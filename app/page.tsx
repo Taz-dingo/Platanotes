@@ -1,4 +1,4 @@
-import { PostList } from "@/components/PostList";
+import { PostList } from "@/components/post-list";
 import { getAllPosts } from "@/lib/posts";
 import Image from "next/image";
 

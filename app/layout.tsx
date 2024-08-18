@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { getAllPosts } from "@/lib/posts";
 import "./globals.css";
+import Categories from "@/components/categories";
 
 export default function RootLayout({
   children,
@@ -15,6 +16,20 @@ export default function RootLayout({
 
   return (
     <html lang="en">
+      <head>
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/github-markdown-css/github-markdown-light.min.css"
+        />
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/highlight.js/styles/github.min.css"
+        />
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css"
+        />
+      </head>
       <body>
         <div className="container mx-auto px-4">
           <header className="my-8">
@@ -30,19 +45,7 @@ export default function RootLayout({
           </header>
           <div className="flex">
             <nav className="w-1/4 pr-4">
-              <h2 className="text-xl font-semibold mb-2">Categories</h2>
-              <ul>
-                {categories.map((category) => (
-                  <li key={category}>
-                    <Link
-                      href={`/${category}`}
-                      className="text-blue-600 hover:underline"
-                    >
-                      {category}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+              <Categories categories={categories} />
             </nav>
             <main className="w-3/4">{children}</main>
           </div>
