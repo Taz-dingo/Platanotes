@@ -10,7 +10,6 @@ export default async function Post({ params }: { params: { slug: string[] } }) {
 
   return (
     <article>
-      <h1>{post.title}</h1>
       <div dangerouslySetInnerHTML={{ __html: post.content }} />
     </article>
   );
