@@ -1,6 +1,6 @@
 import React from "react";
 import { notFound } from "next/navigation";
-import { getAllPosts, getCategoryPosts, getPostBySlug } from "@/lib/posts";
+import { getPostBySlug, getCategoryPosts } from "@/lib/posts";
 import { PostList } from "@/components/post-list";
 
 export default async function PostOrCategory({
@@ -9,12 +9,10 @@ export default async function PostOrCategory({
   params: { slug: string[] };
 }) {
   const slug = decodeURIComponent(params.slug.join("/"));
-  console.log("🚀 ~ slug!!:", slug);
   const post = await getPostBySlug(slug);
-  console.log("🚀 ~ post:", post);
 
   if (post) {
-    const title = post.slug.split("/")[slug.split("/").length - 1];
+    const title = post.title || slug.split("/").pop() || 'Untitled';
     return (
       <article>
         <h1 className="text-3xl font-bold mb-4">{title}</h1>
@@ -23,7 +21,7 @@ export default async function PostOrCategory({
       </article>
     );
   } else {
-    const categoryPosts = getCategoryPosts(slug);
+    const categoryPosts = await getCategoryPosts(slug);
     if (categoryPosts.length === 0) {
       notFound();
     }

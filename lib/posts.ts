@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs from 'fs/promises';
 import path from 'path';
 import matter from 'gray-matter';
 import { unified } from "unified";
@@ -12,37 +12,67 @@ import remarkRehype from "remark-rehype"
 
 const postsDirectory = path.join(process.cwd(), 'posts');
 
-function getPostsRecursively(dir: string, basePath: string = ''): any[] {
-    const entries = fs.readdirSync(dir, { withFileTypes: true });
+interface TreeNode {
+    name: string;
+    path: string;
+    type: 'file' | 'directory';
+    children?: TreeNode[];
+    metadata?: any;
+}
 
-    return entries.flatMap(entry => {
+async function getPostsTreeRecursively(dir: string, basePath: string = ''): Promise<TreeNode[]> {
+    const entries = await fs.readdir(dir, { withFileTypes: true });
+
+    const nodes = await Promise.all(entries.map(async entry => {
         const res = path.resolve(dir, entry.name);
         const currentPath = path.join(basePath, entry.name);
 
         if (entry.isDirectory()) {
-            return getPostsRecursively(res, currentPath);
+            return {
+                name: entry.name,
+                path: currentPath,
+                type: 'directory' as const,
+                children: await getPostsTreeRecursively(res, currentPath)
+            };
         } else if (entry.isFile() && entry.name.endsWith('.md')) {
             try {
-                const fileContents = fs.readFileSync(res, 'utf8');
+                const fileContents = await fs.readFile(res, 'utf8');
                 const { data } = matter(fileContents);
-                return [{
-                    slug: currentPath.replace(/\.md$/, ''),
-                    ...data,
-                }];
+                return {
+                    name: entry.name.replace(/\.md$/, ''),
+                    path: currentPath.replace(/\.md$/, ''),
+                    type: 'file' as const,
+                    metadata: data
+                };
             } catch (error) {
                 console.error(`Error reading file ${res}:`, error);
-                return [];
+                return {
+                    name: entry.name,
+                    path: currentPath,
+                    type: 'file' as const,
+                    metadata: {}
+                };
             }
-
         } else {
-            return [];
+            return {
+                name: entry.name,
+                path: currentPath,
+                type: 'file' as const,
+                metadata: {}
+            };
         }
-    });
+    }));
+
+    return nodes;
 }
 
-export function getAllPosts() {
-    const allPosts = getPostsRecursively(postsDirectory);
-    return allPosts.sort((a, b) => ((a.date as string) < (b.date as string) ? 1 : -1));
+export async function getPostsTree(): Promise<TreeNode> {
+    return {
+        name: 'posts',
+        path: '',
+        type: 'directory',
+        children: await getPostsTreeRecursively(postsDirectory)
+    };
 }
 
 export async function getPostBySlug(slug: string) {
@@ -50,9 +80,10 @@ export async function getPostBySlug(slug: string) {
 
     const dirPath = path.join(postsDirectory, slug);
 
-    if (fs.existsSync(fullPath)) {
+    try {
+        await fs.access(fullPath);
         // It's a file
-        const fileContents = fs.readFileSync(fullPath, 'utf8');
+        const fileContents = await fs.readFile(fullPath, 'utf8');
         const { data, content } = matter(fileContents);
 
         const processedContent = await unified()
@@ -72,17 +103,33 @@ export async function getPostBySlug(slug: string) {
             content: contentHtml,
             ...data,
         };
-    } else if (fs.existsSync(dirPath) && fs.lstatSync(dirPath).isDirectory()) {
-        // It's a directory
-        return null;
-    } else {
-        // Neither file nor directory exists
-        return undefined;
+    } catch (error) {
+        try {
+            const stats = await fs.stat(dirPath);
+            if (stats.isDirectory()) {
+                // It's a directory
+                return null;
+            }
+        } catch {
+            // Neither file nor directory exists
+            return undefined;
+        }
     }
 }
 
-export function getCategoryPosts(category: string) {
-    category = decodeURIComponent(category);
-    const allPosts = getAllPosts();
-    return allPosts.filter(post => post.slug.startsWith(category + '/'));
+
+export async function getCategoryPosts(category: string) {
+    const postsTree = await getPostsTree();
+
+    function findCategoryPosts(node: TreeNode, targetCategory: string): TreeNode[] {
+        if (node.type === 'file' && node.path.startsWith(targetCategory)) {
+            return [node];
+        }
+        if (node.type === 'directory') {
+            return node.children?.flatMap(child => findCategoryPosts(child, targetCategory)) || [];
+        }
+        return [];
+    }
+
+    return findCategoryPosts(postsTree, category);
 }

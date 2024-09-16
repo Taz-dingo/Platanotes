@@ -1,28 +1,28 @@
-import Link from "next/link";
+import React from 'react';
+import Link from 'next/link';
 
-// 补充定义
-type Post = {
-  slug: string;
-  title: string;
-};
+interface Post {
+  name: string;
+  path: string;
+  type: 'file' | 'directory';
+  metadata?: any;
+}
 
-type PostListProps = {
+interface PostListProps {
   posts: Post[];
-};
+}
 
-export const PostList = ({ posts }: PostListProps) => {
+export const PostList: React.FC<PostListProps> = ({ posts }) => {
   return (
-    <ul className="space-y-4">
-      {posts.map((post) => {
-        return (
-          <li key={post.slug}>
-            <Link href={`/${post.slug}`}>
-              {post.slug.split("/")[post.slug.split("/").length - 1]}
-            </Link>
-            <span className="ml-2 text-gray-500">({post.slug})</span>
-          </li>
-        );
-      })}
+    <ul>
+      {posts.map((post) => (
+        <li key={post.path}>
+          <Link href={`/${post.path}`}>
+            {post.name}
+          </Link>
+          <span className="ml-2 text-gray-500">({post.path})</span>
+        </li>
+      ))}
     </ul>
   );
 };

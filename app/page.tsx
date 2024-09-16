@@ -1,13 +1,15 @@
-import { PostList } from "@/components/post-list";
-import { getAllPosts } from "@/lib/posts";
-import Image from "next/image";
+import { getPostsTree } from "../lib/posts";
+import PostTree from "../components/post-tree";
 
-export default function Home() {
-  const posts = getAllPosts();
+export default async function Home() {
+  const postsTree = await getPostsTree();
+
   return (
-    <>
-      <h2 className="text-2xl font-semibold mb-4">Latest Posts</h2>
-      <PostList posts={posts} />
-    </>
+    <div>
+      <h1>博客文章</h1>
+      <ul>
+        <PostTree node={postsTree} />
+      </ul>
+    </div>
   );
 }
