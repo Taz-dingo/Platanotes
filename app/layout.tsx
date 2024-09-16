@@ -1,9 +1,8 @@
 import React from "react";
 import Link from "next/link";
-import { getAllPosts } from "@/lib/posts";
 import "./globals.css";
-import Categories from "@/components/categories";
 import { Metadata } from "next";
+import PostListBar from "@/components/post-list-bar";
 
 export const metadata: Metadata = {
   title: "梧桐树下",
@@ -15,13 +14,8 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const posts = getAllPosts();
-  const categories = Array.from(
-    new Set(posts.map((post) => post.slug.split("/")[0]))
-  );
-
   return (
-    <html lang="en">
+    <html lang="zh">
       <head>
         <link
           rel="stylesheet"
@@ -50,9 +44,9 @@ export default function RootLayout({
             </h1>
           </header>
           <div className="flex">
-            <nav className="w-1/4 pr-4">
-              <Categories categories={categories} />
-            </nav>
+            <aside className="w-1/4 pr-4">
+              <PostListBar />
+            </aside>
             <main className="w-3/4">{children}</main>
           </div>
           <footer className="mt-8 py-4 text-center text-gray-500">
