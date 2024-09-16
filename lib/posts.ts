@@ -118,7 +118,7 @@ export async function getPostBySlug(slug: string) {
 }
 
 
-export async function getCategoryPosts(category: string) {
+export async function getCategoryPosts(category: string): Promise<TreeNode[]> {
     const postsTree = await getPostsTree();
 
     function findCategoryPosts(node: TreeNode, targetCategory: string): TreeNode[] {

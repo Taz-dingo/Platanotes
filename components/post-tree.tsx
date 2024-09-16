@@ -1,27 +1,45 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import Link from 'next/link';
+import React, { useState } from "react";
+import Link from "next/link";
 
 interface TreeNode {
   name: string;
   path: string;
-  type: 'file' | 'directory';
+  type: "file" | "directory";
   children?: TreeNode[];
   metadata?: any;
 }
 
 interface PostTreeProps {
   node: TreeNode;
+  level?: number;
 }
 
-const PostTree: React.FC<PostTreeProps> = ({ node }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+const PostTree: React.FC<PostTreeProps> = ({ node, level = 0 }) => {
+  const [isExpanded, setIsExpanded] = useState(level === 0);
 
-  if (node.type === 'file') {
+  if (level === 0 && node.children) {
     return (
-      <li>
-        <Link href={`/posts/${node.path}`}>
+      <ul className="pl-0 list-none">
+        {node.children.map((child, index) => (
+          <PostTree
+            key={index}
+            node={child}
+            level={1}
+          />
+        ))}
+      </ul>
+    );
+  }
+
+  if (node.type === "file") {
+    return (
+      <li style={{ paddingLeft: `${level * 8}px` }}>
+        <Link
+          href={`/posts/${node.path}`}
+          className="hover:underline"
+        >
           {node.name}
         </Link>
       </li>
@@ -29,14 +47,21 @@ const PostTree: React.FC<PostTreeProps> = ({ node }) => {
   }
 
   return (
-    <li>
-      <span onClick={() => setIsExpanded(!isExpanded)} style={{ cursor: 'pointer' }}>
-        {isExpanded ? '▼' : '▶'} {node.name}
+    <li style={{ paddingLeft: `${level * 8}px` }}>
+      <span
+        onClick={() => setIsExpanded(!isExpanded)}
+        className="cursor-pointer hover:text-blue-500"
+      >
+        {isExpanded ? "▼" : "▶"} {node.name}
       </span>
       {isExpanded && node.children && (
-        <ul>
+        <ul className="list-none pl-0">
           {node.children.map((child, index) => (
-            <PostTree key={index} node={child} />
+            <PostTree
+              key={index}
+              node={child}
+              level={level + 1}
+            />
           ))}
         </ul>
       )}
