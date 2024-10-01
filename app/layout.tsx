@@ -3,6 +3,8 @@ import Link from "next/link";
 import "./globals.css";
 import { Metadata } from "next";
 import PostListBar from "@/components/post-list-bar";
+import Script from "next/script";
+import FallingLeaves from "@/components/falling-leaves";
 
 export const metadata: Metadata = {
   title: "梧桐树下",
@@ -19,6 +21,10 @@ export default function RootLayout({
       <head>
         <link
           rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.1.0/style.css"
+        />
+        <link
+          rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/github-markdown-css/github-markdown-light.min.css"
         />
         <link
@@ -31,12 +37,13 @@ export default function RootLayout({
         />
       </head>
       <body>
+        <FallingLeaves />
         <div className="container mx-auto px-4">
           <header className="my-8">
             <h1 className="text-4xl font-bold">
               <Link
                 //  去掉下划线和点击后变色
-                className="text-blue-600 hover:underline"
+                className="text-green-700 hover:underline"
                 href="/"
               >
                 梧桐树下
@@ -53,6 +60,7 @@ export default function RootLayout({
             © {new Date().getFullYear()} Tazdingo
           </footer>
         </div>
+        <Script src="https://cdnjs.cloudflare.com/ajax/libs/processing.js/1.6.6/processing.min.js" strategy="beforeInteractive" />
       </body>
     </html>
   );

@@ -1,8 +1,6 @@
-import { getPostsTree } from "../lib/posts";
-import PostTree from "../components/post-tree";
+
 
 export default async function Home() {
-  const postsTree = await getPostsTree();
 
   return (
     <main className="container mx-auto px-4">

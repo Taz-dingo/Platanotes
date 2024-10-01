@@ -1,6 +1,6 @@
 import { getPostsTree } from "@/lib/posts";
 import React from "react";
-import PostTree from "@/components/post-tree";
+import PostTreeNode from "@/components/post-tree-node";
 
 export default async function PostListBar() {
   const postsTree = await getPostsTree();
@@ -10,7 +10,7 @@ export default async function PostListBar() {
       <h2 className="border-b-2 border-solid border-slate-300 mb-2">
         文章目录
       </h2>
-      <PostTree node={postsTree} />
+      <PostTreeNode node={postsTree} />
     </div>
   );
 }
