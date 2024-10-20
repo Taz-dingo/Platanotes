@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 interface TreeNode {
   name: string;
@@ -90,7 +91,7 @@ const PostTreeNode: React.FC<PostTreeProps> = ({ node, level = 0 }) => {
       </span>
       {node.children && (
         <div
-          className="overflow-hidden transition-all duration-200 ease-in-out"
+          className="overflow-hidden transition-opacity duration-200 ease-in-out"
           style={{ maxHeight: height, opacity: isExpanded ? 1 : 0 }}
         >
           <ul
