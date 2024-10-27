@@ -29,10 +29,10 @@ export default function RootLayout({
           rel="stylesheet"
           href="/styles/github-markdown.css"
         />
-        {/* <link
+        <link
           rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/highlight.js/styles/github.min.css"
-        /> */}
+        />
         <link
           rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css"
