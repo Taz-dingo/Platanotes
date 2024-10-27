@@ -58,7 +58,7 @@ const PostTreeNode: React.FC<PostTreeProps> = ({ node, level = 0 }) => {
       </ul>
     );
   }
-
+  // if it's a file node
   if (node.type === "file") {
     return (
       <li style={{ paddingLeft: `${level * 8}px` }}>
@@ -72,6 +72,7 @@ const PostTreeNode: React.FC<PostTreeProps> = ({ node, level = 0 }) => {
     );
   }
 
+  // if it's a directory node
   return (
     <li style={{ paddingLeft: `${level * 8}px` }}>
       <span

@@ -11,11 +11,23 @@
 
 #### TO DO
 - [ ] 添加首页
+- [ ] 左边栏的当前页面添加灰色背景标识
+- [ ] feature:latest posts
+- [ ] feature:
+- [ ] feature:顶部导航栏
+- [ ] feature:面包屑
+- [ ] feature:右边栏显示文章结构
+- [ ] feature:左边栏添加
+- [ ] feature:
+- [ ] bug:首屏加载样式闪烁
+- [ ] bug:首屏加载sidebar闪烁
+- [ ] bug:页面切换抖动
 
 ### 2024-10-20
 - 把markdown外联样式改为本地样式、修改main背景色
 - 暂时取消落叶动画
-- sidebar动画修改 - 去掉高度变化渐变，添加文字渐入渐出
+- sidebar - 去掉高度变化渐变，添加文字渐入渐出；添加sticky
+- 修改三栏布局
 
 ### 2024-10-01
 #### 新增

@@ -10,6 +10,7 @@ import FallingLeaves from "@/components/falling-leaves";
 export const metadata: Metadata = {
   title: "梧桐树下",
   description: "享受片刻宁静",
+  icons: "/favicon.ico",
 };
 
 export default function RootLayout({
@@ -41,7 +42,7 @@ export default function RootLayout({
         {/* <FallingLeaves /> */}
         <div className="container mx-auto px-4">
           <header className="my-8">
-            <h1 className="text-4xl font-bold">
+            <h1 className="text-4xl">
               <Link
                 //  去掉下划线和点击后变色
                 className="text-green-700 hover:underline"
