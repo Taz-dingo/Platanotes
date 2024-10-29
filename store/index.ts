@@ -1,5 +1,5 @@
 import { PathStore, TreeStore } from '@/types/store';
-import { TreeNode } from '@/types/tree';
+import { FileTreeNode } from '@/types/tree';
 import { create } from 'zustand'
 
 
@@ -10,5 +10,5 @@ export const usePathStore = create<PathStore>((set) => ({
 
 export const useTreeStore = create<TreeStore>((set) => ({
     root: undefined, // 初始化树结构为空
-    setTreeRoot: (root: TreeNode) => set({ root })
+    setTreeRoot: (root: FileTreeNode) => set({ root })
 }));

@@ -11,17 +11,19 @@
 
 #### TO DO
 - [ ] 添加首页
-- [ ] 左边栏的当前页面添加灰色背景标识
 - [ ] feature:latest posts
 - [ ] feature:
 - [ ] feature:顶部导航栏
 - [ ] feature:面包屑
-- [ ] feature:右边栏显示文章结构
-- [x] feature:左边栏添加当前页面高亮
 - [ ] feature:
 - [ ] bug:首屏加载样式闪烁
 - [ ] bug:首屏加载sidebar闪烁
-- [ ] bug:页面切换抖动
+
+### 2024-10-30
+- [x] feature:右边栏显示文章结构
+- [x] feature:左边栏添加当前页面高亮
+- [x] bug:页面切换抖动
+- [x] 左边栏的当前页面添加灰色背景标识
 
 ### 2024-10-20
 - 把markdown外联样式改为本地样式、修改main背景色

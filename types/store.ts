@@ -1,9 +1,9 @@
-import { TreeNode } from "@/types/tree";
+import { FileTreeNode } from "@/types/tree";
 
 // 定义状态接口
 export interface TreeStore {
-    root: TreeNode | undefined; // 保存树结构
-    setTreeRoot: (postsTree: TreeNode) => void; // 获取树结构的方法
+    root: FileTreeNode | undefined; // 保存树结构
+    setTreeRoot: (postsTree: FileTreeNode) => void; // 获取树结构的方法
 }
 
 export interface PathStore {
