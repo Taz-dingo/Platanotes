@@ -17,7 +17,7 @@
 - [ ] feature:顶部导航栏
 - [ ] feature:面包屑
 - [ ] feature:右边栏显示文章结构
-- [ ] feature:左边栏添加
+- [x] feature:左边栏添加当前页面高亮
 - [ ] feature:
 - [ ] bug:首屏加载样式闪烁
 - [ ] bug:首屏加载sidebar闪烁

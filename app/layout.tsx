@@ -5,7 +5,6 @@ import Link from "next/link";
 import { Metadata } from "next";
 import PostListBar from "@/components/sidebar/post-list-bar";
 import Script from "next/script";
-import FallingLeaves from "@/components/falling-leaves";
 
 export const metadata: Metadata = {
   title: "梧桐树下",
@@ -13,7 +12,7 @@ export const metadata: Metadata = {
   icons: "/favicon.ico",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -41,11 +40,11 @@ export default function RootLayout({
       <body>
         {/* <FallingLeaves /> */}
         <div className="container mx-auto px-4">
-          <header className="my-8">
+          <header className="my-8 border-b-2 pb-3">
             <h1 className="text-4xl">
               <Link
                 //  去掉下划线和点击后变色
-                className="text-green-700 hover:underline"
+                className="text-green-700 hover:text-green-900"
                 href="/"
               >
                 梧桐树下
@@ -53,11 +52,10 @@ export default function RootLayout({
             </h1>
           </header>
           <div className="flex w-full justify-center relative">
-            <aside className="w-[20rem] pr-4">
+            <aside className="w-[18rem] pr-4">
               <PostListBar />
             </aside>
-            <main className="w-[50rem] relative">{children}</main>
-            <aside className="w-[20rem] pr-4"></aside>
+            <main className="relative">{children}</main>
           </div>
           <footer className="mt-8 py-4 text-center text-gray-500">
             © {new Date().getFullYear()} Tazdingo

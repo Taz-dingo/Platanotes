@@ -23,7 +23,9 @@
     "remark-parse": "^11.0.0",
     "remark-preset-lint-markdown-style-guide": "^6.0.0",
     "remark-rehype": "^11.1.0",
-    "unified": "^11.0.5"
+    "tailwind-scrollbar": "^3.1.0",
+    "unified": "^11.0.5",
+    "zustand": "^5.0.0"
   },
   "devDependencies": {
     "@types/node": "^20",
