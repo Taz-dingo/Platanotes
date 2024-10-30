@@ -114,7 +114,7 @@ const PostTreeNode: React.FC<TreeProps> = ({
 
       {!isLeaf && (
         <div
-          className="overflow-hidden transition-all duration-200"
+          className="overflow-hidden transition-opacity duration-200 "
           style={{ maxHeight: contentHeight }}
         >
           <ul

@@ -11,25 +11,26 @@
 
 #### TO DO
 - [ ] 添加首页
-- [ ] feature:latest posts
-- [ ] feature:
-- [ ] feature:顶部导航栏
-- [ ] feature:面包屑
-- [ ] feature:
-- [ ] bug:首屏加载样式闪烁
-- [ ] bug:首屏加载sidebar闪烁
+- [ ] feat: latest posts
+- [ ] feat:
+- [ ] feat: 顶部导航栏
+- [ ] feat: 面包屑
+- [ ] feat:
+- [ ] bug: 首屏加载样式闪烁
+- [ ] bug: 首屏加载sidebar闪烁
+- [ ] bug: sticky失效了
 
 ### 2024-10-30
-- [x] feature:右边栏显示文章结构
-- [x] feature:左边栏添加当前页面高亮
-- [x] bug:页面切换抖动
+- [x] feat: 右边栏显示文章结构
+- [x] feat: 左边栏添加当前页面高亮
+- [x] bug: 页面切换抖动
 - [x] 左边栏的当前页面添加灰色背景标识
 
 ### 2024-10-20
-- 把markdown外联样式改为本地样式、修改main背景色
-- 暂时取消落叶动画
-- sidebar - 去掉高度变化渐变，添加文字渐入渐出；添加sticky
-- 修改三栏布局
+- [x] 把markdown外联样式改为本地样式、修改main背景色
+- [x] 暂时取消落叶动画
+- [x] sidebar - 去掉高度变化渐变，添加文字渐入渐出；添加sticky
+- [x] 修改三栏布局
 
 ### 2024-10-01
 #### 新增

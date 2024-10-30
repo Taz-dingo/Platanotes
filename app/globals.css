@@ -6,32 +6,23 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
-
-  overflow-y: auto;
-  overflow-x: hidden;
 }
 
-:root body {
+/* 解决scrollbar出现影响布局的问题 */
+body {
+  width: 100vw;
+  overflow-x: hidden;
   position: absolute;
 }
 
-html {
-  overflow-y: scroll; /* 始终显示垂直滚动条 */
-}
-/* .scrollbar {
-  @apply ; /* 根据需要调整颜色 */
-
-/* 使全局应用该样式 */
 html,
 body {
-  @apply scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200; /* 或者使用直接的类名 */
+  @apply scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200;
 }
 
 body {
   /* font-family: "LXGW WenKai", sans-serif; */
   background-color: rgba(255, 245, 230, 0.8);
-  width: 100vw;
-  overflow: hidden;
 }
 
 .markdown-body {
