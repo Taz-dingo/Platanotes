@@ -1,7 +1,7 @@
-import { getFileTree, getPostsTree } from "@/lib/get-posts-tree";
+import { FileTreeNode, getFileTree, getPostsTree } from "@/lib/get-posts-tree";
 import React from "react";
 import PostTreeNode, { TreeNode } from "@/components/sidebar/post-tree-node";
-import { FileTreeNode } from "@/types/tree";
+
 import PostTreeWithClickHandler from "./post-tree-with-click-handler";
 
 export default async function PostListBar() {
@@ -21,7 +21,7 @@ export default async function PostListBar() {
   const root = convertFileTreeNodeToTreeNode(originRoot);
 
   return (
-    <div className="bg-[rgba(255,255,255,0.5)] p-5 rounded-lg sticky top-2">
+    <div className="bg-[rgba(255,255,255,0.5)] p-5 rounded-lg sticky top-2 shadow-lg">
       <h2 className="border-b-2 border-solid border-slate-300 mb-2 pb-2 font-semibold">
         文章目录
       </h2>

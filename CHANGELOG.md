@@ -11,14 +11,14 @@
 
 #### TO DO
 - [ ] 添加首页
-- [ ] feat: latest posts
-- [ ] feat:
 - [ ] feat: 顶部导航栏
 - [ ] feat: 面包屑
-- [ ] feat:
 - [ ] bug: 首屏加载样式闪烁
 - [ ] bug: 首屏加载sidebar闪烁
-- [ ] bug: sticky失效了
+
+### 2024-10-31
+- [x] feat: latest posts
+- [x] bug: sticky失效了
 
 ### 2024-10-30
 - [x] feat: 右边栏显示文章结构

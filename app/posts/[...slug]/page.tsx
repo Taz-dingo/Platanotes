@@ -13,7 +13,7 @@ export default async function Post({ params }: { params: { slug: string[] } }) {
   return (
     <article className="flex">
       <div
-        className="flex-1"
+        className="flex-1 shadow-md"
         dangerouslySetInnerHTML={{ __html: post.content }}
       />
 

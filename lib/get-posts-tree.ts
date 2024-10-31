@@ -1,16 +1,26 @@
 import fs from 'fs/promises';
 import path from 'path';
-import matter from 'gray-matter';
-import { FileTreeNode } from '@/types/tree';
 
 /**
  * 1. 文章树结构：通过递归读取指定目录下的文件和子目录，构建一个树形结构（TreeNode），
  *    其中每个节点包含文件或目录的名称、路径、类型和元数据。
  */
 
+// 文件树节点类型
+export interface FileTreeNode {
+    type: 'file' | 'directory'; // 节点类型
+    name: string; // 节点名称
+    path: string; // 节点路径
+    children?: FileTreeNode[]; // 子节点
+    metadata?: {
+        ctime?: number;
+        summary?: string;
+    }; // 元数据
+}
 
 // 定义文章存储目录
-export const postsDirectory = path.join(process.cwd(), '/public/posts');
+export const postsPath = '/public/posts/'
+export const postsDirectory = path.join(process.cwd(), postsPath);
 
 let fileTreeCache: FileTreeNode | null = null;
 
@@ -20,8 +30,10 @@ export async function getFileTree() {
         fileTreeCache = await getPostsTree();
     }
 
+
     return fileTreeCache;
 }
+
 
 // 递归获取指定目录下的所有文章及其子目录
 async function getPostsTreeRecursively(dir: string, basePath: string = ''): Promise<FileTreeNode[]> {
@@ -44,13 +56,26 @@ async function getPostsTreeRecursively(dir: string, basePath: string = ''): Prom
         } else if (entry.isFile() && entry.name.endsWith('.md')) {
             // 如果是 markdown 文件，读取文件内容
             try {
+                // 获取创建时间
+                const stats = await fs.stat(res);
+                const ctime = stats.birthtimeMs;
+                // 取摘要
                 const fileContents = await fs.readFile(res, 'utf8');
-                const { data } = matter(fileContents); // 解析文件元数据
+                const cleanContents = fileContents
+                    .replace(/[#*`>+-=]/g, "")
+                    .trim()
+                const summary = cleanContents.length === 0
+                    ? "还没有内容噢~"
+                    : cleanContents.substring(0, 100) + '. . . . . .';
+
                 return {
                     name: entry.name.replace(/\.md$/, ''), // 去掉文件扩展名
                     path: currentPath.replace(/\.md$/, ''), // 去掉路径中的文件扩展名
                     type: 'file' as const,
-                    metadata: data // 存储元数据
+                    metadata: {
+                        ctime,
+                        summary
+                    }  // 存储元数据
                 };
             } catch (error) {
                 console.error(`Error reading file ${res}:`, error); // 错误处理

@@ -1,9 +1,7 @@
 import { getFileTree, getPostsTree } from "@/lib/get-posts-tree";
 import React from "react";
 import PostTreeNode, { TreeNode } from "@/components/sidebar/post-tree-node";
-import { getTreeData } from "@/lib/get-posts-content";
-import Post from "@/app/posts/[...slug]/page";
-import { ASTNode } from "@/types/tree";
+import { ASTNode, getTreeData } from "@/lib/get-posts-content";
 
 export default async function ASTListBar() {
   // 获取
@@ -62,7 +60,7 @@ export default async function ASTListBar() {
   const root = convertASTToTree(originRoot);
 
   return (
-    <div className="bg-[rgba(255,255,255,0.5)] p-5 rounded-lg sticky top-2">
+    <div className="bg-[rgba(255,255,255,0.5)] p-5 rounded-lg sticky top-2 shadow-lg">
       <h2 className="border-b-2 border-solid border-slate-300 mb-2 pb-2 font-semibold">
         内容目录
       </h2>

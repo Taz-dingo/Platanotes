@@ -25,10 +25,13 @@ body {
   background-color: rgba(255, 245, 230, 0.8);
 }
 
+/* 盒子基础样式 */
 .markdown-body {
   padding: 2rem;
   border-radius: 10px;
   background-color: rgba(255, 255, 255, 0.5);
+
+  width: 50rem;
 }
 
 .markdown-body pre {

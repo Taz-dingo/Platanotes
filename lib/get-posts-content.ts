@@ -1,6 +1,7 @@
 import fs from 'fs/promises';
 import path from 'path';
 import matter from 'gray-matter';
+
 import { unified } from "unified";
 import rehypeHighlight from "rehype-highlight";
 import rehypeKatex from "rehype-katex";
@@ -9,7 +10,7 @@ import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype"
-import { ASTNode } from '@/types/tree';
+
 import { getPostsTree, postsDirectory } from './get-posts-tree';
 
 /*
@@ -18,7 +19,36 @@ import { getPostsTree, postsDirectory } from './get-posts-tree';
  * 
  * 2. 按类别获取文章：支持根据指定类别从文章树中查找所有相关文件，以便于分类展示。
 */
+// AST 节点类型
+export interface ASTNode {
+    type: 'root' | 'text' | 'element'; // 类型标识
+    tagName?: string; // 仅在元素节点时定义
+    properties?: Record<string, any>; // 元素属性
+    value?: string; // 仅在文本节点时定义
+    position?: {
+        start: { line: number; column: number; offset: number };
+        end: { line: number; column: number; offset: number };
+    }; // 位置属性
+    children?: ASTNode[]; // 子节点，可以嵌套，形成树结构
+}
 
+// 特殊节点类型，增强可读性
+export interface TextNode extends ASTNode {
+    type: 'text';
+    value: string; // 文本内容
+}
+
+export interface ElementNode extends ASTNode {
+    type: 'element';
+    tagName: string; // HTML 标签名
+    properties?: Record<string, any>; // 元素属性
+    children?: ASTNode[]; // 子节点
+}
+
+export interface RootNode extends ASTNode {
+    type: 'root';
+    children: ASTNode[]; // 直接子节点
+}
 let treeData: ASTNode;
 // 自定义插件，获取HTML语法树
 const getHAST = () => (tree: any) => {
@@ -37,6 +67,7 @@ export async function getPostBySlug(slug: string) {
     const fullPath = path.join(postsDirectory, decodeURIComponent(`${slug}.md`)); // 生成文件路径
     const dirPath = path.join(postsDirectory, slug); // 生成目录路径
 
+    console.log(fullPath);
     try {
         await fs.access(fullPath); // 检查文件是否存在
         // 读取文件内容
