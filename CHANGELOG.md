@@ -12,9 +12,15 @@
 #### TO DO
 - [ ] 添加首页
 - [ ] feat: 顶部导航栏
-- [ ] feat: 面包屑
+- [ ] feat: 添加mermaid解析器
+- [ ] feat: 面包屑和目录树联动
 - [ ] bug: 首屏加载样式闪烁
 - [ ] bug: 首屏加载sidebar闪烁
+
+
+### 2024-11-01
+- [x] feat: 面包屑
+
 
 ### 2024-10-31
 - [x] feat: latest posts

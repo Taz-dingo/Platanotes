@@ -45,6 +45,10 @@ export default async function RootLayout({
               <Link
                 //  去掉下划线和点击后变色
                 className="text-green-700 hover:text-green-900"
+                style={{
+                  fontFamily: "LXGW WenKai",
+                  fontWeight:'bold'
+                }}
                 href="/"
               >
                 梧桐树下

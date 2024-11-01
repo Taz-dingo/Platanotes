@@ -28,9 +28,8 @@ body {
 /* 盒子基础样式 */
 .markdown-body {
   padding: 2rem;
-  border-radius: 10px;
+  border-radius: 0.5rem;
   background-color: rgba(255, 255, 255, 0.5);
-
   width: 50rem;
 }
 
