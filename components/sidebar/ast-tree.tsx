@@ -65,11 +65,15 @@ export default async function ASTListBar() {
         内容目录
       </h2>
       <div className="leading-loose">
-        <PostTreeNode
-          node={root}
-          showToggleIcon={false}
-          defaultExpand={true}
-        />
+        {root.children?.length || 0 > 0 ? (
+          <PostTreeNode
+            node={root}
+            showToggleIcon={false}
+            defaultExpand={true}
+          />
+        ) : (
+          <p>暂无标题~</p>
+        )}
       </div>
     </div>
   );
