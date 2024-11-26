@@ -1,5 +1,7 @@
 import fs from 'fs/promises';
+import matter from 'gray-matter';
 import path from 'path';
+import { downloadAllFiles } from './oss';
 
 /**
  * 1. 文章树结构：通过递归读取指定目录下的文件和子目录，构建一个树形结构（TreeNode），
@@ -22,10 +24,13 @@ export interface FileTreeNode {
 export const postsPath = '/public/posts/'
 export const postsDirectory = path.join(process.cwd(), postsPath);
 
+
 let fileTreeCache: FileTreeNode | null = null;
 
 // 缓存结果
 export async function getFileTree() {
+    await downloadAllFiles();
+
     if (!fileTreeCache) {
         fileTreeCache = await getPostsTree();
     }
@@ -56,12 +61,20 @@ async function getPostsTreeRecursively(dir: string, basePath: string = ''): Prom
         } else if (entry.isFile() && entry.name.endsWith('.md')) {
             // 如果是 markdown 文件，读取文件内容
             try {
-                // 获取创建时间
-                const stats = await fs.stat(res);
-                const ctime = stats.birthtimeMs;
+                // 获取frontmatter
+                const fileContent = await fs.readFile(res, 'utf8');
+                const fm = matter(fileContent);
+
+                // 获取创建时间，处理没有 created 字段的情况
+                const created = fm.data.created;
+                if (!created) {
+                    console.warn(`Missing 'created' field in frontmatter for file: ${res}`);
+                }
+                const ctime = created ? Number(created.split(',').pop().trim()) : 0;
+
                 // 取摘要
-                const fileContents = await fs.readFile(res, 'utf8');
-                const cleanContents = fileContents
+                const content = fm.content
+                const cleanContents = content
                     .replace(/[#*`>+-=]/g, "")
                     .trim()
                 const summary = cleanContents.length === 0

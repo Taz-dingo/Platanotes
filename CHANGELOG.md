@@ -15,11 +15,17 @@
 - [ ] feat: 面包屑和目录树联动
 - [ ] feat: 移动端响应式
 - [ ] feat: 首页设计
+- [ ] feat: 侧边栏文字禁止换行，超行省略号
+- [ ] feat: 添加md双链解析
+- [ ] feat: 实现链接图
+- [x] feat: latest posts从front matter获取
 - [ ] bug: 首屏加载样式闪烁
 - [ ] bug: 首屏加载sidebar闪烁
 - [ ] bug: 文章目录树在数字标题1.x等下有问题
-- [ ] todo: posts的ctime、etime问题
-
+- [ ] feat: 文章通过api获取
+- [x] todo: posts的ctime、etime问题（新文件使用模板；旧文件批处理添加对应字段）
+- [x] todo: posts的git自动同步
+- [ ] refactor: 从阿里云oss获取博客内容
 
 ### 2024-11-02
 - [x] feat: 目录树为空时显示对应文字
