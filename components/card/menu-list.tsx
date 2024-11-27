@@ -1,5 +1,6 @@
 'use client';
 
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FaHome, FaBook, FaLightbulb, FaFilm, FaCamera } from "react-icons/fa";
@@ -75,7 +76,7 @@ export default function MenuList({ folders }: MenuListProps) {
           }`}
         >
           <menuConfig.home.icon className="text-lg" />
-          <span>{menuConfig.home.name}</span>
+          <span className="whitespace-nowrap">{menuConfig.home.name}</span>
         </Link>
       </li>
       {/* Dynamic folders */}
@@ -95,7 +96,7 @@ export default function MenuList({ folders }: MenuListProps) {
               }`}
             >
               <config.icon className="text-lg" />
-              <span>{config.name}</span>
+              <span className="whitespace-nowrap">{config.name}</span>
             </Link>
           </li>
         );

@@ -6,7 +6,7 @@ export default async function MenuCard() {
   const topLevelFolders = fileTree.children?.filter(node => node.type === 'directory') || [];
 
   return (
-    <div className="bg-[rgba(255,255,255,0.5)] p-5 rounded-lg sticky top-2 shadow-lg">
+    <div className="bg-[rgba(255,255,255,0.5)] p-5 rounded-lg sticky top-2 shadow-lg w-full">
       <MenuList folders={topLevelFolders} />
     </div>
   );

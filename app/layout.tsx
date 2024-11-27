@@ -39,11 +39,11 @@ export default async function RootLayout({
           href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css"
         />
       </head>
-      <body className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 py-2 px-4">
+      <body className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 py-2 px-2 sm:px-4">
         {/* <FallingLeaves /> */}
-        <div className="container mx-auto px-4">
-          <header className="my-8 border-b-2 pb-3 flex items-center justify-between px-5">
-            <h1 className="text-4xl">
+        <div className="mx-auto px-2 sm:px-4">
+          <header className="my-4 sm:my-8 border-b-2 pb-3 flex flex-col sm:flex-row items-center justify-between px-2 sm:px-5 space-y-4 sm:space-y-0">
+            <h1 className="text-3xl sm:text-4xl">
               <Link
                 //  去掉下划线和点击后变色
                 className="text-green-700 hover:text-green-900"
@@ -57,7 +57,7 @@ export default async function RootLayout({
               </Link>
             </h1>
             <div className="flex items-center space-x-4">
-              <h2 className="text-lg">
+              <h2 className="text-base sm:text-lg">
                 <Link
                   className="text-green-700 hover:text-green-900"
                   href="/archive"
@@ -65,7 +65,7 @@ export default async function RootLayout({
                   文章
                 </Link>
               </h2>
-              <h2 className="text-lg">
+              <h2 className="text-base sm:text-lg">
                 <Link
                   className="text-green-700 hover:text-green-900"
                   href="/about"
@@ -75,12 +75,12 @@ export default async function RootLayout({
               </h2>
             </div>
           </header>
-          <div className="flex w-full justify-center relative">
-            <aside className="w-[18rem] pr-4">
+          <div className="flex flex-col sm:flex-row w-full justify-center relative">
+            <aside className="w-full sm:w-[18rem] px-2 sm:px-0 sm:pr-4 mb-4 sm:mb-0">
               <MenuCard />
               {/* <PostListBar /> */}
             </aside>
-            <main className="relative">
+            <main className="relative px-2 sm:px-0 max-w-[50rem]">
               {children}
               <SpeedInsights />
             </main>

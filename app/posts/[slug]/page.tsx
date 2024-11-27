@@ -12,8 +12,7 @@ export default async function CategoryPage({ params }: PageProps) {
   const posts = await getCategoryPosts(slug);
 
   return (
-    <div className="flex">
-      <div className="w-[50rem]">
+    <div className="flex flex-col">
         {posts.map((node) => {
           const date = new Date(node.metadata?.ctime || 0).toLocaleDateString('zh-CN', {
             year: 'numeric',
@@ -38,14 +37,12 @@ export default async function CategoryPage({ params }: PageProps) {
                 <h2 className="group-hover:text-green-700 transition duration-300 border-b-2 border-gray-300 pb-1 mb-1 text-lg">
                   {node.metadata?.title || node.name}
                 </h2>
-                <p className="text-gray-600">{node.metadata?.summary}</p>
+                <p className="text-gray-600 break-all">{node.metadata?.summary}</p>
               </Link>
               <p className="text-sm text-gray-500 mt-2">{date}</p>
             </div>
           );
         })}
-      </div>
-      <aside className="w-[20rem] pl-4"></aside>
     </div>
   );
 }
