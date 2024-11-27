@@ -25,7 +25,7 @@
 - [ ] feat: 文章通过api获取
 - [x] todo: posts的ctime、etime问题（新文件使用模板；旧文件批处理添加对应字段）
 - [x] todo: posts的git自动同步
-- [ ] refactor: 从阿里云oss获取博客内容
+- [x] refactor: 从阿里云oss获取博客内容
 
 ### 2024-11-02
 - [x] feat: 目录树为空时显示对应文字

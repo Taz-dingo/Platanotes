@@ -10,6 +10,7 @@
     "update": "node update-posts.js"
   },
   "dependencies": {
+    "@vercel/speed-insights": "^1.1.0",
     "ali-oss": "^6.21.0",
     "gray-matter": "^4.0.3",
     "lxgw-wenkai-webfont": "^1.7.0",

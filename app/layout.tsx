@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Metadata } from "next";
 import PostListBar from "@/components/sidebar/post-list-bar";
 import Script from "next/script";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata: Metadata = {
   title: "梧桐树下",
@@ -47,7 +48,7 @@ export default async function RootLayout({
                 className="text-green-700 hover:text-green-900"
                 style={{
                   fontFamily: "LXGW WenKai",
-                  fontWeight:'bold'
+                  fontWeight: "bold",
                 }}
                 href="/"
               >
@@ -59,16 +60,15 @@ export default async function RootLayout({
             <aside className="w-[18rem] pr-4">
               <PostListBar />
             </aside>
-            <main className="relative">{children}</main>
+            <main className="relative">
+              {children}
+              <SpeedInsights />
+            </main>
           </div>
           <footer className="mt-8 py-4 text-center text-gray-500">
             © {new Date().getFullYear()} Tazdingo
           </footer>
         </div>
-        <Script
-          src="https://cdnjs.cloudflare.com/ajax/libs/processing.js/1.6.6/processing.min.js"
-          strategy="beforeInteractive"
-        />
       </body>
     </html>
   );
