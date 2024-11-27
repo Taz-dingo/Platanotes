@@ -1,7 +1,6 @@
 import fs from 'fs/promises';
 import matter from 'gray-matter';
 import path from 'path';
-import { downloadAllFiles } from './oss';
 
 /**
  * 1. 文章树结构：通过递归读取指定目录下的文件和子目录，构建一个树形结构（TreeNode），
@@ -29,8 +28,6 @@ let fileTreeCache: FileTreeNode | null = null;
 
 // 缓存结果
 export async function getFileTree() {
-    await downloadAllFiles();
-
     if (!fileTreeCache) {
         fileTreeCache = await getPostsTree();
     }
@@ -40,7 +37,7 @@ export async function getFileTree() {
 }
 
 
-// 递归获取指定目录下的所有文章及其子目录
+// 递归获取指定目录下的所有文章及其子目录                                
 async function getPostsTreeRecursively(dir: string, basePath: string = ''): Promise<FileTreeNode[]> {
     // 读取目录中的所有条目
     const entries = await fs.readdir(dir, { withFileTypes: true });
