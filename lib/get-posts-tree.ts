@@ -1,4 +1,4 @@
-import fs from 'fs/promises';
+import { promises as fs } from 'fs';
 import matter from 'gray-matter';
 import path from 'path';
 
@@ -16,13 +16,13 @@ export interface FileTreeNode {
     metadata?: {
         ctime?: number;
         summary?: string;
+        title?: string;
     }; // 元数据
 }
 
 // 定义文章存储目录
 export const postsPath = '/public/posts/'
 export const postsDirectory = path.join(process.cwd(), postsPath);
-
 
 let fileTreeCache: FileTreeNode | null = null;
 
@@ -31,11 +31,8 @@ export async function getFileTree() {
     if (!fileTreeCache) {
         fileTreeCache = await getPostsTree();
     }
-
-
     return fileTreeCache;
 }
-
 
 // 递归获取指定目录下的所有文章及其子目录                                
 async function getPostsTreeRecursively(dir: string, basePath: string = ''): Promise<FileTreeNode[]> {
@@ -43,81 +40,82 @@ async function getPostsTreeRecursively(dir: string, basePath: string = ''): Prom
     const entries = await fs.readdir(dir, { withFileTypes: true });
 
     // 使用 Promise.all 处理所有条目
-    const nodes = await Promise.all(entries.map(async entry => {
+    const nodes = await Promise.all(entries.map(async (entry): Promise<FileTreeNode | null> => {
         const res = path.resolve(dir, entry.name); // 获取完整路径
         const currentPath = path.join(basePath, entry.name); // 当前条目的相对路径
 
         if (entry.isDirectory()) {
             // 如果是目录，递归获取其子目录
+            const children = await getPostsTreeRecursively(res, currentPath);
             return {
+                type: 'directory' as const,
                 name: entry.name,
                 path: currentPath,
-                type: 'directory' as const,
-                children: await getPostsTreeRecursively(res, currentPath)
+                children
             };
-        } else if (entry.isFile() && entry.name.endsWith('.md')) {
-            // 如果是 markdown 文件，读取文件内容
+        } else if (entry.name.endsWith('.md')) {
+            // 如果是 markdown 文件
             try {
-                // 获取frontmatter
-                const fileContent = await fs.readFile(res, 'utf8');
-                const fm = matter(fileContent);
+                const stats = await fs.stat(res);
+                const content = await fs.readFile(res, 'utf-8');
+                const { data: frontMatter, content: markdownContent } = matter(content);
 
-                // 获取创建时间，处理没有 created 字段的情况
-                const created = fm.data.created;
-                if (!created) {
-                    console.warn(`Missing 'created' field in frontmatter for file: ${res}`);
+                // 提取摘要：首先尝试使用 frontMatter 中的 summary，如果没有则从内容中提取
+                let summary = frontMatter.summary;
+                if (!summary) {
+                    // 移除 Markdown 标记并提取前 100 个字符作为摘要
+                    const plainText = markdownContent
+                        .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // 处理链接 [text](url) -> text
+                        .replace(/[#*`>+-=\[\]]/g, '') // 移除特殊字符
+                        .replace(/\n+/g, ' ') // 将换行替换为空格
+                        .trim();
+                    summary = plainText.length > 100 
+                        ? plainText.substring(0, 100) + '...'
+                        : plainText;
                 }
-                const ctime = created ? Number(created.split(',').pop().trim()) : 0;
 
-                // 取摘要
-                const content = fm.content
-                const cleanContents = content
-                    .replace(/[#*`>+-=]/g, "")
-                    .trim()
-                const summary = cleanContents.length === 0
-                    ? "还没有内容噢~"
-                    : cleanContents.substring(0, 100) + '. . . . . .';
+                // 移除 .md 后缀
+                const nameWithoutExt = entry.name.replace(/\.md$/, '');
+                const pathWithoutExt = currentPath.replace(/\.md$/, '');
 
                 return {
-                    name: entry.name.replace(/\.md$/, ''), // 去掉文件扩展名
-                    path: currentPath.replace(/\.md$/, ''), // 去掉路径中的文件扩展名
                     type: 'file' as const,
+                    name: nameWithoutExt,
+                    path: pathWithoutExt,
                     metadata: {
-                        ctime,
-                        summary
-                    }  // 存储元数据
+                        ctime: stats.ctimeMs,
+                        summary,
+                        title: frontMatter.title || nameWithoutExt
+                    }
                 };
             } catch (error) {
-                console.error(`Error reading file ${res}:`, error); // 错误处理
+                console.error(`Error processing file ${res}:`, error);
                 return {
-                    name: entry.name,
-                    path: currentPath,
                     type: 'file' as const,
-                    metadata: {}
+                    name: entry.name.replace(/\.md$/, ''),
+                    path: currentPath.replace(/\.md$/, ''),
+                    metadata: {
+                        ctime: 0,
+                        summary: '无法加载文章内容'
+                    }
                 };
             }
-        } else {
-            // 对于其他文件类型
-            return {
-                name: entry.name,
-                path: currentPath,
-                type: 'file' as const,
-                metadata: {}
-            };
         }
+        // 忽略非 markdown 文件
+        return null;
     }));
 
-    return nodes; // 返回构建的节点数组
+
+    return nodes.filter((node): node is FileTreeNode => node !== null);
 }
 
 // 获取所有文章的树结构
 export async function getPostsTree(): Promise<FileTreeNode> {
+    const children = await getPostsTreeRecursively(postsDirectory);
     return {
+        type: 'directory',
         name: 'posts',
         path: '',
-        type: 'directory',
-        children: await getPostsTreeRecursively(postsDirectory) // 调用递归函数
+        children
     };
 }
-
-

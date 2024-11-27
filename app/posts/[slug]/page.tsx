@@ -1,14 +1,20 @@
-import Categories from "@/components/categories";
-import { getSortedFileList } from "@/lib/get-posts-list";
+import { getCategoryPosts } from "@/lib/get-posts-list";
 import Link from "next/link";
 
-export default async function Home() {
-  const sortedList = await getSortedFileList();
+interface PageProps {
+  params: {
+    slug: string;
+  };
+}
+
+export default async function CategoryPage({ params }: PageProps) {
+  const { slug } = params;
+  const posts = await getCategoryPosts(slug);
 
   return (
     <div className="flex">
       <div className="w-[50rem]">
-        {sortedList.map((node) => {
+        {posts.map((node) => {
           const date = new Date(node.metadata?.ctime || 0).toLocaleDateString('zh-CN', {
             year: 'numeric',
             month: 'long',

@@ -1,19 +1,24 @@
-import Categories from "@/components/categories";
-import { getSortedFileList } from "@/lib/get-posts-list";
+import React from 'react'
+import { getCategoryPosts } from "@/lib/get-posts-list";
 import Link from "next/link";
 
-export default async function Home() {
-  const sortedList = await getSortedFileList();
+interface PageProps {
+  params: {
+    slug: string;
+  };
+}
+
+export default async function CategoryPage({ params }: PageProps) {
+  const { slug } = params;
+  const posts = await getCategoryPosts(slug);
+
+  console.log("posts", posts);
 
   return (
     <div className="flex">
       <div className="w-[50rem]">
-        {sortedList.map((node) => {
-          const date = new Date(node.metadata?.ctime || 0).toLocaleDateString('zh-CN', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-          });
+        {posts.map((node) => {
+          const date = new Date(node.metadata?.ctime || 0).toISOString();
 
           return (
             <div
@@ -30,11 +35,11 @@ export default async function Home() {
                 href={`/posts/${node.path}`}
               >
                 <h2 className="group-hover:text-green-700 transition duration-300 border-b-2 border-gray-300 pb-1 mb-1 text-lg">
-                  {node.metadata?.title || node.name}
+                  {node.name}
                 </h2>
-                <p className="text-gray-600">{node.metadata?.summary}</p>
+                <p>{node.metadata?.summary}</p>
               </Link>
-              <p className="text-sm text-gray-500 mt-2">{date}</p>
+              <p className="text-sm text-gray-500">{date}</p>
             </div>
           );
         })}

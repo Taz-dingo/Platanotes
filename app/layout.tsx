@@ -6,6 +6,7 @@ import { Metadata } from "next";
 import PostListBar from "@/components/sidebar/post-list-bar";
 import Script from "next/script";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import MenuCard from "@/components/card/menu-card";
 
 export const metadata: Metadata = {
   title: "梧桐树下",
@@ -38,10 +39,10 @@ export default async function RootLayout({
           href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css"
         />
       </head>
-      <body>
+      <body className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 py-2 px-4">
         {/* <FallingLeaves /> */}
         <div className="container mx-auto px-4">
-          <header className="my-8 border-b-2 pb-3">
+          <header className="my-8 border-b-2 pb-3 flex items-center justify-between px-5">
             <h1 className="text-4xl">
               <Link
                 //  去掉下划线和点击后变色
@@ -55,10 +56,29 @@ export default async function RootLayout({
                 梧桐树下
               </Link>
             </h1>
+            <div className="flex items-center space-x-4">
+              <h2 className="text-lg">
+                <Link
+                  className="text-green-700 hover:text-green-900"
+                  href="/archive"
+                >
+                  文章
+                </Link>
+              </h2>
+              <h2 className="text-lg">
+                <Link
+                  className="text-green-700 hover:text-green-900"
+                  href="/about"
+                >
+                  关于
+                </Link>
+              </h2>
+            </div>
           </header>
           <div className="flex w-full justify-center relative">
             <aside className="w-[18rem] pr-4">
-              <PostListBar />
+              <MenuCard />
+              {/* <PostListBar /> */}
             </aside>
             <main className="relative">
               {children}
@@ -66,7 +86,7 @@ export default async function RootLayout({
             </main>
           </div>
           <footer className="mt-8 py-4 text-center text-gray-500">
-            © {new Date().getFullYear()} Tazdingo
+            {new Date().getFullYear()} Tazdingo
           </footer>
         </div>
       </body>
