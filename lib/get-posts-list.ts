@@ -1,5 +1,3 @@
-'use server';
-
 import { FileTreeNode, getFileTree, getPostsTree, postsDirectory } from "./get-posts-tree";
 import { DIRECTORY_NAMES } from "./constants";
 

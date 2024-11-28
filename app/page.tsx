@@ -1,4 +1,3 @@
-import Categories from "@/components/categories";
 import { getSortedFileList } from "@/lib/get-posts-list";
 import Link from "next/link";
 

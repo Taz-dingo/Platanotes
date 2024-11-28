@@ -1,6 +1,5 @@
 'use client';
 
-
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FaHome, FaBook, FaLightbulb, FaFilm, FaCamera } from "react-icons/fa";
@@ -16,22 +15,22 @@ const menuConfig = {
   },
   notes: {
     name: "笔记",
-    path: "/posts/notes",
+    path: "/categories/notes",
     icon: FaBook
   },
   thoughts: {
     name: "想法",
-    path: "/posts/thoughts",
+    path: "/categories/thoughts",
     icon: FaLightbulb
   },
   cinema: {
     name: "放映厅",
-    path: "/posts/cinema",
+    path: "/categories/cinema",
     icon: FaFilm
   },
   photos: {
     name: "摄影",
-    path: "/posts/photos",
+    path: "/categories/photos",
     icon: FaCamera
   }
 } as const;

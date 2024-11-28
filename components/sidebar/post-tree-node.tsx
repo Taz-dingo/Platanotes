@@ -20,6 +20,7 @@ interface TreeProps {
   indentSize?: number;
   showToggleIcon?: boolean; // 控制是否显示展开图标
   defaultExpand?: boolean; // 控制是否默认展开所有节点
+  clickToExpand?: boolean; // 控制是否点击节点时展开/收起
 }
 
 const PostTreeNode: React.FC<TreeProps> = ({
@@ -29,8 +30,9 @@ const PostTreeNode: React.FC<TreeProps> = ({
   isSelected,
   renderLabel,
   indentSize = 8,
-  showToggleIcon = true,
+  showToggleIcon = false, // 默认不显示展开图标
   defaultExpand = false,
+  clickToExpand = false,
 }) => {
   const [isExpanded, setIsExpanded] = useState(defaultExpand || level === 0);
   const [contentHeight, setContentHeight] = useState<string>("auto");
@@ -52,11 +54,38 @@ const PostTreeNode: React.FC<TreeProps> = ({
   }, [isExpanded]);
 
   const handleClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (!isLeaf) {
-      setIsExpanded((prev) => !prev);
+    if (!isLeaf && clickToExpand) {
+      setIsExpanded(!isExpanded);
     }
     onNodeClick?.(node);
+  };
+
+  const handleToggleClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!isLeaf) {
+      setIsExpanded(!isExpanded);
+    }
+  };
+
+  const renderToggleIcon = () => {
+    if (isLeaf || !showToggleIcon) return null;
+
+    return (
+      <span
+        className="cursor-pointer inline-block w-4 h-4 mr-1"
+        onClick={handleToggleClick}
+      >
+        <Image
+          src="/svg/triangle.svg"
+          alt={isExpanded ? "收起" : "展开"}
+          width={16}
+          height={16}
+          className={`transition-transform duration-200 ${
+            isExpanded ? "rotate-0" : "-rotate-90"
+          }`}
+        />
+      </span>
+    );
   };
 
   // 根节点特殊处理，直接渲染子节点
@@ -74,56 +103,37 @@ const PostTreeNode: React.FC<TreeProps> = ({
             indentSize={indentSize}
             showToggleIcon={showToggleIcon}
             defaultExpand={defaultExpand}
+            clickToExpand={clickToExpand}
           />
         ))}
       </ul>
     );
   }
 
-  // 渲染节点标签
-  const renderDefaultLabel = () => (
-    <div className="flex items-center gap-2">
-      {!isLeaf && showToggleIcon && (
-        <Image
-          src="/svg/triangle.svg"
-          alt="展开/折叠"
-          width={20}
-          height={20}
-          className={`mr-1 transition-transform duration-200 ease-in-out ${
-            isExpanded ? "" : "rotate-[-90deg]"
-          }`}
-        />
-      )}
-      <span>{node.label}</span>
-    </div>
-  );
-
   return (
     <li style={{ paddingLeft: `${level * indentSize}px` }}>
       <div
+        className={`flex items-center cursor-pointer hover:text-green-500 ${
+          isSelected?.(node) ? "text-green-500" : ""
+        }`}
         onClick={handleClick}
-        className={`
-          py-2 px-2 rounded-lg cursor-pointer
-          transition-colors duration-200
-          hover:bg-gray-100
-          ${isSelected?.(node) ? "text-green-600 bg-gray-100" : ""}
-        `}
       >
-        {renderLabel ? renderLabel(node, isLeaf) : renderDefaultLabel()}
+        {renderToggleIcon()}
+        {renderLabel ? (
+          renderLabel(node, isLeaf)
+        ) : (
+          <span>{node.label}</span>
+        )}
       </div>
-
       {!isLeaf && (
-        <div
-          className="overflow-hidden transition-opacity duration-200 "
-          style={{ maxHeight: contentHeight }}
+        <ul
+          ref={childrenRef}
+          className="overflow-hidden transition-all duration-300 ease-in-out"
+          style={{ height: contentHeight }}
         >
-          <ul
-            ref={childrenRef}
-            className="list-none pl-0"
-          >
-            {node.children?.map((child) => (
+          {node.children?.map((child, index) => (
+            <li key={child.id || index}>
               <PostTreeNode
-                key={child.id}
                 node={child}
                 level={level + 1}
                 onNodeClick={onNodeClick}
@@ -132,10 +142,11 @@ const PostTreeNode: React.FC<TreeProps> = ({
                 indentSize={indentSize}
                 showToggleIcon={showToggleIcon}
                 defaultExpand={defaultExpand}
+                clickToExpand={clickToExpand}
               />
-            ))}
-          </ul>
-        </div>
+            </li>
+          ))}
+        </ul>
       )}
     </li>
   );

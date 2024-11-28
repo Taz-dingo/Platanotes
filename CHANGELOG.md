@@ -10,19 +10,36 @@
 
 
 #### TO DO
-- [ ] feat: 顶部导航栏
 - [ ] feat: 添加mermaid解析器
-- [ ] feat: 面包屑和目录树联动
-- [ ] feat: 移动端响应式
 - [ ] feat: 首页设计
 - [ ] feat: 侧边栏文字禁止换行，超行省略号
-- [ ] feat: 添加md双链解析
-- [ ] feat: 实现链接图
-- [x] feat: latest posts从front matter获取
+- [ ] feat: 还是可以实现一下双链、图链
 - [ ] bug: 首屏加载样式闪烁
-- [ ] bug: 首屏加载sidebar闪烁
-- [ ] bug: 文章目录树在数字标题1.x等下有问题
-- [ ] feat: 文章通过api获取
+- [ ] bug: 如果文本内容太短，即时有富余空间，main也不会达到应有的宽度
+- [ ] feat: 滑动动态加载，虚拟列表
+
+- [ ] bug: post-tree-node展开收起有问题（深层子级）
+- [ ] bug: 进入具体posts后menu-card选中状态丢失
+
+- [ ] bug：没有标题的时候ast-list-bar没有对应显示
+- [ ] bug：ast-list-bar选中状态有问题
+- [ ] feat：滚动时候ast-list-bar同步高亮
+
+- [ ] feat: OSS上CDN
+- [ ] feat: 图片懒加载、点击放大等等功能
+
+- [ ] refactor: 统一post格式
+- [ ] refactor: 统一icon库（现在有lucide-react和react-icons两个））
+
+- [ ] feat: 404页面
+
+### 2024-11-28
+- [x] feat: 移动端响应式
+- [x] feat: 面包屑正常跳转
+
+### 2024-11-26
+- [x] feat: 顶部导航栏
+- [x] feat: latest posts从front matter获取
 - [x] todo: posts的ctime、etime问题（新文件使用模板；旧文件批处理添加对应字段）
 - [x] todo: posts的git自动同步
 - [x] refactor: 从阿里云oss获取博客内容

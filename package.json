@@ -13,6 +13,7 @@
     "@vercel/speed-insights": "^1.1.0",
     "ali-oss": "^6.21.0",
     "gray-matter": "^4.0.3",
+    "lucide-react": "^0.462.0",
     "lxgw-wenkai-webfont": "^1.7.0",
     "next": "14.2.5",
     "react": "^18",
