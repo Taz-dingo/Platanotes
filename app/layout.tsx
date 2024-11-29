@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { Metadata } from "next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from '@vercel/analytics/next';
 import MenuCard from "@/components/card/menu-card";
 
 export const metadata: Metadata = {
@@ -81,6 +82,7 @@ export default async function RootLayout({
             <main className="relative px-2 sm:px-0 max-w-[50rem]">
               {children}
               <SpeedInsights />
+              <Analytics />
             </main>
           </div>
           <footer className="mt-8 py-4 text-center text-gray-500">
