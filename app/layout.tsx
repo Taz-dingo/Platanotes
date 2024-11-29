@@ -3,8 +3,6 @@ import "/public/styles/github-markdown.css";
 import React from "react";
 import Link from "next/link";
 import { Metadata } from "next";
-import PostListBar from "@/components/sidebar/post-list-bar";
-import Script from "next/script";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import MenuCard from "@/components/card/menu-card";
 

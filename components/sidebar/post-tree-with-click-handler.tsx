@@ -1,4 +1,3 @@
-// app/NodeClickHandler.js
 "use client"; // 使其成为客户端组件
 
 import { useRouter } from "next/navigation";

@@ -1,5 +1,6 @@
-import { FileTreeNode, getFileTree, getPostsTree, postsDirectory } from "./get-posts-tree";
 import { DIRECTORY_NAMES } from "./constants";
+import matter from 'gray-matter';
+import { getBlogCategories, getCategoryPosts as getCategoryPostsFromOSS, getPostContent } from './oss';
 
 // 获取目录的展示名称
 export async function getDirectoryDisplayName(dirName: string): Promise<string> {
@@ -17,49 +18,107 @@ export async function getDirectorySystemName(displayName: string): Promise<strin
 
 // 根据类别获取所有相关的文章
 export async function getCategoryPosts(category: string): Promise<FileTreeNode[]> {
-    const postsTree = await getPostsTree();
+    const posts = await getCategoryPostsFromOSS(category);
+    const categoryPosts: FileTreeNode[] = [];
 
-    // 递归查找特定类别的文章
-    function findCategoryPosts(node: FileTreeNode, targetCategory: string): FileTreeNode[] {
-        if (node.type === 'directory' && node.name === targetCategory) {
-            return node.children?.filter(child => child.type === 'file') || [];
+    for (const post of posts) {
+        try {
+            const content = await getPostContent(post);
+            const { data: frontMatter, content: markdownContent } = matter(content);
+
+            // 提取摘要
+            let summary = frontMatter.summary;
+            if (!summary) {
+                const plainText = markdownContent
+                    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+                    .replace(/[#*`>+-=\[\]]/g, '')
+                    .replace(/\n+/g, ' ')
+                    .trim();
+                summary = plainText.length > 100 
+                    ? plainText.substring(0, 100) + '...'
+                    : plainText;
+            }
+
+            const fileName = post.split('/').pop()?.replace('.md', '') || '';
+            const relativePath = post.replace('Blog/', '').replace('.md', '');
+
+            categoryPosts.push({
+                type: 'file',
+                name: fileName,
+                path: relativePath,
+                metadata: {
+                    ctime: frontMatter.date ? new Date(frontMatter.date).getTime() : Date.now(),
+                    summary,
+                    title: frontMatter.title || fileName
+                }
+            });
+        } catch (error) {
+            console.error(`Error processing file ${post}:`, error);
         }
-        if (node.type === 'directory') {
-            return node.children?.flatMap(child => findCategoryPosts(child, targetCategory)) || [];
-        }
-        return [];
     }
 
-    return findCategoryPosts(postsTree, category);
+    // 按时间排序
+    return categoryPosts.sort((a, b) => (b.metadata?.ctime || 0) - (a.metadata?.ctime || 0));
 }
 
-export type FileItem = Omit<FileTreeNode, "children">
-// 处理文件树，获取排序列表
-async function processFileTree(node: FileTreeNode): Promise<FileItem[]> {
-    let fileList: FileItem[] = [];
+export interface FileTreeNode {
+    type: 'file' | 'directory';
+    name: string;
+    path: string;
+    children?: FileTreeNode[];
+    metadata?: {
+        ctime: number;
+        summary?: string;
+        title?: string;
+    };
+}
 
-    // 如果是文件，则获取创建时间并加入列表
-    if (node.type === 'file') {
-        fileList.push(node);
-    }
+// 获取所有文章列表，按时间排序
+export async function getSortedFileList(): Promise<FileTreeNode[]> {
+    const categories = await getBlogCategories();
+    const allPosts: FileTreeNode[] = [];
 
-    // 如果是目录，则递归处理子节点
-    if (node.type === 'directory' && node.children) {
-        for (const child of node.children) {
-            const childFiles = await processFileTree(child);
-            fileList = fileList.concat(childFiles);
+    for (const category of categories) {
+        const categoryName = category.replace('Blog/', '').replace('/', '');
+        const posts = await getCategoryPostsFromOSS(categoryName);
+        
+        for (const post of posts) {
+            try {
+                const content = await getPostContent(post);
+                const { data: frontMatter, content: markdownContent } = matter(content);
+
+                // 提取摘要
+                let summary = frontMatter.summary;
+                if (!summary) {
+                    const plainText = markdownContent
+                        .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+                        .replace(/[#*`>+-=\[\]]/g, '')
+                        .replace(/\n+/g, ' ')
+                        .trim();
+                    summary = plainText.length > 100 
+                        ? plainText.substring(0, 100) + '...'
+                        : plainText;
+                }
+
+                const fileName = post.split('/').pop()?.replace('.md', '') || '';
+                const relativePath = post.replace('Blog/', '').replace('.md', '');
+
+                allPosts.push({
+                    type: 'file',
+                    name: fileName,
+                    path: relativePath,
+                    metadata: {
+                        ctime: frontMatter.date ? new Date(frontMatter.date).getTime() : Date.now(),
+                        summary,
+                        title: frontMatter.title || fileName
+                    }
+                });
+            } catch (error) {
+                console.error(`Error processing file ${post}:`, error);
+            }
         }
     }
 
-    return fileList;
-}
-
-// 根据创建时间排序
-export async function getSortedFileList(order: 'asc' | 'desc' = 'desc'): Promise<FileItem[]> {
-    const root = await getFileTree();
-    const fileList = await processFileTree(root);
-    return fileList.sort((a, b) => {
-        const comparison = (a.metadata?.ctime || 0) - (b.metadata?.ctime || 0);
-        return order === 'desc' ? -comparison : comparison;
-    });
+    // 按时间排序
+    return allPosts.sort((a, b) => (b.metadata?.ctime || 0) - (a.metadata?.ctime || 0));
 }

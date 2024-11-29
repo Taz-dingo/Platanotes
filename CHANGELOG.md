@@ -30,8 +30,15 @@
 
 - [ ] refactor: 统一post格式
 - [ ] refactor: 统一icon库（现在有lucide-react和react-icons两个））
+- [ ] refactor: 统一响应式断点位置（现在有sm和md两个））
 
 - [ ] feat: 404页面
+
+- [ ] feat: 影展，用微前端实现？
+
+### 2024-11-29
+- [x] feat：不用本地文件，用OSS，通过API动态获取当前页面
+
 
 ### 2024-11-28
 - [x] feat: 移动端响应式

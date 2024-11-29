@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
+import { safeUrlEncode } from '@/lib/url-utils';
 
 // 通用树节点接口
 export interface TreeNode {
@@ -53,11 +54,19 @@ const PostTreeNode: React.FC<TreeProps> = ({
     }
   }, [isExpanded]);
 
-  const handleClick = (e: React.MouseEvent) => {
-    if (!isLeaf && clickToExpand) {
+  const handleNodeClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (clickToExpand) {
       setIsExpanded(!isExpanded);
     }
-    onNodeClick?.(node);
+    if (onNodeClick) {
+      // 确保节点数据在传递给点击处理函数之前进行URL编码
+      const encodedNode = {
+        ...node,
+        id: typeof node.id === 'string' ? safeUrlEncode(node.id) : node.id
+      };
+      onNodeClick(encodedNode);
+    }
   };
 
   const handleToggleClick = (e: React.MouseEvent) => {
@@ -116,7 +125,7 @@ const PostTreeNode: React.FC<TreeProps> = ({
         className={`flex items-center cursor-pointer hover:text-green-500 ${
           isSelected?.(node) ? "text-green-500" : ""
         }`}
-        onClick={handleClick}
+        onClick={handleNodeClick}
       >
         {renderToggleIcon()}
         {renderLabel ? (
