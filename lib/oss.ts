@@ -56,6 +56,37 @@ export async function getCategoryPosts(category: string): Promise<string[]> {
     }
 }
 
+// 批量获取文章内容
+export async function getPostsContent(paths: string[]): Promise<Map<string, string>> {
+    const contentMap = new Map<string, string>();
+    
+    try {
+        // 使用 Promise.all 并行获取所有文章内容
+        const contents = await Promise.all(
+            paths.map(async (path) => {
+                try {
+                    const result = await client.get(path);
+                    return { path, content: result.content.toString('utf-8') };
+                } catch (error) {
+                    console.error(`Error getting content for ${path}:`, error);
+                    return { path, content: '' };
+                }
+            })
+        );
+
+        // 将结果存入 Map
+        contents.forEach(({ path, content }) => {
+            if (content) {
+                contentMap.set(path, content);
+            }
+        });
+    } catch (error) {
+        console.error('Error in batch content fetch:', error);
+    }
+
+    return contentMap;
+}
+
 // 获取特定文章的内容
 export async function getPostContent(path: string): Promise<string> {
     try {

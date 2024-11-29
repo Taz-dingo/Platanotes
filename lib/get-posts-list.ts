@@ -1,6 +1,6 @@
 import { DIRECTORY_NAMES } from "./constants";
 import matter from 'gray-matter';
-import { getBlogCategories, getCategoryPosts as getCategoryPostsFromOSS, getPostContent } from './oss';
+import { getBlogCategories, getCategoryPosts as getCategoryPostsFromOSS, getPostsContent,getPostContent } from './oss';
 
 // 获取目录的展示名称
 export async function getDirectoryDisplayName(dirName: string): Promise<string> {
@@ -16,14 +16,33 @@ export async function getDirectorySystemName(displayName: string): Promise<strin
     return entry ? entry[0] : displayName;
 }
 
+// 使用 LRU 缓存来存储分类文章列表
+const categoryCache = new Map<string, { data: FileTreeNode[], timestamp: number }>();
+const CACHE_DURATION = 5 * 60 * 1000; // 5分钟缓存
+
 // 根据类别获取所有相关的文章
 export async function getCategoryPosts(category: string): Promise<FileTreeNode[]> {
+    // 检查缓存
+    const cached = categoryCache.get(category);
+    if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
+        return cached.data;
+    }
+
     const posts = await getCategoryPostsFromOSS(category);
     const categoryPosts: FileTreeNode[] = [];
 
+    if (posts.length === 0) {
+        return [];
+    }
+
+    // 批量获取所有文章内容
+    const contentMap = await getPostsContent(posts);
+
     for (const post of posts) {
         try {
-            const content = await getPostContent(post);
+            const content = contentMap.get(post);
+            if (!content) continue;
+
             const { data: frontMatter, content: markdownContent } = matter(content);
 
             // 提取摘要
@@ -58,7 +77,12 @@ export async function getCategoryPosts(category: string): Promise<FileTreeNode[]
     }
 
     // 按时间排序
-    return categoryPosts.sort((a, b) => (b.metadata?.ctime || 0) - (a.metadata?.ctime || 0));
+    const sortedPosts = categoryPosts.sort((a, b) => (b.metadata?.ctime || 0) - (a.metadata?.ctime || 0));
+    
+    // 更新缓存
+    categoryCache.set(category, { data: sortedPosts, timestamp: Date.now() });
+
+    return sortedPosts;
 }
 
 export interface FileTreeNode {
