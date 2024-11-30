@@ -39,7 +39,7 @@ export async function generateStaticParams() {
 }
 
 // 设置页面重新验证时间
-export const revalidate = 3600; // 1小时重新验证一次
+export const revalidate = 300; // 5分钟重新验证一次
 
 export default async function CategoryPage({ params }: PageProps) {
   const { slug } = params;
