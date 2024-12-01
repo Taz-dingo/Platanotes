@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "node -r @swc-node/register scripts/generate-static-data.ts",
     "prebuild": "node -r @swc-node/register scripts/generate-static-data.ts",
     "build": "next build",
     "dev": "next dev",

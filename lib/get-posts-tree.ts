@@ -1,5 +1,5 @@
 import matter from 'gray-matter';
-import { getBlogCategories, getCategoryPosts, getPostContent } from './oss';
+import { CategoryData } from './generate-static-data';
 
 /**
  * 1. 文章树结构：通过递归读取指定目录下的文件和子目录，构建一个树形结构（TreeNode），
@@ -19,68 +19,38 @@ export interface FileTreeNode {
     }; // 元数据
 }
 
-// 从OSS获取文章树结构
+// 从静态数据文件获取文章树结构
 export async function getPostsTree(): Promise<FileTreeNode> {
-    const categories = await getBlogCategories();
-    const rootChildren: FileTreeNode[] = [];
+    try {
+        // 从静态数据文件中读取
+        const staticData = await import('../public/static-data/category-data.json') as { default: CategoryData[] };
+        const rootChildren: FileTreeNode[] = [];
 
-    for (const category of categories) {
-        const categoryName = category.replace('Blog/', '').replace('/', '');
-        const posts = await getCategoryPosts(categoryName);
-        const categoryChildren: FileTreeNode[] = [];
-
-        for (const post of posts) {
-            try {
-                const content = await getPostContent(post);
-                const { data: frontMatter, content: markdownContent } = matter(content);
-
-                // 提取摘要
-                let summary = frontMatter.summary;
-                if (!summary) {
-                    const plainText = markdownContent
-                        .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
-                        .replace(/[#*`>+-=\[\]]/g, '')
-                        .replace(/\n+/g, ' ')
-                        .trim();
-                    summary = plainText.length > 100 
-                        ? plainText.substring(0, 100) + '...'
-                        : plainText;
-                }
-
-                const fileName = post.split('/').pop()?.replace('.md', '') || '';
-                const relativePath = post.replace('Blog/', '').replace('.md', '');
-
-                categoryChildren.push({
-                    type: 'file',
-                    name: fileName,
-                    path: relativePath,
-                    metadata: {
-                        ctime: frontMatter.date ? new Date(frontMatter.date).getTime() : Date.now(),
-                        summary,
-                        title: frontMatter.title || fileName
-                    }
-                });
-            } catch (error) {
-                console.error(`Error processing file ${post}:`, error);
-            }
+        for (const category of staticData.default) {
+            rootChildren.push({
+                type: 'directory',
+                name: category.slug,
+                path: category.slug,
+                children: category.posts as FileTreeNode[]
+            });
         }
 
-        // 添加分类目录节点
-        rootChildren.push({
+        return {
             type: 'directory',
-            name: categoryName,
-            path: categoryName,
-            children: categoryChildren
-        });
+            name: 'Blog',
+            path: '',
+            children: rootChildren
+        };
+    } catch (error) {
+        console.error('Error loading static data:', error);
+        // 如果静态数据加载失败，返回空树
+        return {
+            type: 'directory',
+            name: 'Blog',
+            path: '',
+            children: []
+        };
     }
-
-    // 返回根节点
-    return {
-        type: 'directory',
-        name: 'Blog',
-        path: '',
-        children: rootChildren
-    };
 }
 
 // 获取文件树
