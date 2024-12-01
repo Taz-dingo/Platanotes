@@ -121,8 +121,8 @@ const PostTreeNode: React.FC<TreeProps> = ({
   return (
     <li style={{ paddingLeft: `${level * indentSize}px` }}>
       <div
-        className={`flex items-center cursor-pointer hover:text-green-500 ${
-          isSelected?.(node) ? "text-green-500" : ""
+        className={`flex items-center cursor-pointer hover:text-green-700 ${
+          isSelected?.(node) ? "text-green-700" : ""
         }`}
         onClick={handleNodeClick}
       >

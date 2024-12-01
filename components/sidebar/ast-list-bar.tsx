@@ -1,6 +1,7 @@
 'use client';
 
 import PostTreeNode, { TreeNode } from '@/components/common/post-tree-node';
+import { useState, useEffect } from 'react';
 
 interface ASTListBarProps {
   headings: { level: number; text: string }[];
@@ -18,7 +19,7 @@ export function convertHeadingsToTree(headings: { level: number; text: string }[
 
   headings.forEach((heading, index) => {
     const node: TreeNode = {
-      id: `heading-${index}`,
+      id: `heading-${heading.text}-${index}`,
       label: heading.text,
       children: [],
     };
@@ -41,6 +42,41 @@ export function convertHeadingsToTree(headings: { level: number; text: string }[
 }
 
 export default function ASTListBar({ headings }: ASTListBarProps) {
+  const [activeHeading, setActiveHeading] = useState<string>('');
+
+  useEffect(() => {
+    // 为每个标题添加唯一ID
+    const headingElements = document.querySelector('.markdown-body')?.querySelectorAll('h1, h2, h3, h4, h5, h6');
+    headingElements?.forEach((el, index) => {
+      if (el.id === '') {
+        // 使用标题文本和索引组合生成唯一ID
+        const text = el.textContent?.trim() || '';
+        el.id = `heading-${text}-${index}`;
+      }
+    });
+
+    // 创建 Intersection Observer
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveHeading(entry.target.id);
+            console.log("🚀 ~ entries.forEach ~ entry.target.id:", entry.target.id)
+          }
+        });
+      },
+      {
+        // 设置观察范围 上、右、下、左
+        rootMargin: '-5px 0px -80% 0px'
+      }
+    );
+
+    // 观察所有标题元素
+    headingElements?.forEach((heading) => observer.observe(heading));
+
+    return () => observer.disconnect();
+  }, []);
+
   if (!headings || headings.length === 0) {
     return null;
   }
@@ -59,17 +95,37 @@ export default function ASTListBar({ headings }: ASTListBarProps) {
               showToggleIcon={false}
               defaultExpand={true}
               clickToExpand={false}
+              isSelected={(node) => {
+                const match =String(node.id).match(/heading-(.*)-(\d+)$/);
+                if (!match) return false;
+              
+                const [, text, index] = match;
+
+                console.log(activeHeading, `heading-${text}-${index}`);
+                return activeHeading === `heading-${text}-${index}`;
+              }}
               onNodeClick={(node) => {
-                // 点击标题时滚动到对应位置的逻辑
                 const text = typeof node.label === 'string' ? node.label : '';
-                if (text) {
-                  const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
-                  const target = Array.from(headings).find(
-                    (h) => h.textContent?.trim() === text
-                  );
-                  if (target) {
-                    target.scrollIntoView({ behavior: 'smooth' });
-                  }
+                if (!text) return;
+              
+                const match = String(node.id).match(/heading-(.*)-(\d+)$/);
+                if (!match) return;
+              
+              
+                const decodedText = decodeURIComponent(match[1]); // 解码 label 部分
+                const index = parseInt(match[2], 10);
+
+              
+                // 查找标题元素 (需要正确解码文本内容)
+                const headingElements = document.querySelector('.markdown-body')?.querySelectorAll('h1, h2, h3, h4, h5, h6');
+                const targetElement = Array.from(headingElements || []).find((h, idx) => 
+                  h.textContent?.trim() === decodedText && idx === index
+                );
+
+
+                if (targetElement) {
+                  targetElement.scrollIntoView({ behavior: 'smooth' });
+                  setActiveHeading(targetElement.id);
                 }
               }}
             />
