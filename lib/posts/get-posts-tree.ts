@@ -1,4 +1,4 @@
-import { CategoryData } from '@/lib/generate-static-data';
+import { CategoryData } from '@/lib/utils/generate-static-data';
 
 /**
  * 1. 文章树结构：通过递归读取指定目录下的文件和子目录，构建一个树形结构（TreeNode），

@@ -1,6 +1,6 @@
 import { DIRECTORY_NAMES } from "@/lib/utils/constants";
 import { FileTreeNode } from '@/lib/posts/get-posts-tree';
-import { CategoryData } from '@/lib/generate-static-data';
+import { CategoryData } from '@/lib/utils/generate-static-data';
 
 // 使用 LRU 缓存来存储分类文章列表
 const categoryCache = new Map<string, { data: FileTreeNode[], timestamp: number }>();

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import path from 'path';
 import fs from 'fs/promises';
-import { CategoryData, StaticPostData } from "@/lib/generate-static-data";
+import { CategoryData } from "@/lib/utils/generate-static-data";
 
 interface PageProps {
   params: {
@@ -11,23 +11,21 @@ interface PageProps {
 
 // 从静态文件获取分类数据
 async function getCategoryData(): Promise<CategoryData[]> {
-  if (process.env.NODE_ENV === 'development') {
-    // 在开发环境下直接生成数据
-    const { generateAllCategoryData } = await import('@/lib/generate-static-data');
-    return generateAllCategoryData();
-  } else {
-    // 生产环境使用静态文件
+  // 每次都动态生成数据
+  const { generateAllCategoryData } = await import('@/lib/utils/generate-static-data');
+  const data = await generateAllCategoryData();
+  
+  // 同时更新静态文件，这样构建时的静态文件也会是最新的
+  if (process.env.NODE_ENV === 'production') {
     try {
       const filePath = path.join(process.cwd(), 'public', 'static-data', 'category-data.json');
-      const fileContent = await fs.readFile(filePath, 'utf-8');
-      return JSON.parse(fileContent);
+      await fs.writeFile(filePath, JSON.stringify(data, null, 2), 'utf-8');
     } catch (error) {
-      console.error('Error reading static data:', error);
-      // 如果静态文件不存在，也使用动态生成
-      const { generateAllCategoryData } = await import('@/lib/generate-static-data');
-      return generateAllCategoryData();
+      console.error('Error writing static data:', error);
     }
   }
+  
+  return data;
 }
 
 // 生成静态页面参数

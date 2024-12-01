@@ -1,5 +1,6 @@
-import { generateStaticDataFile } from '../lib/generate-static-data';
+import { generateStaticDataFile } from '@/lib/utils/generate-static-data';
 
+// 开发环境生成静态数据的脚本
 async function main() {
     console.log('Generating static data...');
     try {
