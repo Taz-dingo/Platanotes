@@ -146,23 +146,22 @@ const PostTreeNode: React.FC<TreeProps> = ({
       {!isLeaf && (
         <ul
           ref={childrenRef}
-          className="overflow-hidden transition-all duration-300 ease-in-out"
+          className="overflow-hidden transition-all duration-300 ease-in-out list-none border-l"
           style={{ height: contentHeight }}
         >
           {node.children?.map((child, index) => (
-            <li key={child.id || index} className="border-l">
-              <PostTreeNode
-                node={child}
-                level={level + 1}
-                onNodeClick={onNodeClick}
-                isSelected={isSelected}
-                renderLabel={renderLabel}
-                indentSize={indentSize}
-                showToggleIcon={showToggleIcon}
-                defaultExpand={defaultExpand}
-                clickToExpand={clickToExpand}
-              />
-            </li>
+            <PostTreeNode
+              key={child.id || index}
+              node={child}
+              level={level + 1}
+              onNodeClick={onNodeClick}
+              isSelected={isSelected}
+              renderLabel={renderLabel}
+              indentSize={indentSize}
+              showToggleIcon={showToggleIcon}
+              defaultExpand={defaultExpand}
+              clickToExpand={clickToExpand}
+            />
           ))}
         </ul>
       )}
