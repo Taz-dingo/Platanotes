@@ -27,10 +27,6 @@ export default async function RootLayout({
         />
         <link
           rel="stylesheet"
-          href="/styles/github-markdown.css"
-        />
-        <link
-          rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/highlight.js/styles/github.min.css"
         />
         <link
