@@ -1,5 +1,4 @@
-import matter from 'gray-matter';
-import { CategoryData } from './generate-static-data';
+import { CategoryData } from '@/lib/generate-static-data';
 
 /**
  * 1. 文章树结构：通过递归读取指定目录下的文件和子目录，构建一个树形结构（TreeNode），
@@ -23,7 +22,7 @@ export interface FileTreeNode {
 export async function getPostsTree(): Promise<FileTreeNode> {
     try {
         // 从静态数据文件中读取
-        const staticData = await import('../public/static-data/category-data.json') as { default: CategoryData[] };
+        const staticData = await import('@/public/static-data/category-data.json') as { default: CategoryData[] };
         const rootChildren: FileTreeNode[] = [];
 
         for (const category of staticData.default) {

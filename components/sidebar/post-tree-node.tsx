@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import { safeUrlEncode } from '@/lib/url-utils';
+import { safeUrlEncode } from '@/lib/utils/url-utils';
 
 // 通用树节点接口
 export interface TreeNode {

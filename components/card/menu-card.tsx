@@ -1,4 +1,4 @@
-import { getFileTree } from "@/lib/get-posts-tree";
+import { getFileTree } from "@/lib/posts/get-posts-tree";
 import MenuList from "./menu-list";
 
 export default async function MenuCard() {

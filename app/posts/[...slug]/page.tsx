@@ -1,7 +1,7 @@
 import Breadcrumb, { BreadcrumbItem } from "@/components/bread-crumb";
 import ResponsiveASTList from "@/components/sidebar/responsive-ast-list";
-import { getPostBySlug } from "@/lib/get-posts-content";
-import { getPostsTree } from "@/lib/get-posts-tree";
+import { getPostBySlug } from "@/lib/posts/get-posts-content";
+import { getPostsTree } from "@/lib/posts/get-posts-tree";
 
 export default async function Post({ params }: { params: { slug: string[] } }) {
   const slug = params.slug.join("/");

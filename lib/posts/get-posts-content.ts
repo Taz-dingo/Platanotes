@@ -1,6 +1,5 @@
 import matter from 'gray-matter';
 import { unified } from "unified";
-import type { Root } from 'hast';
 import rehypeHighlight from "rehype-highlight";
 import rehypeKatex from "rehype-katex";
 import rehypeStringify from "rehype-stringify";
@@ -8,9 +7,8 @@ import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
-import { getHAST } from './get-hast';
-import { getPostContent } from './oss';
-import { safeUrlDecode } from './url-utils';
+import { getPostContent } from '@/lib/services/oss';
+import { safeUrlDecode } from '@/lib/utils/url-utils';
 
 // AST 节点类型
 export interface ASTNode {
@@ -83,7 +81,6 @@ export async function getPostBySlug(slug: string) {
             .use(remarkGfm)
             .use(remarkMath)
             .use(remarkRehype, { allowDangerousHtml: true })
-            .use(getHAST)
             .use(rehypeKatex)
             .use(rehypeHighlight)
             .use(rehypeStringify)

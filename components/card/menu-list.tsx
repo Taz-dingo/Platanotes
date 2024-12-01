@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FaHome, FaBook, FaLightbulb, FaFilm, FaCamera } from "react-icons/fa";
-import type { FileTreeNode } from "@/lib/get-posts-tree";
-import { DIRECTORY_NAMES } from "@/lib/constants";
+import type { FileTreeNode } from "@/lib/posts/get-posts-tree";
+import { DIRECTORY_NAMES } from "@/lib/utils/constants";
 
 // 统一的菜单配置
 const menuConfig = {

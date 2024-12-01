@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import ASTListBar from '@/components/sidebar/ast-list-bar';
 import { Menu } from 'lucide-react';
-import { usePortal } from '@/lib/use-portal';
+import { usePortal } from '@/hooks/use-portal';
 import { usePathname } from 'next/navigation';
 
 interface ResponsiveASTListProps {

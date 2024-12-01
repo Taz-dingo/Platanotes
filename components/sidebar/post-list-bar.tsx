@@ -1,4 +1,4 @@
-import { FileTreeNode, getFileTree, getPostsTree } from "@/lib/get-posts-tree";
+import { FileTreeNode, getFileTree, getPostsTree } from "@/lib/posts/get-posts-tree";
 import React from "react";
 import PostTreeNode, { TreeNode } from "@/components/sidebar/post-tree-node";
 

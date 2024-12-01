@@ -1,4 +1,4 @@
-import { getBlogCategories, getCategoryPosts as getCategoryPostsFromOSS, getPostsContent } from './oss';
+import { getBlogCategories, getCategoryPosts, getPostsContent } from '@/lib/services/oss';
 import matter from 'gray-matter';
 import fs from 'fs/promises';
 import path from 'path';
@@ -81,7 +81,7 @@ export async function generateAllCategoryData(): Promise<CategoryData[]> {
 
     for (const category of categories) {
         const categorySlug = category.replace('Blog/', '').replace('/', '');
-        const posts = await getCategoryPostsFromOSS(categorySlug);
+        const posts = await getCategoryPosts(categorySlug);
         
         if (posts.length === 0) continue;
 

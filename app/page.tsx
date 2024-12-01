@@ -1,4 +1,4 @@
-import { getSortedFileList } from "@/lib/get-posts-list";
+import { getSortedFileList } from "@/lib/posts/get-posts-list";
 import Link from "next/link";
 
 export default async function Home() {

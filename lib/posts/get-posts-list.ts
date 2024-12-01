@@ -1,8 +1,6 @@
-import { DIRECTORY_NAMES } from "./constants";
-import matter from 'gray-matter';
-import { getBlogCategories, getCategoryPosts as getCategoryPostsFromOSS, getPostsContent,getPostContent } from './oss';
-import { FileTreeNode } from './get-posts-tree';
-import { StaticPostData, CategoryData } from './generate-static-data';
+import { DIRECTORY_NAMES } from "@/lib/utils/constants";
+import { FileTreeNode } from '@/lib/posts/get-posts-tree';
+import { CategoryData } from '@/lib/generate-static-data';
 
 // 使用 LRU 缓存来存储分类文章列表
 const categoryCache = new Map<string, { data: FileTreeNode[], timestamp: number }>();
@@ -31,7 +29,7 @@ export async function getCategoryPosts(category: string): Promise<FileTreeNode[]
     }
 
     try {
-        const staticData = await import('../public/static-data/category-data.json') as { default: CategoryData[] };
+        const staticData = await import('@/public/static-data/category-data.json') as { default: CategoryData[] };
         const categoryData = staticData.default.find(c => c.slug === category);
         const posts = categoryData?.posts || [];
         
@@ -51,7 +49,7 @@ export async function getCategoryPosts(category: string): Promise<FileTreeNode[]
 // 获取所有文章列表，按时间排序
 export async function getSortedFileList(): Promise<FileTreeNode[]> {
     try {
-        const staticData = await import('../public/static-data/category-data.json') as { default: CategoryData[] };
+        const staticData = await import('@/public/static-data/category-data.json') as { default: CategoryData[] };
         const allPosts: FileTreeNode[] = [];
         
         for (const category of staticData.default) {

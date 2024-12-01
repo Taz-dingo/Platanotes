@@ -1,6 +1,8 @@
 const OSS = require('ali-oss');
-require('dotenv').config({ path: '.env.local' });
 
+// 根据环境加载不同的配置文件
+const envFile = process.env.NODE_ENV === 'production' ? '.env.production' : '.env.local';
+require('dotenv').config({ path: envFile });
 
 const client = new OSS({
     // region填写Bucket所在地域。以华东1（杭州）为例，Region填写为oss-cn-hangzhou。
