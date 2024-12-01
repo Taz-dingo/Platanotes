@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { safeUrlEncode } from '@/lib/utils/url-utils';
+import Tooltip from './tooltip';
 
 // 通用树节点接口
 export interface TreeNode {
@@ -10,40 +11,6 @@ export interface TreeNode {
   label: React.ReactNode;
   children?: TreeNode[];
   data?: any; // 可选的额外数据
-}
-
-// 将标题列表转换为树形结构
-export function convertHeadingsToTree(headings: { level: number; text: string }[]): TreeNode {
-  const root: TreeNode = {
-    id: 'root',
-    label: '目录',
-    children: [],
-  };
-
-  const stack: { node: TreeNode; level: number }[] = [{ node: root, level: 0 }];
-
-  headings.forEach((heading, index) => {
-    const node: TreeNode = {
-      id: `heading-${index}`,
-      label: heading.text,
-      children: [],
-    };
-
-    // 找到合适的父节点
-    while (stack.length > 1 && stack[stack.length - 1].level >= heading.level) {
-      stack.pop();
-    }
-
-    // 添加到父节点的子节点中
-    const parent = stack[stack.length - 1].node;
-    parent.children = parent.children || [];
-    parent.children.push(node);
-
-    // 将当前节点加入栈中
-    stack.push({ node, level: heading.level });
-  });
-
-  return root;
 }
 
 interface TreeProps {
@@ -111,24 +78,22 @@ const PostTreeNode: React.FC<TreeProps> = ({
   };
 
   const renderToggleIcon = () => {
-    if (isLeaf || !showToggleIcon) return null;
-
     return (
-      <span
-        className="cursor-pointer inline-block w-4 h-4 mr-1"
+      <div
+        className="w-4 h-4 flex items-center justify-center flex-shrink-0"
         onClick={handleToggleClick}
       >
-        <Image
+        {isLeaf || !showToggleIcon ? null : (
+          <Image
           src="/svg/triangle.svg"
-          alt={isExpanded ? "收起" : "展开"}
+          alt={isExpanded ? "展开" : "收起"}
           width={16}
           height={16}
-          className={`transition-transform duration-200 ${
-            isExpanded ? "rotate-0" : "-rotate-90"
-          }`}
+          className={`transition ${isExpanded ? "" : "rotate-[-90deg]"}`}
         />
-      </span>
-    );
+        )}
+      </div>
+    )
   };
 
   // 根节点特殊处理，直接渲染子节点
@@ -161,12 +126,22 @@ const PostTreeNode: React.FC<TreeProps> = ({
         }`}
         onClick={handleNodeClick}
       >
-        {renderToggleIcon()}
-        {renderLabel ? (
-          renderLabel(node, isLeaf)
-        ) : (
-          <span>{node.label}</span>
+        {level > 0 && (
+          <div 
+            className="absolute left-0 top-0 bottom-0 border-gray-300" 
+            style={{ left: `${(level - 1) * indentSize + 4}px` }}
+          />
         )}
+        {renderToggleIcon()}
+        <Tooltip 
+          content={typeof node.label === 'string' ? node.label : ''}
+          position="right"
+          delay={300}
+        >
+          <div className="overflow-hidden text-ellipsis whitespace-nowrap">
+            {renderLabel ? renderLabel(node, isLeaf) : node.label}
+          </div>
+        </Tooltip>
       </div>
       {!isLeaf && (
         <ul
@@ -175,7 +150,7 @@ const PostTreeNode: React.FC<TreeProps> = ({
           style={{ height: contentHeight }}
         >
           {node.children?.map((child, index) => (
-            <li key={child.id || index}>
+            <li key={child.id || index} className="border-l">
               <PostTreeNode
                 node={child}
                 level={level + 1}

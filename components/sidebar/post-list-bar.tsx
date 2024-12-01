@@ -1,6 +1,6 @@
 import { FileTreeNode, getFileTree, getPostsTree } from "@/lib/posts/get-posts-tree";
 import React from "react";
-import PostTreeNode, { TreeNode } from "@/components/sidebar/post-tree-node";
+import PostTreeNode, { TreeNode } from "@/components/common/post-tree-node";
 
 import PostTreeWithClickHandler from "./post-tree-with-click-handler";
 

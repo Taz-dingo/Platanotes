@@ -39,6 +39,8 @@
 - [ ] perf: /categories超级慢，把所有文章都loading+处理了才响应好，而且这玩意为啥没缓存？
 - [ ] refactor: 组件样式框抽象出来
 
+- [x] feat: ast-list-bar添加左border
+
 ### 2024-11-29
 - [x] feat：不用本地文件，用OSS，通过API动态获取当前页面
 
