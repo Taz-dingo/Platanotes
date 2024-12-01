@@ -33,7 +33,7 @@ export default async function Post({ params }: { params: { slug: string[] } }) {
           dangerouslySetInnerHTML={{ __html: post.content }}
         />
       </div>
-      <ResponsiveASTList />
+      <ResponsiveASTList headings={post.headings} />
     </article>
   );
 }

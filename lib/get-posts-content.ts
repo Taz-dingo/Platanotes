@@ -53,6 +53,30 @@ export async function getPostBySlug(slug: string) {
         const fileContents = await getPostContent(ossPath);
         const { data, content } = matter(fileContents);
 
+        // 提取标题结构
+        const headings: { level: number; text: string }[] = [];
+        const lines = content.split('\n');
+        let inCodeBlock = false;
+
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i];
+            
+            // 检查是否进入或离开代码块
+            if (line.trim().startsWith('```')) {
+                inCodeBlock = !inCodeBlock;
+                continue;
+            }
+            
+            // 只在非代码块区域处理标题
+            if (!inCodeBlock && line.startsWith('#')) {
+                const level = line.match(/^#+/)?.[0].length || 0;
+                const text = line.replace(/^#+\s+/, '').trim();
+                if (level > 0 && text) {
+                    headings.push({ level, text });
+                }
+            }
+        }
+
         // 使用 unified 处理 markdown 内容并转化为 HTML
         const processedContent = await unified()
             .use(remarkParse)
@@ -70,6 +94,7 @@ export async function getPostBySlug(slug: string) {
         return {
             slug,
             content: contentHtml,
+            headings,
             ...data,
         };
     } catch (error) {

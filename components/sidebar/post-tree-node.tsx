@@ -12,6 +12,40 @@ export interface TreeNode {
   data?: any; // 可选的额外数据
 }
 
+// 将标题列表转换为树形结构
+export function convertHeadingsToTree(headings: { level: number; text: string }[]): TreeNode {
+  const root: TreeNode = {
+    id: 'root',
+    label: '目录',
+    children: [],
+  };
+
+  const stack: { node: TreeNode; level: number }[] = [{ node: root, level: 0 }];
+
+  headings.forEach((heading, index) => {
+    const node: TreeNode = {
+      id: `heading-${index}`,
+      label: heading.text,
+      children: [],
+    };
+
+    // 找到合适的父节点
+    while (stack.length > 1 && stack[stack.length - 1].level >= heading.level) {
+      stack.pop();
+    }
+
+    // 添加到父节点的子节点中
+    const parent = stack[stack.length - 1].node;
+    parent.children = parent.children || [];
+    parent.children.push(node);
+
+    // 将当前节点加入栈中
+    stack.push({ node, level: heading.level });
+  });
+
+  return root;
+}
+
 interface TreeProps {
   node: TreeNode;
   level?: number;

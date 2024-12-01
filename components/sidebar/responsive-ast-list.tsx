@@ -6,7 +6,11 @@ import { Menu } from 'lucide-react';
 import { usePortal } from '@/lib/use-portal';
 import { usePathname } from 'next/navigation';
 
-export default function ResponsiveASTList() {
+interface ResponsiveASTListProps {
+  headings: { level: number; text: string }[];
+}
+
+export default function ResponsiveASTList({ headings }: ResponsiveASTListProps) {
   const [showMobileAst, setShowMobileAst] = useState(false);
   const pathname = usePathname();
   const { Portal: MenuPortal } = usePortal('#menu-card-append');
@@ -22,7 +26,7 @@ export default function ResponsiveASTList() {
       {/* Desktop Version - Portal to menu-card */}
       <MenuPortal>
         <div className="hidden md:block  pt-4">
-          <ASTListBar />
+          <ASTListBar headings={headings} />
         </div>
       </MenuPortal>
 
@@ -46,7 +50,7 @@ export default function ResponsiveASTList() {
         aria-hidden={!showMobileAst}
       >
         <div className="h-full flex items-center justify-end overflow-auto p-4">
-          <ASTListBar />
+          <ASTListBar headings={headings} />
         </div>
       </div>
     </>

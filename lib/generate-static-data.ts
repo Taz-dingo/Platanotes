@@ -11,6 +11,7 @@ export interface StaticPostData {
         ctime: number;
         summary?: string;
         title?: string;
+        headings?: { level: number; text: string }[];
     };
 }
 
@@ -36,6 +37,30 @@ function processPostContent(content: string, fileName: string, relativePath: str
             : plainText;
     }
 
+    // 提取标题结构
+    const headings: { level: number; text: string }[] = [];
+    const lines = markdownContent.split('\n');
+    let inCodeBlock = false;
+
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        
+        // 检查是否进入或离开代码块
+        if (line.trim().startsWith('```')) {
+            inCodeBlock = !inCodeBlock;
+            continue;
+        }
+        
+        // 只在非代码块区域处理标题
+        if (!inCodeBlock && line.startsWith('#')) {
+            const level = line.match(/^#+/)?.[0].length || 0;
+            const text = line.replace(/^#+\s+/, '').trim();
+            if (level > 0 && text) {
+                headings.push({ level, text });
+            }
+        }
+    }
+
     return {
         type: 'file',
         name: fileName,
@@ -43,7 +68,8 @@ function processPostContent(content: string, fileName: string, relativePath: str
         metadata: {
             ctime: frontMatter.date ? new Date(frontMatter.date).getTime() : Date.now(),
             summary,
-            title: frontMatter.title || fileName
+            title: frontMatter.title || fileName,
+            headings
         }
     };
 }
