@@ -1,5 +1,6 @@
 import Breadcrumb, { BreadcrumbItem } from "@/components/bread-crumb";
 import ResponsiveASTList from "@/components/sidebar/responsive-ast-list";
+import GlassCard from "@/components/common/glass-card";
 import { getPostBySlug } from "@/lib/posts/get-posts-content";
 import { getPostsTree } from "@/lib/posts/get-posts-tree";
 
@@ -25,13 +26,14 @@ export default async function Post({ params }: { params: { slug: string[] } }) {
   return (
     <article className="flex-1 transition">
       <div className="flex-1">
-        <div className="p-4 rounded-lg bg-[rgba(255,255,255,0.5)] mb-2 shadow-md">
+        <GlassCard className="mb-2">
           <Breadcrumb items={items} />
-        </div>
-        <div
-          className="shadow-md rounded-lg"
-          dangerouslySetInnerHTML={{ __html: post.content }}
-        />
+        </GlassCard>
+        <GlassCard>
+          <div
+            dangerouslySetInnerHTML={{ __html: post.content }}
+          />
+        </GlassCard>
       </div>
       <ResponsiveASTList headings={post.headings} />
     </article>

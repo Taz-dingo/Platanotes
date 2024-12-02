@@ -2,6 +2,7 @@
 
 import PostTreeNode, { TreeNode } from '@/components/common/post-tree-node';
 import { useState, useEffect } from 'react';
+import GlassCard from '@/components/common/glass-card';
 
 interface ASTListBarProps {
   headings: { level: number; text: string }[];
@@ -84,7 +85,7 @@ export default function ASTListBar({ headings }: ASTListBarProps) {
   const treeData = convertHeadingsToTree(headings);
 
   return (
-    <div className="bg-[rgba(255,255,255,0.5)] p-5 rounded-lg sticky top-2 shadow-md">
+    <GlassCard>
       <h2 className="border-b-2 border-solid border-slate-300 mb-2 pb-2 font-semibold">
         内容目录
       </h2>
@@ -133,6 +134,6 @@ export default function ASTListBar({ headings }: ASTListBarProps) {
             <p>暂无标题</p>
           )}
       </div>
-    </div>
+    </GlassCard>
   );
 }

@@ -1,5 +1,6 @@
 import { getFileTree } from "@/lib/posts/get-posts-tree";
 import MenuList from "./menu-list";
+import GlassCard from "../common/glass-card";
 
 export default async function MenuCard() {
   const fileTree = await getFileTree();
@@ -7,9 +8,9 @@ export default async function MenuCard() {
 
   return (
     <div className="sticky top-2">
-      <div className=" bg-[rgba(255,255,255,0.5)] p-5 rounded-lg   shadow-md w-full">
+      <GlassCard>
         <MenuList folders={topLevelFolders} />
-      </div>
+      </GlassCard>
       <div id="menu-card-append" />
     </div>
   );

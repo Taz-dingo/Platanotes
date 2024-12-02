@@ -22,8 +22,6 @@
 - [ ] bug: 进入具体posts后menu-card选中状态丢失
 
 - [ ] bug：没有标题的时候ast-list-bar没有对应显示
-- [ ] bug：ast-list-bar选中状态有问题
-- [ ] feat：滚动时候ast-list-bar同步高亮
 
 - [ ] feat: OSS上CDN
 - [ ] feat: 图片懒加载、点击放大等等功能
@@ -39,9 +37,11 @@
 - [ ] perf: /categories超级慢，把所有文章都loading+处理了才响应好，而且这玩意为啥没缓存？
 - [ ] refactor: 组件样式框抽象出来
 
-- [ ] bug: 同名headings会导致跳转不正确
 
 ### 2024-12-01
+- [x] bug：ast-list-bar选中状态有问题
+- [x] feat：滚动时候ast-list-bar同步高亮
+- [x] bug: 同名headings会导致跳转不正确
 - [x] feat: ast-list-bar添加左border
 
 ### 2024-11-29

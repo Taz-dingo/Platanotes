@@ -2,6 +2,7 @@ import Link from "next/link";
 import path from 'path';
 import fs from 'fs/promises';
 import { CategoryData } from "@/lib/utils/generate-static-data";
+import GlassCard from "@/components/common/glass-card";
 
 interface PageProps {
   params: {
@@ -58,26 +59,20 @@ export default async function CategoryPage({ params }: PageProps) {
         });
 
         return (
-          <div
-            style={{
-              padding: "2rem",
-              borderRadius: "10px",
-              backgroundColor: "rgba(255, 255, 255, 0.5)",
-            }}
-            className="mb-2 transition-transform duration-300 will-change-transform transform hover:scale-[1.02] hover:-translate-y-1 shadow-md"
-            key={node.path}
-          >
+          <GlassCard 
+          className="mb-3 p-8"
+           key={node.path} hover>
             <Link
               className="group"
               href={`/posts/${node.path}`}
             >
-              <h2 className="group-hover:text-green-700 transition duration-300 border-b-2 border-gray-300 pb-1 mb-1 text-lg">
+              <h2 className="group-hover:text-green-700 transition duration-300 border-b-2 border-gray-300 pb-1 mb-1 text-xl font-bold">
                 {node.metadata.title || node.name}
               </h2>
               <p className="text-gray-600 break-all">{node.metadata.summary}</p>
             </Link>
             <p className="text-sm text-gray-500 mt-2">{date}</p>
-          </div>
+          </GlassCard>
         );
       })}
     </div>
