@@ -6,6 +6,7 @@ import { Metadata } from "next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from '@vercel/analytics/next';
 import MenuCard from "@/components/card/menu-card";
+import PageTransition from '@/components/transitions/page-transition';
 
 export const metadata: Metadata = {
   title: "梧桐树下",
@@ -76,7 +77,9 @@ export default async function RootLayout({
               {/* <PostListBar /> */}
             </aside>
             <main className="relative px-2 sm:px-0 max-w-[50rem]">
-              {children}
+              <PageTransition>
+                {children}
+              </PageTransition>
               <SpeedInsights />
               <Analytics />
             </main>
