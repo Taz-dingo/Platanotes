@@ -30,7 +30,7 @@ export default async function Post({ params }: { params: { slug: string[] } }) {
           <Breadcrumb items={items} />
         </GlassCard>
         <GlassCard>
-          <div
+          <div className="px-4 py-2"
             dangerouslySetInnerHTML={{ __html: post.content }}
           />
         </GlassCard>

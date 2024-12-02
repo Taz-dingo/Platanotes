@@ -10,27 +10,27 @@ import { DIRECTORY_NAMES } from "@/lib/config/constants";
 const menuConfig = {
   home: {
     name: "首页",
-    path: "/",
+    path: "/posts",
     icon: Home
   },
   notes: {
     name: "笔记",
-    path: "/categories/notes",
+    path: "/posts/categories/notes",
     icon: BookText
   },
   thoughts: {
     name: "想法",
-    path: "/categories/thoughts",
+    path: "/posts/categories/thoughts",
     icon: Lightbulb
   },
   cinema: {
     name: "放映厅",
-    path: "/categories/cinema",
+    path: "/posts/categories/cinema",
     icon: Film
   },
   photos: {
     name: "摄影",
-    path: "/categories/photos",
+    path: "/posts/categories/photos",
     icon: Camera
   }
 } as const;
@@ -43,24 +43,23 @@ export default function MenuList({ folders }: MenuListProps) {
   const pathname = usePathname();
 
   const isSelected = (path: string) => {
-    if (path === '/' && pathname === '/') return true;
-    if (path === '/') return false;
+    if (path === '/posts' && pathname === '/posts') return true;
+    if (path === '/posts') return false;
     
     // 移除末尾的斜杠以确保正确匹配
     const currentPath = pathname.endsWith('/') ? pathname.slice(0, -1) : pathname;
     const targetPath = path.endsWith('/') ? path.slice(0, -1) : path;
     
     // 如果是分类页面，直接检查路径是否匹配
-    if (currentPath.startsWith('/categories/')) {
+    if (currentPath.startsWith('/posts/categories/')) {
       return currentPath.startsWith(targetPath);
     }
     
-    // 如果是文章页面，需要检查文章所属的分类
     if (currentPath.startsWith('/posts/')) {
       // 从 /posts/category/post 中提取 category
       const category = currentPath.split('/')[2];
       // 检查目标路径是否匹配这个分类
-      return targetPath === `/categories/${category}`;
+      return targetPath === `/posts/categories/${category}`;
     }
     
     return false;

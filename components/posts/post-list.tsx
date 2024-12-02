@@ -25,7 +25,7 @@ export default function PostList({ initialPosts }: PostListProps) {
 
     setIsLoading(true);
     try {
-      const url = new URL('/api/posts', window.location.origin);
+      const url = new URL('/posts/api/posts', window.location.origin);
       if (category) {
         url.searchParams.set('category', category);
       }

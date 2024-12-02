@@ -5,8 +5,6 @@ import Link from "next/link";
 import { Metadata } from "next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from '@vercel/analytics/next';
-import MenuCard from "@/components/card/menu-card";
-import PageTransition from '@/components/transitions/page-transition';
 
 export const metadata: Metadata = {
   title: "梧桐树下",
@@ -26,22 +24,12 @@ export default async function RootLayout({
           rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.1.0/style.css"
         />
-        <link
-          rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/highlight.js/styles/github.min.css"
-        />
-        <link
-          rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css"
-        />
       </head>
       <body className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 py-2 px-2 sm:px-4">
-        {/* <FallingLeaves /> */}
         <div className="mx-auto px-2 sm:px-4">
           <header className="my-4 sm:my-8 border-b-2 pb-3 flex flex-col sm:flex-row items-center justify-between px-2 sm:px-5 space-y-4 sm:space-y-0">
             <h1 className="text-3xl sm:text-4xl">
               <Link
-                //  去掉下划线和点击后变色
                 className="text-green-700 hover:text-green-900"
                 style={{
                   fontFamily: "LXGW WenKai",
@@ -56,7 +44,7 @@ export default async function RootLayout({
               <h2 className="text-base sm:text-lg">
                 <Link
                   className="text-green-700 hover:text-green-900"
-                  href="/archive"
+                  href="/posts"
                 >
                   文章
                 </Link>
@@ -71,23 +59,10 @@ export default async function RootLayout({
               </h2>
             </div>
           </header>
-          <div className="flex flex-col sm:flex-row w-full justify-center relative">
-            <aside className="w-full sm:w-[18rem] px-2 sm:px-0 sm:pr-4 mb-4 sm:mb-0">
-              <MenuCard />
-              {/* <PostListBar /> */}
-            </aside>
-            <main className="relative px-2 sm:px-0 max-w-[50rem]">
-              <PageTransition>
-                {children}
-              </PageTransition>
-              <SpeedInsights />
-              <Analytics />
-            </main>
-          </div>
-          <footer className="mt-8 py-4 text-center text-gray-500">
-            {new Date().getFullYear()} Tazdingo
-          </footer>
+          {children}
         </div>
+        <SpeedInsights />
+        <Analytics />
       </body>
     </html>
   );
