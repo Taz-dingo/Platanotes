@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FaHome, FaBook, FaLightbulb, FaFilm, FaCamera } from "react-icons/fa";
+import { Home, BookText, Lightbulb, Film, Camera } from "lucide-react";
 import type { FileTreeNode } from "@/lib/posts/get-posts-tree";
 import { DIRECTORY_NAMES } from "@/lib/utils/constants";
 
@@ -11,27 +11,27 @@ const menuConfig = {
   home: {
     name: "首页",
     path: "/",
-    icon: FaHome
+    icon: Home
   },
   notes: {
     name: "笔记",
     path: "/categories/notes",
-    icon: FaBook
+    icon: BookText
   },
   thoughts: {
     name: "想法",
     path: "/categories/thoughts",
-    icon: FaLightbulb
+    icon: Lightbulb
   },
   cinema: {
     name: "放映厅",
     path: "/categories/cinema",
-    icon: FaFilm
+    icon: Film
   },
   photos: {
     name: "摄影",
     path: "/categories/photos",
-    icon: FaCamera
+    icon: Camera
   }
 } as const;
 
