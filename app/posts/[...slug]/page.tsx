@@ -1,4 +1,4 @@
-import Breadcrumb, { BreadcrumbItem } from "@/components/bread-crumb";
+import Breadcrumb, { BreadcrumbItem } from "@/components/posts/bread-crumb";
 import ResponsiveASTList from "@/components/sidebar/responsive-ast-list";
 import GlassCard from "@/components/common/glass-card";
 import { getPostBySlug } from "@/lib/posts/get-posts-content";

@@ -62,7 +62,6 @@ export default function ASTListBar({ headings }: ASTListBarProps) {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             setActiveHeading(entry.target.id);
-            console.log("🚀 ~ entries.forEach ~ entry.target.id:", entry.target.id)
           }
         });
       },
@@ -102,7 +101,6 @@ export default function ASTListBar({ headings }: ASTListBarProps) {
               
                 const [, text, index] = match;
 
-                console.log(activeHeading, `heading-${text}-${index}`);
                 return activeHeading === `heading-${text}-${index}`;
               }}
               onNodeClick={(node) => {
