@@ -41,8 +41,17 @@ export interface RootNode extends ASTNode {
     children: ASTNode[];
 }
 
+// 文章数据类型
+export interface PostData {
+    slug: string;
+    content: string;
+    headings: { level: number; text: string }[];
+    title: string;
+    date?: string;
+}
+
 // 根据 slug 获取特定文章内容
-export async function getPostBySlug(slug: string) {
+export async function getPostBySlug(slug: string): Promise<PostData | undefined> {
     try {
         // 构建OSS路径，确保正确解码
         const ossPath = `Blog/${safeUrlDecode(slug)}.md`;
@@ -88,12 +97,22 @@ export async function getPostBySlug(slug: string) {
 
         const contentHtml = `<div class="markdown-body">${String(processedContent)}</div>`;
 
-        return {
+        // Ensure required fields are present
+        if (!data.title) {
+            console.error('Missing required field "title" in frontmatter for:', slug);
+            return undefined;
+        }
+
+        // Construct the post data with type safety
+        const post: PostData = {
             slug,
             content: contentHtml,
             headings,
-            ...data,
+            title: data.title,
+            date: data.date,
         };
+
+        return post;
     } catch (error) {
         console.error('Error loading post from OSS:', error);
         return undefined;
