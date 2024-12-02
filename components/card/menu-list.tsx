@@ -50,8 +50,20 @@ export default function MenuList({ folders }: MenuListProps) {
     const currentPath = pathname.endsWith('/') ? pathname.slice(0, -1) : pathname;
     const targetPath = path.endsWith('/') ? path.slice(0, -1) : path;
     
-    // 检查当前路径是否以目标路径开头
-    return currentPath.startsWith(targetPath);
+    // 如果是分类页面，直接检查路径是否匹配
+    if (currentPath.startsWith('/categories/')) {
+      return currentPath.startsWith(targetPath);
+    }
+    
+    // 如果是文章页面，需要检查文章所属的分类
+    if (currentPath.startsWith('/posts/')) {
+      // 从 /posts/category/post 中提取 category
+      const category = currentPath.split('/')[2];
+      // 检查目标路径是否匹配这个分类
+      return targetPath === `/categories/${category}`;
+    }
+    
+    return false;
   };
 
   // 获取目录的系统名称

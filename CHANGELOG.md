@@ -12,14 +12,12 @@
 #### TO DO
 - [ ] feat: 添加mermaid解析器
 - [ ] feat: 首页设计
-- [ ] feat: 侧边栏文字禁止换行，超行省略号
 - [ ] feat: 还是可以实现一下双链、图链
 - [ ] bug: 首屏加载样式闪烁
 - [ ] bug: 如果文本内容太短，即时有富余空间，main也不会达到应有的宽度
 - [ ] feat: 滑动动态加载，虚拟列表
 
 - [ ] bug: post-tree-node展开收起有问题（深层子级）
-- [ ] bug: 进入具体posts后menu-card选中状态丢失
 
 - [ ] bug：没有标题的时候ast-list-bar没有对应显示
 
@@ -37,8 +35,12 @@
 - [ ] perf: /categories超级慢，把所有文章都loading+处理了才响应好，而且这玩意为啥没缓存？
 - [ ] refactor: 组件样式框抽象出来
 
+### 2024-12-02
+- [x] bug: 进入具体posts后menu-card选中状态丢失
+- [x] feat：引入frame-motion动画
 
 ### 2024-12-01
+- [x] feat: 侧边栏文字禁止换行
 - [x] bug：ast-list-bar选中状态有问题
 - [x] feat：滚动时候ast-list-bar同步高亮
 - [x] bug: 同名headings会导致跳转不正确
