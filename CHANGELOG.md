@@ -33,9 +33,9 @@
 - [ ] feat: 影展，用微前端实现？
 
 - [ ] perf: /categories超级慢，把所有文章都loading+处理了才响应好，而且这玩意为啥没缓存？
-- [ ] refactor: 组件样式框抽象出来
 
 ### 2024-12-02
+- [x] refactor: 组件样式框抽象出来
 - [x] bug: 进入具体posts后menu-card选中状态丢失
 - [x] feat：引入frame-motion动画
 

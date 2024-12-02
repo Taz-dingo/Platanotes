@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Home, BookText, Lightbulb, Film, Camera } from "lucide-react";
-import type { FileTreeNode } from "@/lib/posts/get-posts-tree";
-import { DIRECTORY_NAMES } from "@/lib/utils/constants";
+import type { Post } from "@/lib/posts/get-posts-tree";
+import { DIRECTORY_NAMES } from "@/lib/config/constants";
 
 // 统一的菜单配置
 const menuConfig = {
@@ -36,7 +36,7 @@ const menuConfig = {
 } as const;
 
 interface MenuListProps {
-  folders: FileTreeNode[];
+  folders: Post[];
 }
 
 export default function MenuList({ folders }: MenuListProps) {

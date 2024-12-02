@@ -1,8 +1,9 @@
 import Link from "next/link";
 import path from 'path';
 import fs from 'fs/promises';
-import { CategoryData } from "@/lib/utils/generate-static-data";
-import GlassCard from "@/components/common/glass-card";
+import { CategoryData, generateAllCategoryData } from "@/lib/utils/generate-static-data";
+import PostList from "@/components/posts/post-list";
+import { POSTS_PER_PAGE } from '@/lib/config/constants';
 
 interface PageProps {
   params: {
@@ -13,7 +14,6 @@ interface PageProps {
 // 从静态文件获取分类数据
 async function getCategoryData(): Promise<CategoryData[]> {
   // 每次都动态生成数据
-  const { generateAllCategoryData } = await import('@/lib/utils/generate-static-data');
   const data = await generateAllCategoryData();
   
   // 同时更新静态文件，这样构建时的静态文件也会是最新的
@@ -49,32 +49,7 @@ export default async function CategoryPage({ params }: PageProps) {
     return <div>分类不存在</div>;
   }
 
-  return (
-    <div className="flex flex-col">
-      {categoryData.posts.map((node) => {
-        const date = new Date(node.metadata.ctime).toLocaleDateString('zh-CN', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric'
-        });
-
-        return (
-          <GlassCard 
-          className="mb-3 p-8"
-           key={node.path} hover>
-            <Link
-              className="group"
-              href={`/posts/${node.path}`}
-            >
-              <h2 className="group-hover:text-green-700 transition duration-300 border-b-2 border-gray-300 pb-1 mb-1 text-xl font-bold">
-                {node.metadata.title || node.name}
-              </h2>
-              <p className="text-gray-600 break-all">{node.metadata.summary}</p>
-            </Link>
-            <p className="text-sm text-gray-500 mt-2">{date}</p>
-          </GlassCard>
-        );
-      })}
-    </div>
-  );
+  // 只传递第一页的文章作为初始数据
+  const initialPosts = categoryData.posts.slice(0, POSTS_PER_PAGE);
+  return <PostList initialPosts={initialPosts} />;
 }

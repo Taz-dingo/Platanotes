@@ -1,36 +1,35 @@
 import { CategoryData } from '@/lib/utils/generate-static-data';
 
 /**
- * 1. 文章树结构：通过递归读取指定目录下的文件和子目录，构建一个树形结构（TreeNode），
- *    其中每个节点包含文件或目录的名称、路径、类型和元数据。
+ * 博客文章数据结构定义和相关操作
  */
 
-// 文件树节点类型
-export interface FileTreeNode {
-    type: 'file' | 'directory'; // 节点类型
-    name: string; // 节点名称
-    path: string; // 节点路径
-    children?: FileTreeNode[]; // 子节点
+// 博客文章类型
+export interface Post {
+    type: 'file' | 'directory'; // 类型（文件或目录）
+    name: string; // 文章名称
+    path: string; // 文章路径
+    children?: Post[]; // 子文章（如果是目录）
     metadata?: {
         ctime: number;
         summary?: string;
         title?: string;
-    }; // 元数据
+    }; // 文章元数据
 }
 
 // 从静态数据文件获取文章树结构
-export async function getPostsTree(): Promise<FileTreeNode> {
+export async function getPostsTree(): Promise<Post> {
     try {
         // 从静态数据文件中读取
         const staticData = await import('@/public/static-data/category-data.json') as { default: CategoryData[] };
-        const rootChildren: FileTreeNode[] = [];
+        const rootChildren: Post[] = [];
 
         for (const category of staticData.default) {
             rootChildren.push({
                 type: 'directory',
                 name: category.slug,
                 path: category.slug,
-                children: category.posts as FileTreeNode[]
+                children: category.posts as Post[]
             });
         }
 
@@ -53,6 +52,6 @@ export async function getPostsTree(): Promise<FileTreeNode> {
 }
 
 // 获取文件树
-export async function getFileTree(): Promise<FileTreeNode> {
+export async function getFileTree(): Promise<Post> {
     return getPostsTree();
 }

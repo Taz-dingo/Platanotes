@@ -17,3 +17,5 @@ export const DIRECTORY_NAMES = {
         zh: '摄影'
     }
 } as const;
+
+export const POSTS_PER_PAGE = 3;

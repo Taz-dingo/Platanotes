@@ -1,5 +1,5 @@
-import { DIRECTORY_NAMES } from "@/lib/utils/constants";
-import { FileTreeNode } from '@/lib/posts/get-posts-tree';
+import { DIRECTORY_NAMES } from "@/lib/config/constants";
+import { Post } from '@/lib/posts/get-posts-tree';
 import { CategoryData } from '@/lib/utils/generate-static-data';
 
 // 获取目录的展示名称
@@ -17,7 +17,7 @@ export async function getDirectorySystemName(displayName: string): Promise<strin
 }
 
 // 根据类别获取所有相关的文章
-export async function getCategoryPosts(category: string): Promise<FileTreeNode[]> {
+export async function getCategoryPosts(category: string): Promise<Post[]> {
     try {
         const staticData = await import('@/public/static-data/category-data.json') as { default: CategoryData[] };
         const categoryData = staticData.default.find(c => c.slug === category);
@@ -29,13 +29,13 @@ export async function getCategoryPosts(category: string): Promise<FileTreeNode[]
 }
 
 // 获取所有文章列表，按时间排序
-export async function getSortedFileList(): Promise<FileTreeNode[]> {
+export async function getSortedFileList(): Promise<Post[]> {
     try {
         const staticData = await import('@/public/static-data/category-data.json') as { default: CategoryData[] };
-        const allPosts: FileTreeNode[] = [];
+        const allPosts: Post[] = [];
         
         for (const category of staticData.default) {
-            allPosts.push(...(category.posts as FileTreeNode[]));
+            allPosts.push(...(category.posts as Post[]));
         }
 
         return allPosts.sort((a, b) => (b.metadata?.ctime || 0) - (a.metadata?.ctime || 0));
