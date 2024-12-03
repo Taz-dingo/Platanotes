@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import { usePortal } from "@/hooks/use-portal";
 
-import TabbedSidebar from "./tabbed-sidebar";
+import TabbedSidebar from "@/components/sidebar/tabbed-sidebar";
 
 interface ResponsiveASTListProps {
   headings?: { level: number; text: string }[];
@@ -60,8 +60,8 @@ export default function ResponsiveASTList({
         {showMobileAst && (
           <motion.div
             className="fixed inset-y-0 right-0 z-40 w-full bg-black/20 backdrop-blur-sm md:hidden"
-            initial={{ opacity: 0, x: "100%" }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, }}
+            animate={{ opacity: 1,}}
             exit={{ opacity: 0, x: "100%" }}
             transition={{ type: "tween", duration: 0.3 }}
           >

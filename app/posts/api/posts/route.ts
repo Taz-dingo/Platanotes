@@ -14,12 +14,12 @@ export async function GET(request: NextRequest) {
     let posts;
     let totalPosts;
 
-    // 如果没有指定分类，则获取所有文章（首页场景）
-    if (!category) {
+    // 如果是 all 或没有指定分类，则获取所有文章
+    if (!category || category === "all") {
       totalPosts = await getSortedFileList();
       posts = await getSortedFileList(page, limit);
     } else {
-      // 获取指定分类的文章（分类页场景）
+      // 获取指定分类的文章
       const categories = await generateAllCategoryData();
       const categoryData = categories.find((c) => c.slug === category);
       if (!categoryData) {

@@ -72,8 +72,8 @@ export default function TabbedSidebar({ headings = [] }: TabbedSidebarProps) {
               <ProfileCard
                 name={"Tazdingo"}
                 avatar="/avatar.png"
-                role="Software Engineer"
-                bio="Full-stack enthusiast, passionate about React and TypeScript"
+                role="Frontend developer / Full-stack enthusiast"
+                bio=""
                 socialLinks={{
                   github: "https://github.com/Taz-dingo",
                 }}
