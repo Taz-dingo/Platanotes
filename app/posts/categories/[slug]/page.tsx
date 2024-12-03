@@ -6,6 +6,7 @@ import { POSTS_PER_PAGE } from "@/lib/config/constants";
 import {
   CategoryData,
   generateAllCategoryData,
+  StaticPostData,
 } from "@/lib/utils/generate-static-data";
 import PostList from "@/components/posts/post-list";
 import ResponsiveASTList from "@/components/sidebar/responsive-ast-list";
@@ -70,7 +71,13 @@ export default async function CategoryPage({ params }: PageProps) {
       categoryData = await generateAllCategoryData();
     }
 
-    const initialPosts = categoryData.reduce((acc, category) => acc.concat(category.posts), []).slice(0, POSTS_PER_PAGE);
+    const initialPosts = categoryData
+      .reduce<StaticPostData[]>(
+        (acc, category) => [...acc, ...category.posts],
+        []
+      )
+      .sort((a, b) => (b.metadata?.ctime || 0) - (a.metadata?.ctime || 0))
+      .slice(0, POSTS_PER_PAGE);
 
     return (
       <div className="flex-1">
@@ -94,7 +101,9 @@ export default async function CategoryPage({ params }: PageProps) {
   }
 
   const category = categoryData.find((cat) => cat.slug === slug);
-  const initialPosts = category?.posts.slice(0, POSTS_PER_PAGE) || [];
+  const initialPosts = category?.posts
+    .sort((a, b) => (b.metadata?.ctime || 0) - (a.metadata?.ctime || 0))
+    .slice(0, POSTS_PER_PAGE) || [];
 
   return (
     <div className="flex-1">
