@@ -20,7 +20,7 @@ export default function Error({
       <p className="text-gray-600 mb-6">抱歉，发生了一些错误。</p>
       <button
         onClick={reset}
-        className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+        className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
       >
         重试
       </button>
