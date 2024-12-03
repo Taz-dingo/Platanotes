@@ -1,10 +1,15 @@
 import { getSortedFileList } from "@/lib/posts/get-posts-list";
 import PostList from "@/components/posts/post-list";
 import { POSTS_PER_PAGE } from "@/lib/config/constants";
+import ResponsiveASTList from "@/components/sidebar/responsive-ast-list";
 
-export default async function PostsPage() {
-  const allPosts = await getSortedFileList();
-  const initialPosts = allPosts.slice(0, POSTS_PER_PAGE);
+export default async function Posts() {
+  const initialPosts = await getSortedFileList(1, POSTS_PER_PAGE);
 
-  return <PostList initialPosts={initialPosts} />;
+  return (
+    <div className="flex-1">
+      <PostList initialPosts={initialPosts} />
+      <ResponsiveASTList />
+    </div>
+  );
 }

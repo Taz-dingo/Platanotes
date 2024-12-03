@@ -11,9 +11,12 @@ export async function GET(request: NextRequest) {
 
   try {
     let posts;
+    let totalPosts;
+
     // 如果没有指定分类，则获取所有文章（首页场景）
     if (!category) {
-      posts = await getSortedFileList();
+      totalPosts = await getSortedFileList();
+      posts = await getSortedFileList(page, limit);
     } else {
       // 获取指定分类的文章（分类页场景）
       const categories = await generateAllCategoryData();
@@ -21,18 +24,16 @@ export async function GET(request: NextRequest) {
       if (!categoryData) {
         return NextResponse.json({ posts: [], hasMore: false });
       }
-      posts = categoryData.posts;
+      totalPosts = categoryData.posts;
+      posts = categoryData.posts.slice((page - 1) * limit, page * limit);
     }
 
-    const start = (page - 1) * limit;
-    const end = start + limit;
-    const paginatedPosts = posts.slice(start, end);
-    const hasMore = end < posts.length;
+    const hasMore = page * limit < totalPosts.length;
 
     return NextResponse.json({
-      posts: paginatedPosts,
+      posts,
       hasMore,
-      total: posts.length
+      total: totalPosts.length
     });
   } catch (error) {
     console.error('Error fetching posts:', error);

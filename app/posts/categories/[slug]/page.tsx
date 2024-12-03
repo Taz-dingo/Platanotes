@@ -3,6 +3,7 @@ import path from 'path';
 import fs from 'fs/promises';
 import { CategoryData, generateAllCategoryData } from "@/lib/utils/generate-static-data";
 import PostList from "@/components/posts/post-list";
+import ResponsiveASTList from "@/components/sidebar/responsive-ast-list";
 import { POSTS_PER_PAGE } from '@/lib/config/constants';
 
 interface PageProps {
@@ -40,16 +41,26 @@ export async function generateStaticParams() {
 // 设置页面重新验证时间
 export const revalidate = 300; // 5分钟重新验证一次
 
-export default async function CategoryPage({ params }: PageProps) {
-  const { slug } = params;
-  const categories = await getCategoryData();
-  const categoryData = categories.find(c => c.slug === slug);
+export default async function CategoryPage({ params }: { params: { slug: string } }) {
+  const staticDir = path.join(process.cwd(), 'public', 'static-data');
+  const filePath = path.join(staticDir, 'category-data.json');
   
-  if (!categoryData) {
-    return <div>分类不存在</div>;
+  let categoryData: CategoryData[] = [];
+  try {
+    const fileContent = await fs.readFile(filePath, 'utf-8');
+    categoryData = JSON.parse(fileContent);
+  } catch (error) {
+    console.error('Error reading category data:', error);
+    categoryData = await generateAllCategoryData();
   }
 
-  // 只传递第一页的文章作为初始数据
-  const initialPosts = categoryData.posts.slice(0, POSTS_PER_PAGE);
-  return <PostList initialPosts={initialPosts} />;
+  const category = categoryData.find(cat => cat.slug === params.slug);
+  const initialPosts = category?.posts.slice(0, POSTS_PER_PAGE) || [];
+
+  return (
+    <div className="flex-1">
+      <PostList initialPosts={initialPosts} />
+      <ResponsiveASTList />
+    </div>
+  );
 }

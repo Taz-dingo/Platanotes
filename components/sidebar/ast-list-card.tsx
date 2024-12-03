@@ -1,10 +1,7 @@
-'use client';
-
 import PostTreeNode, { TreeNode } from '@/components/common/post-tree-node';
 import { useState, useEffect } from 'react';
-import GlassCard from '@/components/common/glass-card';
 
-interface ASTListBarProps {
+interface ASTListCardProps {
   headings: { level: number; text: string }[];
 }
 
@@ -42,7 +39,7 @@ export function convertHeadingsToTree(headings: { level: number; text: string }[
   return root;
 }
 
-export default function ASTListBar({ headings }: ASTListBarProps) {
+export default function ASTListCard({ headings }: ASTListCardProps) {
   const [activeHeading, setActiveHeading] = useState<string>('');
 
   useEffect(() => {
@@ -50,7 +47,6 @@ export default function ASTListBar({ headings }: ASTListBarProps) {
     const headingElements = document.querySelector('.markdown-body')?.querySelectorAll('h1, h2, h3, h4, h5, h6');
     headingElements?.forEach((el, index) => {
       if (el.id === '') {
-        // 使用标题文本和索引组合生成唯一ID
         const text = el.textContent?.trim() || '';
         el.id = `heading-${text}-${index}`;
       }
@@ -66,7 +62,6 @@ export default function ASTListBar({ headings }: ASTListBarProps) {
         });
       },
       {
-        // 设置观察范围 上、右、下、左
         rootMargin: '-5px 0px -80% 0px'
       }
     );
@@ -84,54 +79,44 @@ export default function ASTListBar({ headings }: ASTListBarProps) {
   const treeData = convertHeadingsToTree(headings);
 
   return (
-    <GlassCard>
-      <h2 className="border-b-2 border-solid border-slate-300 mb-2 pb-2 font-semibold">
-        内容目录
-      </h2>
+    <>
       <div className="leading-loose">
-          {treeData.children && treeData.children.length > 0 ? (
-            <PostTreeNode
-              node={treeData}
-              showToggleIcon={false}
-              defaultExpand={true}
-              clickToExpand={false}
-              isSelected={(node) => {
-                const match =String(node.id).match(/heading-(.*)-(\d+)$/);
-                if (!match) return false;
-              
-                const [, text, index] = match;
+        {treeData.children && treeData.children.length > 0 ? (
+          <PostTreeNode
+            node={treeData}
+            showToggleIcon={false}
+            defaultExpand={true}
+            clickToExpand={false}
+            isSelected={(node) => {
+              const match = String(node.id).match(/heading-(.*)-(\d+)$/);
+              if (!match) return false;
+              return activeHeading === `heading-${match[1]}-${match[2]}`;
+            }}
+            onNodeClick={(node) => {
+              const text = typeof node.label === 'string' ? node.label : '';
+              if (!text) return;
+            
+              const match = String(node.id).match(/heading-(.*)-(\d+)$/);
+              if (!match) return;
+            
+              const decodedText = decodeURIComponent(match[1]);
+              const index = parseInt(match[2], 10);
 
-                return activeHeading === `heading-${text}-${index}`;
-              }}
-              onNodeClick={(node) => {
-                const text = typeof node.label === 'string' ? node.label : '';
-                if (!text) return;
-              
-                const match = String(node.id).match(/heading-(.*)-(\d+)$/);
-                if (!match) return;
-              
-              
-                const decodedText = decodeURIComponent(match[1]); // 解码 label 部分
-                const index = parseInt(match[2], 10);
+              const headingElements = document.querySelector('.markdown-body')?.querySelectorAll('h1, h2, h3, h4, h5, h6');
+              const targetElement = Array.from(headingElements || []).find((h, idx) => 
+                h.textContent?.trim() === decodedText && idx === index
+              );
 
-              
-                // 查找标题元素 (需要正确解码文本内容)
-                const headingElements = document.querySelector('.markdown-body')?.querySelectorAll('h1, h2, h3, h4, h5, h6');
-                const targetElement = Array.from(headingElements || []).find((h, idx) => 
-                  h.textContent?.trim() === decodedText && idx === index
-                );
-
-
-                if (targetElement) {
-                  targetElement.scrollIntoView({ behavior: 'smooth' });
-                  setActiveHeading(targetElement.id);
-                }
-              }}
-            />
-          ) : (
-            <p>暂无标题</p>
-          )}
+              if (targetElement) {
+                targetElement.scrollIntoView({ behavior: 'smooth' });
+                setActiveHeading(targetElement.id);
+              }
+            }}
+          />
+        ) : (
+          <p>暂无标题</p>
+        )}
       </div>
-    </GlassCard>
+    </>
   );
 }

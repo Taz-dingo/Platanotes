@@ -29,7 +29,7 @@ export async function getCategoryPosts(category: string): Promise<Post[]> {
 }
 
 // 获取所有文章列表，按时间排序
-export async function getSortedFileList(): Promise<Post[]> {
+export async function getSortedFileList(page?: number, limit?: number): Promise<Post[]> {
     try {
         const staticData = await import('@/public/static-data/category-data.json') as { default: CategoryData[] };
         const allPosts: Post[] = [];
@@ -38,7 +38,15 @@ export async function getSortedFileList(): Promise<Post[]> {
             allPosts.push(...(category.posts as Post[]));
         }
 
-        return allPosts.sort((a, b) => (b.metadata?.ctime || 0) - (a.metadata?.ctime || 0));
+        const sortedPosts = allPosts.sort((a, b) => (b.metadata?.ctime || 0) - (a.metadata?.ctime || 0));
+
+        if (page && limit) {
+            const start = (page - 1) * limit;
+            const end = start + limit;
+            return sortedPosts.slice(start, end);
+        }
+
+        return sortedPosts;
     } catch (error) {
         console.error('Error loading static data:', error);
         return [];

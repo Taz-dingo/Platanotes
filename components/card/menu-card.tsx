@@ -7,11 +7,8 @@ export default async function MenuCard() {
   const topLevelFolders = fileTree.children?.filter(node => node.type === 'directory') || [];
 
   return (
-    <div className="sticky top-2">
-      <GlassCard>
-        <MenuList folders={topLevelFolders} />
-      </GlassCard>
-      <div id="menu-card-append" />
-    </div>
+    <GlassCard>
+      <MenuList folders={topLevelFolders} />
+    </GlassCard>
   );
 }
