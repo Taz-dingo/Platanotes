@@ -1,20 +1,24 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import TabbedSidebar from './tabbed-sidebar';
-import { Menu } from 'lucide-react';
-import { usePortal } from '@/hooks/use-portal';
-import { usePathname } from 'next/navigation';
+import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import { Menu } from "lucide-react";
+
+import { usePortal } from "@/hooks/use-portal";
+
+import TabbedSidebar from "./tabbed-sidebar";
 
 interface ResponsiveASTListProps {
   headings?: { level: number; text: string }[];
 }
 
-export default function ResponsiveASTList({ headings = [] }: ResponsiveASTListProps) {
+export default function ResponsiveASTList({
+  headings = [],
+}: ResponsiveASTListProps) {
   const [showMobileAst, setShowMobileAst] = useState(false);
   const pathname = usePathname();
-  const { Portal: MenuPortal } = usePortal('#menu-card-append');
-  const { Portal: MobilePortal } = usePortal('body');
+  const { Portal: MenuPortal } = usePortal("#menu-card-append");
+  const { Portal: MobilePortal } = usePortal("body");
 
   // 当路由变化时重置移动端显示状态
   useEffect(() => {
@@ -25,7 +29,7 @@ export default function ResponsiveASTList({ headings = [] }: ResponsiveASTListPr
     <>
       {/* Desktop Version - Portal to menu-card */}
       <MenuPortal>
-        <div className="hidden md:block pt-4">
+        <div className="hidden pt-4 md:block">
           <TabbedSidebar headings={headings} />
         </div>
       </MenuPortal>
@@ -35,21 +39,21 @@ export default function ResponsiveASTList({ headings = [] }: ResponsiveASTListPr
         {/* Floating Button */}
         <button
           onClick={() => setShowMobileAst(!showMobileAst)}
-          className="md:hidden fixed bottom-4 right-4 bg-white/50 backdrop-blur-sm p-3 rounded-full shadow-lg hover:bg-white/60 transition-all z-50"
+          className="fixed bottom-4 right-4 z-50 rounded-full bg-white/50 p-3 shadow-lg backdrop-blur-sm transition-all hover:bg-white/60 md:hidden"
           aria-label="Toggle Table of Contents"
         >
-          <Menu className="w-6 h-6" />
+          <Menu className="h-6 w-6" />
         </button>
       </MobilePortal>
 
       {/* Mobile AST List */}
       <div
-        className={`md:hidden fixed inset-y-0 right-0 w-full backdrop-blur-sm bg-black/20 transform transition-opacity duration-300 ease-in-out z-40 ${
-          showMobileAst ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        className={`fixed inset-y-0 right-0 z-40 w-full transform bg-black/20 backdrop-blur-sm transition-opacity duration-300 ease-in-out md:hidden ${
+          showMobileAst ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
         aria-hidden={!showMobileAst}
       >
-        <div className="h-full flex items-center justify-end overflow-auto p-4">
+        <div className="flex h-full items-center justify-end overflow-auto p-4">
           <TabbedSidebar headings={headings} />
         </div>
       </div>

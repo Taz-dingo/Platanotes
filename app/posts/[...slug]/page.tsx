@@ -1,9 +1,9 @@
-import Breadcrumb, { BreadcrumbItem } from "@/components/posts/bread-crumb";
-import ResponsiveASTList from "@/components/sidebar/responsive-ast-list";
-import GlassCard from "@/components/common/glass-card";
-import PostContent from "@/components/posts/post-content";
 import { getPostBySlug } from "@/lib/posts/get-posts-content";
 import { getPostsTree } from "@/lib/posts/get-posts-tree";
+import GlassCard from "@/components/common/glass-card";
+import Breadcrumb, { BreadcrumbItem } from "@/components/posts/bread-crumb";
+import PostContent from "@/components/posts/post-content";
+import ResponsiveASTList from "@/components/sidebar/responsive-ast-list";
 
 export default async function Post({ params }: { params: { slug: string[] } }) {
   const slug = params.slug.join("/");

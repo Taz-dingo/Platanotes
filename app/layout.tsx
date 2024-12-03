@@ -1,10 +1,11 @@
 import "./globals.css";
 import "/public/styles/github-markdown.css";
+
 import React from "react";
-import Link from "next/link";
 import { Metadata } from "next";
+import Link from "next/link";
+import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { Analytics } from '@vercel/analytics/next';
 
 export const metadata: Metadata = {
   title: "梧桐树下",
@@ -25,9 +26,9 @@ export default async function RootLayout({
           href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.1.0/style.css"
         />
       </head>
-      <body className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 py-2 px-2 sm:px-4">
+      <body className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 px-2 py-2 sm:px-4">
         <div className="mx-auto px-2 sm:px-4">
-          <header className="my-4 sm:my-8 border-b-2 pb-3 flex flex-col sm:flex-row items-center justify-between px-2 sm:px-5 space-y-4 sm:space-y-0">
+          <header className="my-4 flex flex-col items-center justify-between space-y-4 border-b-2 px-2 pb-3 sm:my-8 sm:flex-row sm:space-y-0 sm:px-5">
             <h1 className="text-3xl sm:text-4xl">
               <Link
                 className="text-green-700 hover:text-green-900"

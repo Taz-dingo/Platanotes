@@ -1,9 +1,11 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { safeUrlEncode } from '@/lib/utils/url-utils';
-import Tooltip from './tooltip';
+
+import { safeUrlEncode } from "@/lib/utils/url-utils";
+
+import Tooltip from "./tooltip";
 
 // 通用树节点接口
 export interface TreeNode {
@@ -64,7 +66,7 @@ const PostTreeNode: React.FC<TreeProps> = ({
       // 确保节点数据在传递给点击处理函数之前进行URL编码
       const encodedNode = {
         ...node,
-        id: typeof node.id === 'string' ? safeUrlEncode(node.id) : node.id
+        id: typeof node.id === "string" ? safeUrlEncode(node.id) : node.id,
       };
       onNodeClick(encodedNode);
     }
@@ -80,26 +82,26 @@ const PostTreeNode: React.FC<TreeProps> = ({
   const renderToggleIcon = () => {
     return (
       <div
-        className="w-4 h-4 flex items-center justify-center flex-shrink-0"
+        className="flex h-4 w-4 flex-shrink-0 items-center justify-center"
         onClick={handleToggleClick}
       >
         {isLeaf || !showToggleIcon ? null : (
           <Image
-          src="/svg/triangle.svg"
-          alt={isExpanded ? "展开" : "收起"}
-          width={16}
-          height={16}
-          className={`transition ${isExpanded ? "" : "rotate-[-90deg]"}`}
-        />
+            src="/svg/triangle.svg"
+            alt={isExpanded ? "展开" : "收起"}
+            width={16}
+            height={16}
+            className={`transition ${isExpanded ? "" : "rotate-[-90deg]"}`}
+          />
         )}
       </div>
-    )
+    );
   };
 
   // 根节点特殊处理，直接渲染子节点
   if (level === 0 && node.children) {
     return (
-      <ul className="pl-0 list-none">
+      <ul className="list-none pl-0">
         {node.children.map((child) => (
           <PostTreeNode
             key={child.id}
@@ -121,20 +123,20 @@ const PostTreeNode: React.FC<TreeProps> = ({
   return (
     <li style={{ paddingLeft: `${level * indentSize}px` }}>
       <div
-        className={`flex items-center cursor-pointer hover:text-green-700 ${
+        className={`flex cursor-pointer items-center hover:text-green-700 ${
           isSelected?.(node) ? "text-green-700" : ""
         }`}
         onClick={handleNodeClick}
       >
         {level > 0 && (
-          <div 
-            className="absolute left-0 top-0 bottom-0 border-gray-300" 
+          <div
+            className="absolute bottom-0 left-0 top-0 border-gray-300"
             style={{ left: `${(level - 1) * indentSize + 4}px` }}
           />
         )}
         {renderToggleIcon()}
-        <Tooltip 
-          content={typeof node.label === 'string' ? node.label : ''}
+        <Tooltip
+          content={typeof node.label === "string" ? node.label : ""}
           position="right"
           delay={300}
         >
@@ -146,7 +148,7 @@ const PostTreeNode: React.FC<TreeProps> = ({
       {!isLeaf && (
         <ul
           ref={childrenRef}
-          className="overflow-hidden transition-all duration-300 ease-in-out list-none border-l"
+          className="list-none overflow-hidden border-l transition-all duration-300 ease-in-out"
           style={{ height: contentHeight }}
         >
           {node.children?.map((child, index) => (

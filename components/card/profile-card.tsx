@@ -1,30 +1,30 @@
-import React from 'react'
-import Image from 'next/image'
-import { Twitter, Github, Linkedin } from 'lucide-react'
+import React from "react";
+import Image from "next/image";
+import { Github, Linkedin, Twitter } from "lucide-react";
 
 interface ProfileCardProps {
-  name: string
-  role?: string
-  avatar?: string
-  bio?: string
+  name: string;
+  role?: string;
+  avatar?: string;
+  bio?: string;
   socialLinks?: {
-    twitter?: string
-    github?: string
-    linkedin?: string
-  }
+    twitter?: string;
+    github?: string;
+    linkedin?: string;
+  };
 }
 
 export default function ProfileCard({
   name,
   role,
-  avatar = '/default-avatar.png',
+  avatar = "/default-avatar.png",
   bio,
-  socialLinks
+  socialLinks,
 }: ProfileCardProps) {
   return (
-    <div className="dark:bg-gray-800 p-6 max-w-sm mx-auto">
+    <div className="mx-auto max-w-sm p-6 dark:bg-gray-800">
       <div className="flex flex-col items-center">
-        <div className="relative w-24 h-24 mb-4">
+        <div className="relative mb-4 h-24 w-24">
           <Image
             src={avatar}
             alt={`${name}'s avatar`}
@@ -32,20 +32,22 @@ export default function ProfileCard({
             className="rounded-full object-cover"
           />
         </div>
-        
-        <h2 className="text-xl font-semibold text-gray-800 dark:text-white">{name}</h2>
+
+        <h2 className="text-xl font-semibold text-gray-800 dark:text-white">
+          {name}
+        </h2>
         {role && (
-          <p className="text-gray-600 dark:text-gray-300 mt-1">{role}</p>
+          <p className="mt-1 text-gray-600 dark:text-gray-300">{role}</p>
         )}
-        
+
         {bio && (
-          <p className="text-gray-500 dark:text-gray-400 text-center mt-3 text-sm">
+          <p className="mt-3 text-center text-sm text-gray-500 dark:text-gray-400">
             {bio}
           </p>
         )}
 
         {socialLinks && (
-          <div className="flex space-x-4 mt-4">
+          <div className="mt-4 flex space-x-4">
             {socialLinks.twitter && (
               <a
                 href={socialLinks.twitter}
@@ -53,7 +55,7 @@ export default function ProfileCard({
                 rel="noopener noreferrer"
                 className="text-gray-600 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400"
               >
-                <Twitter className="w-5 h-5" />
+                <Twitter className="h-5 w-5" />
               </a>
             )}
             {socialLinks.github && (
@@ -63,7 +65,7 @@ export default function ProfileCard({
                 rel="noopener noreferrer"
                 className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
               >
-                <Github className="w-5 h-5" />
+                <Github className="h-5 w-5" />
               </a>
             )}
             {socialLinks.linkedin && (
@@ -73,12 +75,12 @@ export default function ProfileCard({
                 rel="noopener noreferrer"
                 className="text-gray-600 hover:text-blue-700 dark:text-gray-400 dark:hover:text-blue-500"
               >
-                <Linkedin className="w-5 h-5" />
+                <Linkedin className="h-5 w-5" />
               </a>
             )}
           </div>
         )}
       </div>
     </div>
-  )
+  );
 }

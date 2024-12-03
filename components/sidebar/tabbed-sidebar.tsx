@@ -1,63 +1,66 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import GlassCard from '@/components/common/glass-card';
-import ASTListCard from './ast-list-card';
-import ProfileCard from '../card/profile-card';
-import { List, User } from 'lucide-react';
+import { useState } from "react";
+import { List, User } from "lucide-react";
+
+import GlassCard from "@/components/common/glass-card";
+
+import ProfileCard from "../card/profile-card";
+import ASTListCard from "./ast-list-card";
 
 interface TabbedSidebarProps {
   headings?: { level: number; text: string }[];
 }
 
 export default function TabbedSidebar({ headings = [] }: TabbedSidebarProps) {
-  const [activeTab, setActiveTab] = useState<'toc' | 'profile'>(headings.length > 0 ? 'toc' : 'profile');
+  const [activeTab, setActiveTab] = useState<"toc" | "profile">(
+    headings.length > 0 ? "toc" : "profile"
+  );
 
   return (
     <GlassCard>
       {/* Tab Header */}
-      <div className="flex border-b-2 border-slate-300 mb-4">
+      <div className="mb-4 flex border-b-2 border-slate-300">
         {headings.length > 0 && (
           <button
-            className={`flex items-center gap-2 px-4 py-2 -mb-[2px] ${
-              activeTab === 'toc'
-                ? 'text-green-700 border-b-2 border-green-700'
-                : 'text-gray-500 hover:text-green-700'
+            className={`-mb-[2px] flex items-center gap-2 px-4 py-2 ${
+              activeTab === "toc"
+                ? "border-b-2 border-green-700 text-green-700"
+                : "text-gray-500 hover:text-green-700"
             }`}
-            onClick={() => setActiveTab('toc')}
+            onClick={() => setActiveTab("toc")}
           >
-            <List className="w-4 h-4" />
+            <List className="h-4 w-4" />
             <span>目录</span>
           </button>
         )}
         <button
-          className={`flex items-center gap-2 px-4 py-2 -mb-[2px] ${
-            activeTab === 'profile'
-              ? 'text-green-700 border-b-2 border-green-700'
-              : 'text-gray-500 hover:text-green-700'
+          className={`-mb-[2px] flex items-center gap-2 px-4 py-2 ${
+            activeTab === "profile"
+              ? "border-b-2 border-green-700 text-green-700"
+              : "text-gray-500 hover:text-green-700"
           }`}
-          onClick={() => setActiveTab('profile')}
+          onClick={() => setActiveTab("profile")}
         >
-          <User className="w-4 h-4" />
+          <User className="h-4 w-4" />
           <span>关于</span>
         </button>
       </div>
 
       {/* Tab Content */}
       <div className="min-h-[200px]">
-        {activeTab === 'toc' && headings.length > 0 ? (
+        {activeTab === "toc" && headings.length > 0 ? (
           <ASTListCard headings={headings} />
         ) : (
-          <ProfileCard 
-          name={'Tazdingo'} 
-          avatar='/avatar.png'  
-          role="Software Engineer"
-          bio="Full-stack enthusiast, passionate about React and TypeScript"
-          socialLinks={{
-            github: "https://github.com/Taz-dingo",
-          }}
+          <ProfileCard
+            name={"Tazdingo"}
+            avatar="/avatar.png"
+            role="Software Engineer"
+            bio="Full-stack enthusiast, passionate about React and TypeScript"
+            socialLinks={{
+              github: "https://github.com/Taz-dingo",
+            }}
           />
-          
         )}
       </div>
     </GlassCard>

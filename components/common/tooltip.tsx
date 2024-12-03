@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from 'react';
-import { createPortal } from 'react-dom';
+import React, { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 interface TooltipProps {
   content: React.ReactNode;
   children: React.ReactNode;
   className?: string;
-  position?: 'top' | 'bottom' | 'left' | 'right';
+  position?: "top" | "bottom" | "left" | "right";
   delay?: number;
   maxWidth?: string;
 }
@@ -15,17 +15,17 @@ interface TooltipProps {
 const Tooltip: React.FC<TooltipProps> = ({
   content,
   children,
-  className = '',
-  position = 'top',
+  className = "",
+  position = "top",
   delay = 200,
-  maxWidth = '300px'
+  maxWidth = "300px",
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [tooltipStyle, setTooltipStyle] = useState<React.CSSProperties>({
-    position: 'fixed',
+    position: "fixed",
     maxWidth,
     zIndex: 9999,
-    visibility: 'hidden',
+    visibility: "hidden",
   });
   const [isMounted, setIsMounted] = useState(false);
   const tooltipRef = useRef<HTMLDivElement>(null);
@@ -51,19 +51,19 @@ const Tooltip: React.FC<TooltipProps> = ({
     let y = 0;
 
     switch (position) {
-      case 'top':
+      case "top":
         x = containerRect.left + (containerRect.width - tooltipRect.width) / 2;
         y = containerRect.top - tooltipRect.height - 8;
         break;
-      case 'bottom':
+      case "bottom":
         x = containerRect.left + (containerRect.width - tooltipRect.width) / 2;
         y = containerRect.bottom + 8;
         break;
-      case 'left':
+      case "left":
         x = containerRect.left - tooltipRect.width - 8;
         y = containerRect.top + (containerRect.height - tooltipRect.height) / 2;
         break;
-      case 'right':
+      case "right":
         x = containerRect.right + 8;
         y = containerRect.top + (containerRect.height - tooltipRect.height) / 2;
         break;
@@ -71,12 +71,18 @@ const Tooltip: React.FC<TooltipProps> = ({
 
     // 防止tooltip超出视窗
     const padding = 10;
-    x = Math.max(padding, Math.min(x, window.innerWidth - tooltipRect.width - padding));
-    y = Math.max(padding, Math.min(y, window.innerHeight - tooltipRect.height - padding));
+    x = Math.max(
+      padding,
+      Math.min(x, window.innerWidth - tooltipRect.width - padding)
+    );
+    y = Math.max(
+      padding,
+      Math.min(y, window.innerHeight - tooltipRect.height - padding)
+    );
 
-    setTooltipStyle(prev => ({
+    setTooltipStyle((prev) => ({
       ...prev,
-      visibility: 'visible',
+      visibility: "visible",
       left: `${x}px`,
       top: `${y}px`,
     }));
@@ -90,16 +96,16 @@ const Tooltip: React.FC<TooltipProps> = ({
     timeoutRef.current = setTimeout(() => {
       setIsVisible(true);
       // 先设置为可见但透明，让浏览器完成布局计算
-      setTooltipStyle(prev => ({
+      setTooltipStyle((prev) => ({
         ...prev,
-        visibility: 'visible',
+        visibility: "visible",
         opacity: 0,
       }));
       // 使用 RAF 确保 DOM 已更新
       requestAnimationFrame(() => {
         updatePosition();
         // 设置不透明
-        setTooltipStyle(prev => ({
+        setTooltipStyle((prev) => ({
           ...prev,
           opacity: 1,
         }));
@@ -112,9 +118,9 @@ const Tooltip: React.FC<TooltipProps> = ({
       clearTimeout(timeoutRef.current);
     }
     setIsVisible(false);
-    setTooltipStyle(prev => ({
+    setTooltipStyle((prev) => ({
       ...prev,
-      visibility: 'hidden',
+      visibility: "hidden",
       opacity: 0,
     }));
   };
@@ -125,12 +131,12 @@ const Tooltip: React.FC<TooltipProps> = ({
         requestAnimationFrame(updatePosition);
       };
 
-      window.addEventListener('scroll', handleUpdate, true);
-      window.addEventListener('resize', handleUpdate);
+      window.addEventListener("scroll", handleUpdate, true);
+      window.addEventListener("resize", handleUpdate);
 
       return () => {
-        window.removeEventListener('scroll', handleUpdate, true);
-        window.removeEventListener('resize', handleUpdate);
+        window.removeEventListener("scroll", handleUpdate, true);
+        window.removeEventListener("resize", handleUpdate);
       };
     }
   }, [isVisible]);
@@ -139,7 +145,7 @@ const Tooltip: React.FC<TooltipProps> = ({
     <div
       ref={tooltipRef}
       style={tooltipStyle}
-      className="bg-gray-800 text-white px-3 py-2 rounded-lg shadow-lg text-sm pointer-events-none transition-opacity duration-200"
+      className="pointer-events-none rounded-lg bg-gray-800 px-3 py-2 text-sm text-white shadow-lg transition-opacity duration-200"
     >
       {content}
     </div>
@@ -155,7 +161,9 @@ const Tooltip: React.FC<TooltipProps> = ({
       >
         {children}
       </div>
-      {isMounted && tooltipContent && createPortal(tooltipContent, document.body)}
+      {isMounted &&
+        tooltipContent &&
+        createPortal(tooltipContent, document.body)}
     </>
   );
 };

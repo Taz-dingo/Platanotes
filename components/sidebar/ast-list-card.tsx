@@ -1,15 +1,18 @@
-import PostTreeNode, { TreeNode } from '@/components/common/post-tree-node';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from "react";
+
+import PostTreeNode, { TreeNode } from "@/components/common/post-tree-node";
 
 interface ASTListCardProps {
   headings: { level: number; text: string }[];
 }
 
 // 将标题列表转换为树形结构
-export function convertHeadingsToTree(headings: { level: number; text: string }[]): TreeNode {
+export function convertHeadingsToTree(
+  headings: { level: number; text: string }[]
+): TreeNode {
   const root: TreeNode = {
-    id: 'root',
-    label: '目录',
+    id: "root",
+    label: "目录",
     children: [],
   };
 
@@ -40,14 +43,16 @@ export function convertHeadingsToTree(headings: { level: number; text: string }[
 }
 
 export default function ASTListCard({ headings }: ASTListCardProps) {
-  const [activeHeading, setActiveHeading] = useState<string>('');
+  const [activeHeading, setActiveHeading] = useState<string>("");
 
   useEffect(() => {
     // 为每个标题添加唯一ID
-    const headingElements = document.querySelector('.markdown-body')?.querySelectorAll('h1, h2, h3, h4, h5, h6');
+    const headingElements = document
+      .querySelector(".markdown-body")
+      ?.querySelectorAll("h1, h2, h3, h4, h5, h6");
     headingElements?.forEach((el, index) => {
-      if (el.id === '') {
-        const text = el.textContent?.trim() || '';
+      if (el.id === "") {
+        const text = el.textContent?.trim() || "";
         el.id = `heading-${text}-${index}`;
       }
     });
@@ -62,7 +67,7 @@ export default function ASTListCard({ headings }: ASTListCardProps) {
         });
       },
       {
-        rootMargin: '-5px 0px -80% 0px'
+        rootMargin: "-5px 0px -80% 0px",
       }
     );
 
@@ -93,22 +98,25 @@ export default function ASTListCard({ headings }: ASTListCardProps) {
               return activeHeading === `heading-${match[1]}-${match[2]}`;
             }}
             onNodeClick={(node) => {
-              const text = typeof node.label === 'string' ? node.label : '';
+              const text = typeof node.label === "string" ? node.label : "";
               if (!text) return;
-            
+
               const match = String(node.id).match(/heading-(.*)-(\d+)$/);
               if (!match) return;
-            
+
               const decodedText = decodeURIComponent(match[1]);
               const index = parseInt(match[2], 10);
 
-              const headingElements = document.querySelector('.markdown-body')?.querySelectorAll('h1, h2, h3, h4, h5, h6');
-              const targetElement = Array.from(headingElements || []).find((h, idx) => 
-                h.textContent?.trim() === decodedText && idx === index
+              const headingElements = document
+                .querySelector(".markdown-body")
+                ?.querySelectorAll("h1, h2, h3, h4, h5, h6");
+              const targetElement = Array.from(headingElements || []).find(
+                (h, idx) =>
+                  h.textContent?.trim() === decodedText && idx === index
               );
 
               if (targetElement) {
-                targetElement.scrollIntoView({ behavior: 'smooth' });
+                targetElement.scrollIntoView({ behavior: "smooth" });
                 setActiveHeading(targetElement.id);
               }
             }}

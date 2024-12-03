@@ -34,7 +34,7 @@ export function safeUrlDecode(str: string): string {
  * @returns 编码后的路径片段数组
  */
 export function encodePostPath(segments: string[]): string[] {
-  return segments.map(segment => safeUrlEncode(segment));
+  return segments.map((segment) => safeUrlEncode(segment));
 }
 
 /**
@@ -43,5 +43,5 @@ export function encodePostPath(segments: string[]): string[] {
  * @returns 解码后的路径片段数组
  */
 export function decodePostPath(segments: string[]): string[] {
-  return segments.map(segment => safeUrlDecode(segment));
+  return segments.map((segment) => safeUrlDecode(segment));
 }

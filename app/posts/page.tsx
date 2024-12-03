@@ -1,6 +1,6 @@
+import { POSTS_PER_PAGE } from "@/lib/config/constants";
 import { getSortedFileList } from "@/lib/posts/get-posts-list";
 import PostList from "@/components/posts/post-list";
-import { POSTS_PER_PAGE } from "@/lib/config/constants";
 import ResponsiveASTList from "@/components/sidebar/responsive-ast-list";
 
 export default async function Posts() {

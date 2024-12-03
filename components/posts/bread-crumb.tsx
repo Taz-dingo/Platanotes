@@ -12,12 +12,9 @@ interface BreadcrumbProps {
 const Breadcrumb: React.FC<BreadcrumbProps> = ({ items }) => {
   return (
     <nav aria-label="Breadcrumb">
-      <ol className="flex ">
+      <ol className="flex">
         {items.map((item, index) => (
-          <li
-            key={index}
-            className="flex items-center"
-          >
+          <li key={index} className="flex items-center">
             {index > 0 && <span className="mx-1">/</span>}
             <Link
               href={item.href}

@@ -1,38 +1,39 @@
-'use client';
+"use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, BookText, Lightbulb, Film, Camera } from "lucide-react";
-import type { Post } from "@/lib/posts/get-posts-tree";
+import { BookText, Camera, Film, Home, Lightbulb } from "lucide-react";
+
 import { DIRECTORY_NAMES } from "@/lib/config/constants";
+import type { Post } from "@/lib/posts/get-posts-tree";
 
 // 统一的菜单配置
 const menuConfig = {
   home: {
     name: "首页",
     path: "/posts",
-    icon: Home
+    icon: Home,
   },
   notes: {
     name: "笔记",
     path: "/posts/categories/notes",
-    icon: BookText
+    icon: BookText,
   },
   thoughts: {
     name: "想法",
     path: "/posts/categories/thoughts",
-    icon: Lightbulb
+    icon: Lightbulb,
   },
   cinema: {
     name: "放映厅",
     path: "/posts/categories/cinema",
-    icon: Film
+    icon: Film,
   },
   photos: {
     name: "摄影",
     path: "/posts/categories/photos",
-    icon: Camera
-  }
+    icon: Camera,
+  },
 } as const;
 
 interface MenuListProps {
@@ -43,25 +44,27 @@ export default function MenuList({ folders }: MenuListProps) {
   const pathname = usePathname();
 
   const isSelected = (path: string) => {
-    if (path === '/posts' && pathname === '/posts') return true;
-    if (path === '/posts') return false;
-    
+    if (path === "/posts" && pathname === "/posts") return true;
+    if (path === "/posts") return false;
+
     // 移除末尾的斜杠以确保正确匹配
-    const currentPath = pathname.endsWith('/') ? pathname.slice(0, -1) : pathname;
-    const targetPath = path.endsWith('/') ? path.slice(0, -1) : path;
-    
+    const currentPath = pathname.endsWith("/")
+      ? pathname.slice(0, -1)
+      : pathname;
+    const targetPath = path.endsWith("/") ? path.slice(0, -1) : path;
+
     // 如果是分类页面，直接检查路径是否匹配
-    if (currentPath.startsWith('/posts/categories/')) {
+    if (currentPath.startsWith("/posts/categories/")) {
       return currentPath.startsWith(targetPath);
     }
-    
-    if (currentPath.startsWith('/posts/')) {
+
+    if (currentPath.startsWith("/posts/")) {
       // 从 /posts/category/post 中提取 category
-      const category = currentPath.split('/')[2];
+      const category = currentPath.split("/")[2];
       // 检查目标路径是否匹配这个分类
       return targetPath === `/posts/categories/${category}`;
     }
-    
+
     return false;
   };
 
@@ -77,12 +80,12 @@ export default function MenuList({ folders }: MenuListProps) {
     <ul className="space-y-1">
       {/* Home link */}
       <li>
-        <Link 
+        <Link
           href={menuConfig.home.path}
-          className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
+          className={`flex items-center gap-2 rounded-lg px-3 py-2 transition-colors ${
             isSelected(menuConfig.home.path)
-              ? 'text-green-800 bg-gray-100' 
-              : 'hover:text-green-800 hover:bg-gray-100'
+              ? "bg-gray-100 text-green-800"
+              : "hover:bg-gray-100 hover:text-green-800"
           }`}
         >
           <menuConfig.home.icon className="text-lg" />
@@ -97,12 +100,12 @@ export default function MenuList({ folders }: MenuListProps) {
 
         return (
           <li key={folder.path}>
-            <Link 
+            <Link
               href={config.path}
-              className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
+              className={`flex items-center gap-2 rounded-lg px-3 py-2 transition-colors ${
                 isSelected(config.path)
-                  ? 'text-green-800 bg-gray-100' 
-                  : 'hover:text-green-800 hover:bg-gray-100'
+                  ? "bg-gray-100 text-green-800"
+                  : "hover:bg-gray-100 hover:text-green-800"
               }`}
             >
               <config.icon className="text-lg" />
