@@ -11,7 +11,7 @@ import type { Post } from "@/lib/posts/get-posts-tree";
 const menuConfig = {
   home: {
     name: "首页",
-    path: "/posts",
+    path: "/posts/categories/all",
     icon: Home,
   },
   notes: {
@@ -44,28 +44,29 @@ export default function MenuList({ folders }: MenuListProps) {
   const pathname = usePathname();
 
   const isSelected = (path: string) => {
-    if (path === "/posts" && pathname === "/posts") return true;
-    if (path === "/posts") return false;
-
     // 移除末尾的斜杠以确保正确匹配
     const currentPath = pathname.endsWith("/")
       ? pathname.slice(0, -1)
       : pathname;
-    const targetPath = path.endsWith("/") ? path.slice(0, -1) : path;
 
-    // 如果是分类页面，直接检查路径是否匹配
-    if (currentPath.startsWith("/posts/categories/")) {
-      return currentPath.startsWith(targetPath);
+    // 如果是文章详情页 (/posts/[...slug])
+    if (currentPath.startsWith("/posts/") && !currentPath.startsWith("/posts/categories/")) {
+      // 从路径中提取分类
+      const pathParts = currentPath.split("/");
+      if (pathParts.length >= 3) {
+        const category = pathParts[2];
+        // 如果是根目录文章，对应到 all 分类
+        if (!category || category === "") {
+          return path === "/posts/categories/all";
+        }
+        // 检查当前分类是否匹配菜单项
+        const menuPath = `/posts/categories/${category}`;
+        return path === menuPath;
+      }
     }
 
-    if (currentPath.startsWith("/posts/")) {
-      // 从 /posts/category/post 中提取 category
-      const category = currentPath.split("/")[2];
-      // 检查目标路径是否匹配这个分类
-      return targetPath === `/posts/categories/${category}`;
-    }
-
-    return false;
+    // 其他情况直接比较路径
+    return currentPath === path;
   };
 
   // 获取目录的系统名称

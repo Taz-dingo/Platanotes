@@ -39,22 +39,48 @@ async function getCategoryData(): Promise<CategoryData[]> {
   return data;
 }
 
-// 生成静态页面参数
-export async function generateStaticParams() {
-  const categories = await getCategoryData();
-  return categories.map((category) => ({
-    slug: category.slug,
-  }));
-}
-
 // 设置页面重新验证时间
 export const revalidate = 300; // 5分钟重新验证一次
 
-export default async function CategoryPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
+// 生成静态页面参数
+export async function generateStaticParams() {
+  const categories = await generateAllCategoryData();
+  return [
+    { slug: "all" },
+    ...categories.map((category) => ({
+      slug: category.slug,
+    })),
+  ];
+}
+
+export default async function CategoryPage({ params }: PageProps) {
+  const { slug } = params;
+
+  // 如果是首页（all），则显示所有文章
+  if (slug === "all") {
+    const staticDir = path.join(process.cwd(), "public", "static-data");
+    const filePath = path.join(staticDir, "category-data.json");
+
+    let categoryData: CategoryData[] = [];
+    try {
+      const fileContent = await fs.readFile(filePath, "utf-8");
+      categoryData = JSON.parse(fileContent);
+    } catch (error) {
+      console.error("Error reading category data:", error);
+      categoryData = await generateAllCategoryData();
+    }
+
+    const initialPosts = categoryData.reduce((acc, category) => acc.concat(category.posts), []).slice(0, POSTS_PER_PAGE);
+
+    return (
+      <div className="flex-1">
+        <PostList initialPosts={initialPosts} />
+        <ResponsiveASTList />
+      </div>
+    );
+  }
+
+  // 其他分类的处理逻辑
   const staticDir = path.join(process.cwd(), "public", "static-data");
   const filePath = path.join(staticDir, "category-data.json");
 
@@ -67,7 +93,7 @@ export default async function CategoryPage({
     categoryData = await generateAllCategoryData();
   }
 
-  const category = categoryData.find((cat) => cat.slug === params.slug);
+  const category = categoryData.find((cat) => cat.slug === slug);
   const initialPosts = category?.posts.slice(0, POSTS_PER_PAGE) || [];
 
   return (
