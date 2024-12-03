@@ -48,7 +48,16 @@ export default function TabbedSidebar({ headings = [] }: TabbedSidebarProps) {
         {activeTab === 'toc' && headings.length > 0 ? (
           <ASTListCard headings={headings} />
         ) : (
-          <ProfileCard />
+          <ProfileCard 
+          name={'Tazdingo'} 
+          avatar='/avatar.png'  
+          role="Software Engineer"
+          bio="Full-stack enthusiast, passionate about React and TypeScript"
+          socialLinks={{
+            github: "https://github.com/Taz-dingo",
+          }}
+          />
+          
         )}
       </div>
     </GlassCard>
