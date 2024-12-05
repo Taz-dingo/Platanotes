@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { List, User } from "lucide-react";
 
-import ProfileCard from "@/components/card/profile-card";
+import ProfileItem from "@/components/card/profile-item";
 import GlassCard from "@/components/common/glass-card";
 import ASTListCard from "@/components/sidebar/ast-list-card";
 
@@ -67,7 +67,7 @@ export default function TabbedSidebar({ headings = [] }: TabbedSidebarProps) {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
             >
-              <ProfileCard
+              <ProfileItem
                 name={"Tazdingo"}
                 avatar="/avatar.png"
                 role="我是一只鱼"

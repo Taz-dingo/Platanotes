@@ -30,7 +30,7 @@ export default function ResponsiveASTList({
       {/* Desktop Version - Portal to menu-card */}
       <MenuPortal>
         <motion.div
-          className="hidden pt-4 md:block"
+          className="hidden py-4 md:block"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.2, ease: "easeOut" }}
