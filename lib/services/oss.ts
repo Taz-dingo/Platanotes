@@ -62,7 +62,7 @@ export async function shouldSync(): Promise<boolean> {
     // 如果同步标记文件超过1小时，则需要重新同步
     console.log("last sync time:", stats.mtimeMs);
     console.log("now time:", now);
-    return now - stats.mtimeMs > 3600000;
+    return now - stats.mtimeMs > 60000;
   } catch (error) {
     // 如果文件不存在，需要同步
     return true;

@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "next build",
+    "sync-oss": "node -r @swc-node/register -r dotenv/config scripts/sync-oss.ts",
+    "build": "npm run sync-oss && next build",
     "dev": "next dev",
     "start": "next start",
     "lint": "next lint",
