@@ -13,9 +13,6 @@ interface PageProps {
   };
 }
 
-// 设置页面重新验证时间
-export const revalidate = 300; // 5分钟重新验证一次
-
 // 生成静态页面参数
 export async function generateStaticParams() {
   const postsDir = path.join(process.cwd(), "public", "static", "posts");
