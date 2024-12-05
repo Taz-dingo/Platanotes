@@ -1,13 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { List, User } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
-
-import GlassCard from "@/components/common/glass-card";
+import { AnimatePresence, motion } from "framer-motion";
+import { List, User } from "lucide-react";
 
 import ProfileCard from "@/components/card/profile-card";
+import GlassCard from "@/components/common/glass-card";
 import ASTListCard from "@/components/sidebar/ast-list-card";
 
 interface TabbedSidebarProps {
@@ -29,34 +28,33 @@ export default function TabbedSidebar({ headings = [] }: TabbedSidebarProps) {
   return (
     <GlassCard>
       {/* Tab Header */}
-        
-        {headings.length > 0 && (
-          <>
-      <div className="mb-4 flex border-b-2 border-slate-300">
-          <button
-          className={`flex-1 justify-center -mb-[2px] flex items-center gap-2 px-4 py-2 ${
-            activeTab === "profile"
-              ? "border-b-2 border-green-700 text-green-700"
-              : "text-gray-500 hover:text-green-700"
-          }`}
-          onClick={() => setActiveTab("profile")}
-        >
-          <User className="h-5" />
-        </button>
-          <button
-            className={`flex-1 justify-center -mb-[2px] flex items-center gap-2 px-4 py-2 ${
-              activeTab === "toc"
-                ? "border-b-2 border-green-700 text-green-700"
-                : "text-gray-500 hover:text-green-700"
-            }`}
-            onClick={() => setActiveTab("toc")}
-          >
-            <List  className="h-5" />
-          </button>
+
+      {headings.length > 0 && (
+        <>
+          <div className="mb-4 flex border-b-2 border-slate-300">
+            <button
+              className={`-mb-[2px] flex flex-1 items-center justify-center gap-2 px-4 py-2 ${
+                activeTab === "profile"
+                  ? "border-b-2 border-green-700 text-green-700"
+                  : "text-gray-500 hover:text-green-700"
+              }`}
+              onClick={() => setActiveTab("profile")}
+            >
+              <User className="h-5" />
+            </button>
+            <button
+              className={`-mb-[2px] flex flex-1 items-center justify-center gap-2 px-4 py-2 ${
+                activeTab === "toc"
+                  ? "border-b-2 border-green-700 text-green-700"
+                  : "text-gray-500 hover:text-green-700"
+              }`}
+              onClick={() => setActiveTab("toc")}
+            >
+              <List className="h-5" />
+            </button>
           </div>
-          </>
-          
-        )}
+        </>
+      )}
 
       {/* Tab Content */}
       <div className="relative">
@@ -64,9 +62,9 @@ export default function TabbedSidebar({ headings = [] }: TabbedSidebarProps) {
           {activeTab === "profile" ? (
             <motion.div
               key="profile"
-              initial={{ opacity: 0}}
-              animate={{ opacity: 1}}
-              exit={{ opacity: 0}}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
             >
               <ProfileCard
@@ -75,6 +73,7 @@ export default function TabbedSidebar({ headings = [] }: TabbedSidebarProps) {
                 role="我是一只鱼"
                 bio=""
                 socialLinks={{
+                  email: "tazdingo@foxmail.com",
                   github: "https://github.com/Taz-dingo",
                 }}
               />
@@ -82,9 +81,9 @@ export default function TabbedSidebar({ headings = [] }: TabbedSidebarProps) {
           ) : (
             <motion.div
               key="toc"
-              initial={{ opacity: 0}}
+              initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              exit={{ opacity: 0}}
+              exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
             >
               <ASTListCard headings={headings} />

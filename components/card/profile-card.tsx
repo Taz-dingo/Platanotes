@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { Github, Linkedin, Twitter } from "lucide-react";
+import { Github, Linkedin, Mail, Twitter } from "lucide-react";
 
 interface ProfileCardProps {
   name: string;
@@ -8,6 +8,7 @@ interface ProfileCardProps {
   avatar?: string;
   bio?: string;
   socialLinks?: {
+    email?: string;
     twitter?: string;
     github?: string;
     linkedin?: string;
@@ -56,6 +57,16 @@ export default function ProfileCard({
                 className="text-gray-600 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400"
               >
                 <Twitter className="h-5 w-5" />
+              </a>
+            )}
+            {socialLinks.email && (
+              <a
+                href={`mailto:${socialLinks.email}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-600 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400"
+              >
+                <Mail className="h-5 w-5" />
               </a>
             )}
             {socialLinks.github && (
