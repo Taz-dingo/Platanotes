@@ -1,5 +1,4 @@
 import React from "react";
-import Link from "next/link";
 
 import SidebarContainer from "@/components/sidebar/sidebar-container";
 import PageTransition from "@/components/transitions/page-transition";
@@ -15,7 +14,7 @@ export default async function PostsLayout({
         <div className="mb-4 w-full px-2 sm:mb-0 sm:w-[18rem] sm:px-0 sm:pr-4">
           <SidebarContainer />
         </div>
-        <main className="relative max-w-[50rem] px-2 sm:px-0">
+        <main className="relative px-2 sm:w-[50rem] sm:px-0">
           <PageTransition>{children}</PageTransition>
         </main>
       </div>

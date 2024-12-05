@@ -3,11 +3,7 @@ import path from "path";
 import Link from "next/link";
 
 import { POSTS_PER_PAGE } from "@/lib/config/constants";
-import {
-  CategoryData,
-  generateAllCategoryData,
-  StaticPostData,
-} from "@/lib/utils/generate-static-data";
+import { getSortedFileList, getCategoryPosts } from "@/lib/posts/get-posts-list";
 import PostList from "@/components/posts/post-list";
 import ResponsiveASTList from "@/components/sidebar/responsive-ast-list";
 
@@ -17,39 +13,30 @@ interface PageProps {
   };
 }
 
-// 从静态文件获取分类数据
-async function getCategoryData(): Promise<CategoryData[]> {
-  // 每次都动态生成数据
-  const data = await generateAllCategoryData();
-
-  // 同时更新静态文件，这样构建时的静态文件也会是最新的
-  if (process.env.NODE_ENV === "production") {
-    try {
-      const filePath = path.join(
-        process.cwd(),
-        "public",
-        "static-data",
-        "category-data.json"
-      );
-      await fs.writeFile(filePath, JSON.stringify(data, null, 2), "utf-8");
-    } catch (error) {
-      console.error("Error writing static data:", error);
-    }
-  }
-
-  return data;
-}
-
 // 设置页面重新验证时间
 export const revalidate = 300; // 5分钟重新验证一次
 
 // 生成静态页面参数
 export async function generateStaticParams() {
-  const categories = await generateAllCategoryData();
+  const postsDir = path.join(process.cwd(), "public", "static", "posts");
+  const categories = new Set<string>();
+
+  try {
+    const files = await fs.readdir(postsDir, { recursive: true });
+    for (const file of files) {
+      if (typeof file === "string" && file.endsWith(".md")) {
+        const category = file.split(path.sep)[0];
+        if (category) categories.add(category);
+      }
+    }
+  } catch (error) {
+    console.error("Error reading posts directory:", error);
+  }
+
   return [
     { slug: "all" },
-    ...categories.map((category) => ({
-      slug: category.slug,
+    ...Array.from(categories).map((category) => ({
+      slug: category,
     })),
   ];
 }
@@ -57,27 +44,16 @@ export async function generateStaticParams() {
 export default async function CategoryPage({ params }: PageProps) {
   const { slug } = params;
 
-  // 如果是首页（all），则显示所有文章
-  if (slug === "all") {
-    const staticDir = path.join(process.cwd(), "public", "static-data");
-    const filePath = path.join(staticDir, "category-data.json");
-
-    let categoryData: CategoryData[] = [];
-    try {
-      const fileContent = await fs.readFile(filePath, "utf-8");
-      categoryData = JSON.parse(fileContent);
-    } catch (error) {
-      console.error("Error reading category data:", error);
-      categoryData = await generateAllCategoryData();
+  try {
+    let posts;
+    if (slug === "all") {
+      posts = await getSortedFileList();
+    } else {
+      posts = await getCategoryPosts(slug);
     }
 
-    const initialPosts = categoryData
-      .reduce<StaticPostData[]>(
-        (acc, category) => [...acc, ...category.posts],
-        []
-      )
-      .sort((a, b) => (b.metadata?.ctime || 0) - (a.metadata?.ctime || 0))
-      .slice(0, POSTS_PER_PAGE);
+    // 只获取第一页的帖子
+    const initialPosts = posts.slice(0, POSTS_PER_PAGE);
 
     return (
       <div className="flex-1">
@@ -85,30 +61,12 @@ export default async function CategoryPage({ params }: PageProps) {
         <ResponsiveASTList />
       </div>
     );
-  }
-
-  // 其他分类的处理逻辑
-  const staticDir = path.join(process.cwd(), "public", "static-data");
-  const filePath = path.join(staticDir, "category-data.json");
-
-  let categoryData: CategoryData[] = [];
-  try {
-    const fileContent = await fs.readFile(filePath, "utf-8");
-    categoryData = JSON.parse(fileContent);
   } catch (error) {
-    console.error("Error reading category data:", error);
-    categoryData = await generateAllCategoryData();
+    console.error("Error reading posts:", error);
+    return (
+      <div className="flex-1">
+        <p>Error loading posts.</p>
+      </div>
+    );
   }
-
-  const category = categoryData.find((cat) => cat.slug === slug);
-  const initialPosts = category?.posts
-    .sort((a, b) => (b.metadata?.ctime || 0) - (a.metadata?.ctime || 0))
-    .slice(0, POSTS_PER_PAGE) || [];
-
-  return (
-    <div className="flex-1">
-      <PostList initialPosts={initialPosts} />
-      <ResponsiveASTList />
-    </div>
-  );
 }

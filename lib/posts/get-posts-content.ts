@@ -1,3 +1,5 @@
+import fs from "fs/promises";
+import path from "path";
 import matter from "gray-matter";
 import rehypeHighlight from "rehype-highlight";
 import rehypeKatex from "rehype-katex";
@@ -8,7 +10,6 @@ import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import { unified } from "unified";
 
-import { getPostContent } from "@/lib/services/oss";
 import { safeUrlDecode } from "@/lib/utils/url-utils";
 
 // AST 节点类型
@@ -48,7 +49,10 @@ export interface PostData {
   content: string;
   headings: { level: number; text: string }[];
   title: string;
-  date?: string;
+  created?: string;
+  modified?: string;
+  created_timestamp?: number;
+  modified_timestamp?: number;
 }
 
 // 根据 slug 获取特定文章内容
@@ -56,12 +60,14 @@ export async function getPostBySlug(
   slug: string
 ): Promise<PostData | undefined> {
   try {
-    // 构建OSS路径，确保正确解码
-    const ossPath = `Blog/${safeUrlDecode(slug)}.md`;
+    // 构建本地文件路径，确保只有一个 .md 扩展名
+    const postsDirectory = path.join(process.cwd(), "public", "static", "posts");
+    const slugWithoutExt = slug.replace(/\.md$/, ""); // 移除可能存在的 .md 扩展名
+    const fullPath = path.join(postsDirectory, `${safeUrlDecode(slugWithoutExt)}.md`);
 
-    // 从OSS获取文件内容
-    const fileContents = await getPostContent(ossPath);
-    const { data, content } = matter(fileContents);
+    // 从本地文件系统读取内容
+    const fileContents = await fs.readFile(fullPath, "utf8");
+    const { data: frontMatter, content } = matter(fileContents);
 
     // 提取标题结构
     const headings: { level: number; text: string }[] = [];
@@ -95,29 +101,32 @@ export async function getPostBySlug(
       .use(remarkRehype, { allowDangerousHtml: true })
       .use(rehypeKatex)
       .use(rehypeHighlight)
-      .use(rehypeStringify)
+      .use(rehypeStringify, { allowDangerousHtml: true })
       .process(content);
 
-    const contentHtml = `<div class="markdown-body">${String(processedContent)}</div>`;
+    // 获取文件名作为标题（不包含日期前缀和扩展名）
+    const fileName = path.basename(fullPath)
+      .replace(/^\d{4}\.\d{2}\.\d{2}\s+/, "")
+      .replace(/\.md$/, "");
 
-    // Ensure required fields are present
-    if (!data.title) {
-      console.error('Missing required field "title" in frontmatter for:', slug);
-      return undefined;
-    }
+    // 从 frontMatter 中获取时间信息
+    const created = frontMatter.created;
+    const modified = frontMatter.modified;
+    const created_timestamp = created ? Number(created.split(", ").pop()) : 0;
+    const modified_timestamp = modified ? Number(modified.split(", ").pop()) : 0;
 
-    // Construct the post data with type safety
-    const post: PostData = {
+    return {
       slug,
-      content: contentHtml,
+      content: `<div class="markdown-body">${String(processedContent)}</div>`,
       headings,
-      title: data.title,
-      date: data.date,
+      title: fileName,
+      created,
+      modified,
+      created_timestamp,
+      modified_timestamp,
     };
-
-    return post;
   } catch (error) {
-    console.error("Error loading post from OSS:", error);
+    console.error("Error loading post:", error);
     return undefined;
   }
 }

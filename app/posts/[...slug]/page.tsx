@@ -1,11 +1,20 @@
+import fs from "fs/promises";
+import path from "path";
+import Link from "next/link";
+
 import { getPostBySlug } from "@/lib/posts/get-posts-content";
-import { getPostsTree } from "@/lib/posts/get-posts-tree";
 import GlassCard from "@/components/common/glass-card";
 import Breadcrumb, { BreadcrumbItem } from "@/components/posts/bread-crumb";
 import PostContent from "@/components/posts/post-content";
 import ResponsiveASTList from "@/components/sidebar/responsive-ast-list";
 
-export default async function Post({ params }: { params: { slug: string[] } }) {
+interface PageProps {
+  params: {
+    slug: string[];
+  };
+}
+
+export default async function Post({ params }: PageProps) {
   const slug = params.slug.join("/");
   const post = await getPostBySlug(slug);
 
@@ -33,7 +42,7 @@ export default async function Post({ params }: { params: { slug: string[] } }) {
         <GlassCard>
           <PostContent
             title={post.title}
-            date={post.date}
+            date={post.modified || post.created}
             content={post.content}
           />
         </GlassCard>
@@ -44,19 +53,34 @@ export default async function Post({ params }: { params: { slug: string[] } }) {
 }
 
 export async function generateStaticParams() {
-  const postsTree = getPostsTree();
-
-  function flattenTree(node: any): string[][] {
-    if (node.type === "file") {
-      return [node.path.split("/")];
-    }
-    if (node.children) {
-      return node.children.flatMap(flattenTree);
-    }
+  const postsDirectory = path.join(process.cwd(), "public", "static", "posts");
+  
+  async function getAllMarkdownFiles(dir: string): Promise<string[]> {
+    const entries = await fs.readdir(dir, { withFileTypes: true });
+    const files = await Promise.all(
+      entries.map(async (entry) => {
+        const res = path.resolve(dir, entry.name);
+        if (entry.isDirectory()) {
+          return getAllMarkdownFiles(res);
+        } else if (entry.name.endsWith(".md")) {
+          return [res];
+        }
+        return [];
+      })
+    );
+    
+    return files.flat();
+  }
+  
+  try {
+    const files = await getAllMarkdownFiles(postsDirectory);
+    return files.map(file => ({
+      slug: path.relative(postsDirectory, file)
+        .replace(/\.md$/, "") // 确保移除 .md 扩展名
+        .split(path.sep)
+    }));
+  } catch (error) {
+    console.error("Error generating static params:", error);
     return [];
   }
-
-  const paths = flattenTree(postsTree);
-
-  return paths.map((slug) => ({ slug }));
 }

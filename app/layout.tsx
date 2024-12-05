@@ -7,6 +7,15 @@ import Link from "next/link";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
+import { downloadAllObjects, shouldSync } from "@/lib/services/oss";
+
+async function syncPosts() {
+  if (await shouldSync()) {
+    await downloadAllObjects();
+    console.log("All posts downloaded successfully");
+  }
+}
+
 export const metadata: Metadata = {
   title: "梧桐树下",
   description: "享受片刻宁静",
@@ -18,6 +27,9 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  // 在服务器端执行同步
+  await syncPosts();
+
   return (
     <html lang="zh">
       <head>

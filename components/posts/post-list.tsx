@@ -3,9 +3,10 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import moment from "moment";
 
 import { POSTS_PER_PAGE } from "@/lib/config/constants";
-import { Post } from "@/lib/posts/get-posts-tree";
+import { Post } from "@/lib/posts/get-posts-list";
 import GlassCard from "@/components/common/glass-card";
 
 interface PostListProps {
@@ -68,31 +69,36 @@ export default function PostList({ initialPosts }: PostListProps) {
 
   return (
     <div className="flex flex-col">
-      {posts.map((node) => {
-        const date = new Date(node.metadata?.ctime || 0).toLocaleDateString(
-          "zh-CN",
-          {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          }
-        );
+      {posts.map((post) => {
+        // 使用修改时间或创建时间
+        const timestamp = post.metadata?.modified_timestamp || post.metadata?.created_timestamp || 0;
+        const dateString = post.metadata?.modified || post.metadata?.created;
+        
+        // 获取文章摘要
+        const summary = post.content
+          .replace(/^---[\s\S]*?---/, "") // 移除 frontmatter
+          .replace(/\[.*?\]/g, "") // 移除链接文本
+          .replace(/\(.*?\)/g, "") // 移除链接地址
+          .replace(/#+\s+.*$/gm, "") // 移除标题
+          .replace(/\n/g, " ") // 替换换行为空格
+          .trim()
+          .slice(0, 200) + "..."; // 截取前200个字符
 
         return (
           <GlassCard
             className="mb-3 animate-fade-in p-8 opacity-0"
             hover
-            key={node.path}
+            key={post.path}
           >
-            <Link className="group" href={`/posts/${node.path}`}>
+            <Link className="group" href={`/posts/${post.path}`}>
               <h2 className="mb-1 border-b-2 border-gray-300 pb-1 text-xl font-bold transition duration-300 group-hover:text-green-700">
-                {node.metadata?.title || node.name}
+                {post.metadata?.title}
               </h2>
               <p className="break-all text-gray-600">
-                {node.metadata?.summary}
+                {summary}
               </p>
             </Link>
-            <p className="mt-2 text-sm text-gray-500">{date}</p>
+            <p className="mt-2 text-sm text-gray-500">{dateString}</p>
           </GlassCard>
         );
       })}

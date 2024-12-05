@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { POSTS_PER_PAGE } from "@/lib/config/constants";
-import { getSortedFileList } from "@/lib/posts/get-posts-list";
-import { generateAllCategoryData } from "@/lib/utils/generate-static-data";
+import { getSortedFileList, getCategoryPosts } from "@/lib/posts/get-posts-list";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -20,13 +19,8 @@ export async function GET(request: NextRequest) {
       posts = await getSortedFileList(page, limit);
     } else {
       // 获取指定分类的文章
-      const categories = await generateAllCategoryData();
-      const categoryData = categories.find((c) => c.slug === category);
-      if (!categoryData) {
-        return NextResponse.json({ posts: [], hasMore: false });
-      }
-      totalPosts = categoryData.posts;
-      posts = categoryData.posts.slice((page - 1) * limit, page * limit);
+      totalPosts = await getCategoryPosts(category);
+      posts = totalPosts.slice((page - 1) * limit, page * limit);
     }
 
     const hasMore = page * limit < totalPosts.length;

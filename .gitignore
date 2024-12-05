@@ -41,4 +41,4 @@ yarn-error.log*
 next-env.d.ts
 
 # static data
-public/static-data
+public/static
