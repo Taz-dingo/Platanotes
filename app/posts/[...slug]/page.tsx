@@ -1,6 +1,5 @@
 import fs from "fs/promises";
 import path from "path";
-import Link from "next/link";
 
 import { getPostBySlug } from "@/lib/posts/get-posts-content";
 import GlassCard from "@/components/common/glass-card";
@@ -42,7 +41,8 @@ export default async function Post({ params }: PageProps) {
         <GlassCard>
           <PostContent
             title={post.title}
-            date={post.modified || post.created}
+            created_timestamp={post.created_timestamp}
+            modified_timestamp={post.modified_timestamp}
             content={post.content}
           />
         </GlassCard>
@@ -54,7 +54,7 @@ export default async function Post({ params }: PageProps) {
 
 export async function generateStaticParams() {
   const postsDirectory = path.join(process.cwd(), "public", "static", "posts");
-  
+
   async function getAllMarkdownFiles(dir: string): Promise<string[]> {
     const entries = await fs.readdir(dir, { withFileTypes: true });
     const files = await Promise.all(
@@ -68,16 +68,17 @@ export async function generateStaticParams() {
         return [];
       })
     );
-    
+
     return files.flat();
   }
-  
+
   try {
     const files = await getAllMarkdownFiles(postsDirectory);
-    return files.map(file => ({
-      slug: path.relative(postsDirectory, file)
+    return files.map((file) => ({
+      slug: path
+        .relative(postsDirectory, file)
         .replace(/\.md$/, "") // 确保移除 .md 扩展名
-        .split(path.sep)
+        .split(path.sep),
     }));
   } catch (error) {
     console.error("Error generating static params:", error);

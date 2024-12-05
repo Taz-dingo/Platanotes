@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { Calendar, Clock } from "lucide-react";
 import moment from "moment";
 
 import { POSTS_PER_PAGE } from "@/lib/config/constants";
@@ -70,19 +71,24 @@ export default function PostList({ initialPosts }: PostListProps) {
   return (
     <div className="flex flex-col">
       {posts.map((post) => {
-        // 使用修改时间或创建时间
-        const timestamp = post.metadata?.modified_timestamp || post.metadata?.created_timestamp || 0;
-        const dateString = post.metadata?.modified || post.metadata?.created;
-        
+        // 获取创建时间和修改时间
+        const createdDate = post.metadata?.created
+          ? moment(post.metadata.created_timestamp).format("YYYY-MM-DD")
+          : null;
+        const modifiedDate = post.metadata?.modified
+          ? moment(post.metadata.modified_timestamp).format("YYYY-MM-DD")
+          : null;
+
         // 获取文章摘要
-        const summary = post.content
-          .replace(/^---[\s\S]*?---/, "") // 移除 frontmatter
-          .replace(/\[.*?\]/g, "") // 移除链接文本
-          .replace(/\(.*?\)/g, "") // 移除链接地址
-          .replace(/#+\s+.*$/gm, "") // 移除标题
-          .replace(/\n/g, " ") // 替换换行为空格
-          .trim()
-          .slice(0, 200) + "..."; // 截取前200个字符
+        const summary =
+          post.content
+            .replace(/^---[\s\S]*?---/, "") // 移除 frontmatter
+            .replace(/\[.*?\]/g, "") // 移除链接文本
+            .replace(/\(.*?\)/g, "") // 移除链接地址
+            .replace(/#+\s+.*$/gm, "") // 移除标题
+            .replace(/\n/g, " ") // 替换换行为空格
+            .trim()
+            .slice(0, 200) + "..."; // 截取前200个字符
 
         return (
           <GlassCard
@@ -94,11 +100,22 @@ export default function PostList({ initialPosts }: PostListProps) {
               <h2 className="mb-1 border-b-2 border-gray-300 pb-1 text-xl font-bold transition duration-300 group-hover:text-green-700">
                 {post.metadata?.title}
               </h2>
-              <p className="break-all text-gray-600">
-                {summary}
-              </p>
+              <p className="break-all text-gray-600">{summary}</p>
             </Link>
-            <p className="mt-2 text-sm text-gray-500">{dateString}</p>
+            <div className="mt-2 flex flex-wrap gap-3 text-sm text-gray-500">
+              {createdDate && (
+                <div className="flex items-center gap-1">
+                  <Calendar size={14} />
+                  <span>{createdDate}</span>
+                </div>
+              )}
+              {modifiedDate && modifiedDate !== createdDate && (
+                <div className="flex items-center gap-1">
+                  <Clock size={14} />
+                  <span>修改于 {modifiedDate}</span>
+                </div>
+              )}
+            </div>
           </GlassCard>
         );
       })}
