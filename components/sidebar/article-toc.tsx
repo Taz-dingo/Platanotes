@@ -42,7 +42,7 @@ export function convertHeadingsToTree(
   return root;
 }
 
-export default function ASTListCard({ headings }: ASTListCardProps) {
+export default function ArticleTOC({ headings }: ASTListCardProps) {
   const [activeHeading, setActiveHeading] = useState<string>("");
 
   useEffect(() => {

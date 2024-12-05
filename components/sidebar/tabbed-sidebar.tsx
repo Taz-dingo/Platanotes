@@ -7,7 +7,7 @@ import { List, User } from "lucide-react";
 
 import ProfileItem from "@/components/card/profile-item";
 import GlassCard from "@/components/common/glass-card";
-import ASTListCard from "@/components/sidebar/ast-list-card";
+import ArticleTOC from "@/components/sidebar/article-toc";
 
 interface TabbedSidebarProps {
   headings?: { level: number; text: string }[];
@@ -86,7 +86,7 @@ export default function TabbedSidebar({ headings = [] }: TabbedSidebarProps) {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
             >
-              <ASTListCard headings={headings} />
+              <ArticleTOC headings={headings} />
             </motion.div>
           )}
         </AnimatePresence>
