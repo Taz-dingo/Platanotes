@@ -27,8 +27,8 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 px-2 py-2 sm:px-4">
-        <div className="mx-auto px-2 sm:px-4">
-          <header className="my-4 flex flex-col items-center justify-between space-y-4 border-b-2 px-2 pb-3 sm:my-8 sm:flex-row sm:space-y-0 sm:px-5">
+        <div className="mx-auto px-0 sm:px-4">
+          <header className="my-4 flex flex-col items-center justify-between space-y-4 border-b-2 px-2 pb-3 sm:my-8 sm:flex-row sm:space-y-0 sm:px-10">
             <h1 className="text-3xl sm:text-4xl">
               <Link
                 className="text-green-700 hover:text-green-900"
