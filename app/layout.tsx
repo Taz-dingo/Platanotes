@@ -32,20 +32,16 @@ export default function RootLayout({
           href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.1.0/style.css"
         />
       </head>
-      <body className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 px-2 py-2 sm:px-4">
-        <div className="mx-auto px-0 sm:px-4">
-          <header className="my-4 flex flex-col items-center justify-between space-y-4 border-b-2 px-2 pb-3 sm:my-8 sm:flex-row sm:space-y-0 sm:px-10">
-            <h1 className="text-3xl sm:text-4xl">
-              <Link
-                className="text-green-700 hover:text-green-900"
-                
-                href="/"
-              >
+      <body className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 px-2 py-2 md:px-4">
+        <div className="mx-auto px-0 md:px-4">
+          <header className="my-4 flex flex-col items-center justify-between space-y-4 border-b-2 px-2 pb-3 md:my-8 md:flex-row md:space-y-0 md:px-10">
+            <h1 className="text-3xl md:text-4xl">
+              <Link className="text-green-700 hover:text-green-900" href="/">
                 梧桐树下
               </Link>
             </h1>
             <div className="flex items-center space-x-4">
-              <h2 className="text-base sm:text-lg">
+              <h2 className="text-base md:text-lg">
                 <Link
                   className="text-green-700 hover:text-green-900"
                   href="/posts"
@@ -53,7 +49,7 @@ export default function RootLayout({
                   文章
                 </Link>
               </h2>
-              <h2 className="text-base sm:text-lg">
+              <h2 className="text-base md:text-lg">
                 <Link
                   className="text-green-700 hover:text-green-900"
                   href="/about"
