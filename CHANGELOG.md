@@ -13,26 +13,34 @@
 - [ ] feat: 首页设计
 - [ ] feat: 还是可以实现一下双链、图链
 - [ ] bug: 首屏加载样式闪烁
-- [ ] bug: 如果文本内容太短，即时有富余空间，main也不会达到应有的宽度
 - [ ] feat: 滑动动态加载，虚拟列表
 
 - [ ] bug: post-tree-node展开收起有问题（深层子级）
 
 - [ ] bug：没有标题的时候ast-list-bar没有对应显示
 
-- [ ] feat: OSS上CDN
+- [ ] feat: OSS上CDN (暂时搁置，需要服务器备案)
 - [ ] feat: 图片懒加载、点击放大等等功能
 
 - [ ] refactor: 统一post格式
 - [ ] refactor: 统一icon库（现在有lucide-react和react-icons两个））
 - [ ] refactor: 统一响应式断点位置（现在有sm和md两个））
 
-- [ ] feat: 404页面
 
 - [ ] feat: 影展，用微前端实现？
 
 - [ ] perf: /categories超级慢，把所有文章都loading+处理了才响应好，而且这玩意为啥没缓存？
 - [ ] todo: 做一个playground（具体怎么做还要想想）
+- [ ] bug：`/posts/[..slug]`布局有问题，
+
+
+### 2024-12-05
+
+- [x] bug: 如果文本内容太短，即时有富余空间，main也不会达到应有的宽度
+
+### 2024-12-03
+
+- [x] feat: 404页面
 
 ### 2024-12-02
 
