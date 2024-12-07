@@ -22,6 +22,12 @@ export default function RootLayout({
     <html lang="zh">
       <head>
         <link
+          rel="preload"
+          href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.1.0/style.css"
+          as="style"
+          crossOrigin="anonymous"
+        />
+        <link
           rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.1.0/style.css"
         />
@@ -32,10 +38,7 @@ export default function RootLayout({
             <h1 className="text-3xl sm:text-4xl">
               <Link
                 className="text-green-700 hover:text-green-900"
-                style={{
-                  fontFamily: "LXGW WenKai",
-                  fontWeight: "bold",
-                }}
+                
                 href="/"
               >
                 梧桐树下

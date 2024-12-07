@@ -97,7 +97,7 @@ export default function PostList({ initialPosts }: PostListProps) {
             key={post.path}
           >
             <Link className="group" href={`/posts/${post.path}`}>
-              <h2 className="mb-1 border-b-2 border-gray-300 pb-1 text-xl font-bold transition duration-300 group-hover:text-green-700">
+              <h2 className="mb-1 border-b-2 border-gray-300 pb-1 text-xl transition duration-300 group-hover:text-green-700">
                 {post.metadata?.title}
               </h2>
               <p className="break-all text-gray-600">{summary}</p>

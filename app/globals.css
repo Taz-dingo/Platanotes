@@ -1,7 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import '@/public/styles/github-markdown.css';
+@import "@/public/styles/github-markdown.css";
 
 :root {
   --foreground-rgb: 0, 0, 0;
@@ -18,18 +18,28 @@ body {
 
 html,
 body {
-  @apply scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200;
+  @apply scrollbar-thin scrollbar-track-gray-200 scrollbar-thumb-gray-400;
+}
+
+/* 字体配置 */
+@font-face {
+  font-family: "LXGW WenKai";
+  font-display: swap;
+  font-weight: normal;
+  font-style: normal;
 }
 
 body {
-  font-family: "Roboto", "LXGW WenKai", sans-serif;
+  font-family: "Roboto", "LXGW WenKai", "KaiXinSong", "SimKai", "楷体",
+    "楷体_GB2312", ui-serif, serif;
   background-color: rgba(255, 245, 230, 0.8);
 }
 
 /* 盒子基础样式 */
 .markdown-body {
   /* padding: 2rem; */
-  font-family: "Roboto", "LXGW WenKai", sans-serif;
+  font-family: "Roboto", "LXGW WenKai", "KaiXinSong", "SimKai", "楷体",
+    "楷体_GB2312", ui-serif, serif;
   /* border-radius: 0.5rem;
   background-color: rgba(255, 255, 255, 0.5); */
 }
