@@ -1,6 +1,5 @@
 import fs from "fs/promises";
 import path from "path";
-import { Suspense } from "react";
 
 import { getPostBySlug } from "@/lib/posts/get-posts-content";
 import GlassCard from "@/components/common/glass-card";
@@ -15,32 +14,9 @@ interface PageProps {
   };
 }
 
-async function PostContentWrapper({ slug }: { slug: string }) {
-  const post = await getPostBySlug(slug);
-  if (!post) {
-    return <div>文章不存在</div>;
-  }
-
-  return (
-    <PostContent
-      title={post.title}
-      created_timestamp={post.created_timestamp}
-      modified_timestamp={post.modified_timestamp}
-      content={post.content}
-    />
-  );
-}
-
-function SuspenseFallback() {
-  return (
-    <div className="opacity-0 animate-fade-in fill-mode-forwards">
-      <PostContentSkeleton />
-    </div>
-  );
-}
-
 export default async function Post({ params }: PageProps) {
   const slug = params.slug.join("/");
+  const post = await getPostBySlug(slug);
 
   // 构建 BreadcrumbItems
   const items: BreadcrumbItem[] = params.slug.map((segment, index) => {
@@ -63,11 +39,14 @@ export default async function Post({ params }: PageProps) {
           <Breadcrumb items={items} />
         </GlassCard>
         <GlassCard>
-          <Suspense fallback={<SuspenseFallback />}>
-            <div className="opacity-0 animate-fade-in fill-mode-forwards">
-              <PostContentWrapper slug={slug} />
-            </div>
-          </Suspense>
+          {post 
+          ?<PostContent
+            title={post.title}
+            created_timestamp={post.created_timestamp}
+            modified_timestamp={post.modified_timestamp}
+            content={post.content}
+          /> 
+          : <div>文章不存在</div>}
         </GlassCard>
       </div>
       <ResponsiveASTList />
