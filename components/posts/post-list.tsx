@@ -92,7 +92,7 @@ export default function PostList({ initialPosts }: PostListProps) {
 
         return (
           <GlassCard
-            className="mb-3 animate-fade-in p-8 opacity-0"
+            className="mb-3 p-8"
             hover
             key={post.path}
           >
