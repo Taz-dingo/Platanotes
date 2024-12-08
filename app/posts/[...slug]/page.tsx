@@ -1,10 +1,12 @@
 import fs from "fs/promises";
 import path from "path";
+import { Suspense } from "react";
 
 import { getPostBySlug } from "@/lib/posts/get-posts-content";
 import GlassCard from "@/components/common/glass-card";
 import Breadcrumb, { BreadcrumbItem } from "@/components/posts/bread-crumb";
 import PostContent from "@/components/posts/post-content";
+import PostContentSkeleton from "@/components/posts/post-content-skeleton";
 import ResponsiveASTList from "@/components/sidebar/responsive-ast-list";
 
 interface PageProps {
@@ -13,24 +15,46 @@ interface PageProps {
   };
 }
 
+async function PostContentWrapper({ slug }: { slug: string }) {
+  const post = await getPostBySlug(slug);
+  if (!post) {
+    return <div>文章不存在</div>;
+  }
+
+  return (
+    <PostContent
+      title={post.title}
+      created_timestamp={post.created_timestamp}
+      modified_timestamp={post.modified_timestamp}
+      content={post.content}
+    />
+  );
+}
+
+function SuspenseFallback() {
+  return (
+    <div className="opacity-0 animate-fade-in fill-mode-forwards">
+      <PostContentSkeleton />
+    </div>
+  );
+}
+
 export default async function Post({ params }: PageProps) {
   const slug = params.slug.join("/");
-  const post = await getPostBySlug(slug);
 
   // 构建 BreadcrumbItems
   const items: BreadcrumbItem[] = params.slug.map((segment, index) => {
-    // 第一级（分类）使用 /posts/categories/，其他级别使用 /posts/
-    const prefix = index === 0 ? "/posts/categories/" : "/posts/";
-    const href = prefix + params.slug.slice(0, index + 1).join("/");
+    // 第一级使用 /categories/，其他级别使用当前路径
+    const prefix = index === 0 ? "/categories/" : "/";
+    const href = index === 0 
+      ? `/categories/${segment}`
+      : `/categories/${params.slug[0]}/${params.slug.slice(1, index + 1).join("/")}`;
+    
     return {
       label: decodeURIComponent(segment.replace(/-/g, " ")),
       href,
     };
   });
-
-  if (!post) {
-    return <div>文章不存在</div>;
-  }
 
   return (
     <article className="flex-1 transition">
@@ -39,15 +63,14 @@ export default async function Post({ params }: PageProps) {
           <Breadcrumb items={items} />
         </GlassCard>
         <GlassCard>
-          <PostContent
-            title={post.title}
-            created_timestamp={post.created_timestamp}
-            modified_timestamp={post.modified_timestamp}
-            content={post.content}
-          />
+          <Suspense fallback={<SuspenseFallback />}>
+            <div className="opacity-0 animate-fade-in fill-mode-forwards">
+              <PostContentWrapper slug={slug} />
+            </div>
+          </Suspense>
         </GlassCard>
       </div>
-      <ResponsiveASTList headings={post.headings} />
+      <ResponsiveASTList />
     </article>
   );
 }

@@ -30,6 +30,8 @@
 
 - [x] bug: 首屏加载样式闪烁
 - [x] feat: 实现外层layout静态展示profile名片
+- [x] feat: 添加骨架屏（`/categories/[slug]`和`/posts/[...slug]`）
+- [x] bug: 修复breadcrumb链接地址（去掉/posts）
 
 
 ### 2024-12-05
