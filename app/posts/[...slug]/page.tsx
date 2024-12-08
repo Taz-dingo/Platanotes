@@ -5,7 +5,6 @@ import { getPostBySlug } from "@/lib/posts/get-posts-content";
 import GlassCard from "@/components/common/glass-card";
 import Breadcrumb, { BreadcrumbItem } from "@/components/posts/bread-crumb";
 import PostContent from "@/components/posts/post-content";
-import PostContentSkeleton from "@/components/posts/post-content-skeleton";
 import ResponsiveASTList from "@/components/sidebar/responsive-ast-list";
 
 interface PageProps {
@@ -22,10 +21,11 @@ export default async function Post({ params }: PageProps) {
   const items: BreadcrumbItem[] = params.slug.map((segment, index) => {
     // 第一级使用 /categories/，其他级别使用当前路径
     const prefix = index === 0 ? "/categories/" : "/";
-    const href = index === 0 
-      ? `/categories/${segment}`
-      : `/categories/${params.slug[0]}/${params.slug.slice(1, index + 1).join("/")}`;
-    
+    const href =
+      index === 0
+        ? `/categories/${segment}`
+        : `/categories/${params.slug[0]}/${params.slug.slice(1, index + 1).join("/")}`;
+
     return {
       label: decodeURIComponent(segment.replace(/-/g, " ")),
       href,
@@ -39,17 +39,21 @@ export default async function Post({ params }: PageProps) {
           <Breadcrumb items={items} />
         </GlassCard>
         <GlassCard>
-          {post 
-          ?<PostContent
-            title={post.title}
-            created_timestamp={post.created_timestamp}
-            modified_timestamp={post.modified_timestamp}
-            content={post.content}
-          /> 
-          : <div>文章不存在</div>}
+          {post ? (
+            <>
+            <PostContent
+              title={post.title}
+              created_timestamp={post.created_timestamp}
+              modified_timestamp={post.modified_timestamp}
+              content={post.content}
+            />
+            <ResponsiveASTList headings={post.headings} />
+            </>
+          ) : (
+            <div>文章不存在</div>
+          )}
         </GlassCard>
       </div>
-      <ResponsiveASTList />
     </article>
   );
 }

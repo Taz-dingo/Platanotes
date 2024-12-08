@@ -17,6 +17,8 @@ export default function TabbedSidebar({ headings = [] }: TabbedSidebarProps) {
   const pathname = usePathname();
   const [activeTab, setActiveTab] = useState<"toc" | "profile">("profile");
 
+  console.log("TabbedSidebar is rendered")
+
   // Automatically switch to toc tab when in a post page and headings are available
   useEffect(() => {
     const isPostPage = pathname.split("/").length > 2;
