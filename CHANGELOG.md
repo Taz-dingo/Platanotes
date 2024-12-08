@@ -31,7 +31,7 @@
 
 - [ ] perf: /categories超级慢，把所有文章都loading+处理了才响应好，而且这玩意为啥没缓存？
 - [ ] todo: 做一个playground（具体怎么做还要想想）
-- [ ] bug：`/posts/[..slug]`布局有问题，
+- [ ] bug：`/posts/[..slug]`样式有问题，md里的code在md尺寸以上不是流式
 
 
 ### 2024-12-05
