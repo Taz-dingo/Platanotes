@@ -11,27 +11,27 @@ import type { Post } from "@/lib/posts/get-posts-tree";
 const menuConfig = {
   home: {
     name: "首页",
-    path: "/posts/categories/all",
+    path: "/categories/all",
     icon: Home,
   },
   notes: {
     name: "笔记",
-    path: "/posts/categories/notes",
+    path: "/categories/notes",
     icon: BookText,
   },
   thoughts: {
     name: "想法",
-    path: "/posts/categories/thoughts",
+    path: "/categories/thoughts",
     icon: Lightbulb,
   },
   cinema: {
     name: "放映厅",
-    path: "/posts/categories/cinema",
+    path: "/categories/cinema",
     icon: Film,
   },
   photos: {
     name: "摄影",
-    path: "/posts/categories/photos",
+    path: "/categories/photos",
     icon: Camera,
   },
 } as const;
@@ -50,17 +50,17 @@ export default function MenuList({ folders }: MenuListProps) {
       : pathname;
 
     // 如果是文章详情页 (/posts/[...slug])
-    if (currentPath.startsWith("/posts/") && !currentPath.startsWith("/posts/categories/")) {
+    if (currentPath.startsWith("/posts/") && !currentPath.startsWith("/categories/")) {
       // 从路径中提取分类
       const pathParts = currentPath.split("/");
       if (pathParts.length >= 3) {
         const category = pathParts[2];
         // 如果是根目录文章，对应到 all 分类
         if (!category || category === "") {
-          return path === "/posts/categories/all";
+          return path === "/categories/all";
         }
         // 检查当前分类是否匹配菜单项
-        const menuPath = `/posts/categories/${category}`;
+        const menuPath = `/categories/${category}`;
         return path === menuPath;
       }
     }

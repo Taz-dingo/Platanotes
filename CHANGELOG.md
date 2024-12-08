@@ -12,44 +12,47 @@
 - [ ] feat: 添加mermaid解析器
 - [ ] feat: 首页设计
 - [ ] feat: 还是可以实现一下双链、图链
-- [ ] bug: 首屏加载样式闪烁
-- [ ] feat: 滑动动态加载，虚拟列表
+- [ ] feat: 虚拟列表
 
 - [ ] bug: post-tree-node展开收起有问题（深层子级）
-
 - [ ] bug：没有标题的时候ast-list-bar没有对应显示
 
 - [ ] feat: OSS上CDN (暂时搁置，需要服务器备案)
 - [ ] feat: 图片懒加载、点击放大等等功能
 
-- [ ] refactor: 统一post格式
-- [ ] refactor: 统一icon库（现在有lucide-react和react-icons两个））
-- [ ] refactor: 统一响应式断点位置（现在有sm和md两个））
-
 
 - [ ] feat: 影展，用微前端实现？
 
-- [ ] perf: /categories超级慢，把所有文章都loading+处理了才响应好，而且这玩意为啥没缓存？
 - [ ] todo: 做一个playground（具体怎么做还要想想）
 - [ ] bug：`/posts/[..slug]`样式有问题，md里的code在md尺寸以上不是流式
+
+### 2024-12-08
+
+- [x] bug: 首屏加载样式闪烁
+- [x] feat: 实现外层layout静态展示profile名片
 
 
 ### 2024-12-05
 
+- [x] refactor: 统一响应式断点位置（现在有sm和md两个））
 - [x] bug: 如果文本内容太短，即时有富余空间，main也不会达到应有的宽度
 
 ### 2024-12-03
 
+- [x] refactor: 统一post格式
+- [x] refactor: 统一icon库（现在有lucide-react和react-icons两个））
 - [x] feat: 404页面
 
 ### 2024-12-02
 
+- [x] feat: 滑动动态加载
 - [x] refactor: 组件样式框抽象出来
 - [x] bug: 进入具体posts后menu-card选中状态丢失
 - [x] feat：引入frame-motion动画
 
 ### 2024-12-01
 
+- [x] perf: /categories超级慢，把所有文章都loading+处理了才响应好，而且这玩意为啥没缓存？
 - [x] feat: 侧边栏文字禁止换行
 - [x] bug：ast-list-bar选中状态有问题
 - [x] feat：滚动时候ast-list-bar同步高亮
