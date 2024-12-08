@@ -6,6 +6,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import ThemeToggle from "@/components/theme/theme-toggle";
 
 export const metadata: Metadata = {
   title: "梧桐树下",
@@ -57,6 +58,7 @@ export default function RootLayout({
                   关于
                 </Link>
               </h2>
+              <ThemeToggle />
             </div>
           </header>
           {children}

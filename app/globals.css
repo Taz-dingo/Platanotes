@@ -9,6 +9,12 @@
   --background-end-rgb: 255, 255, 255;
 }
 
+:root.dark {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 0, 0, 0;
+  --background-end-rgb: 0, 0, 0;
+}
+
 /* 解决scrollbar出现影响布局的问题 */
 body {
   width: 100vw;
@@ -35,11 +41,18 @@ body {
   background-color: rgba(255, 245, 230, 0.8);
 }
 
+.dark body {
+  background-color: rgba(31, 41, 55, 0.85);
+  /* color: #e5e7eb; */
+}
+
 /* 盒子基础样式 */
 .markdown-body {
-  /* padding: 2rem; */
   font-family: "Roboto", "LXGW WenKai", "KaiXinSong", "SimKai", "楷体",
     "楷体_GB2312", ui-serif, serif;
-  /* border-radius: 0.5rem;
-  background-color: rgba(255, 255, 255, 0.5); */
+}
+
+.dark .markdown-body {
+  color: #e5e7eb;
+  /* background-color: rgba(31, 41, 55, 0.5); */
 }
