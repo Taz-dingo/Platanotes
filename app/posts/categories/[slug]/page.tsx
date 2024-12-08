@@ -1,6 +1,5 @@
 import fs from "fs/promises";
 import path from "path";
-import Link from "next/link";
 
 import { POSTS_PER_PAGE } from "@/lib/config/constants";
 import { getSortedFileList, getCategoryPosts } from "@/lib/posts/get-posts-list";

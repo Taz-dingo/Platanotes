@@ -26,7 +26,7 @@ export default function TabbedSidebar({ headings = [] }: TabbedSidebarProps) {
   }, [pathname, headings]);
 
   return (
-    <GlassCard>
+    <GlassCard className="w-[60%] transition-all duration-[1000ms] ease-in-out md:w-full">
       {/* Tab Header */}
 
       {headings.length > 0 && (
