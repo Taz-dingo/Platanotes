@@ -2,6 +2,7 @@ import React from "react";
 import moment from "moment";
 
 import "moment/locale/zh-cn";
+
 import { Calendar, Clock } from "lucide-react";
 
 interface PostContentProps {
@@ -37,21 +38,20 @@ export default function PostContent({
       className={`prose prose-slate dark:prose-invert max-w-none px-4 py-2 ${className}`}
     >
       <header className="mb-8 border-b-2 pb-3">
-        <h1 className="mb-2 text-3xl font-bold">{title}</h1>
+        <h1 className="mb-2 text-3xl font-bold dark:text-gray-200">{title}</h1>
         <div>
           {createdDate && (
-            <div className="flex items-center gap-1">
-              <Calendar size={14} />
+            <div className="flex items-center gap-1 dark:text-gray-200">
+              <Calendar size={18} />
               <span>创建于 {createdDate}</span>
             </div>
           )}
           {modifiedDate && modifiedDate !== createdDate && (
-            <div className="flex items-center gap-1">
-              <Clock size={14} />
+            <div className="flex items-center gap-1 dark:text-gray-200">
+              <Clock size={18} />
               <span>修改于 {modifiedDate}</span>
             </div>
           )}
-          
         </div>
       </header>
       <div

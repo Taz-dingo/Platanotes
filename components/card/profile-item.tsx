@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { Github,  Mail } from "lucide-react";
+import { Github, Mail } from "lucide-react";
 
 interface ProfileItemProps {
   name: string;
@@ -21,7 +21,7 @@ export default function ProfileItem({
   socialLinks,
 }: ProfileItemProps) {
   return (
-    <div className="mx-auto max-w-sm p-6 dark:bg-gray-800">
+    <div className="mx-auto max-w-sm p-6">
       <div className="flex flex-col items-center">
         <div className="relative mb-4 h-24 w-24">
           <Image

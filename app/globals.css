@@ -3,17 +3,16 @@
 @tailwind utilities;
 @import "@/public/styles/github-markdown.css";
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
 /* 解决scrollbar出现影响布局的问题 */
 body {
   width: 100vw;
   overflow-x: hidden;
   position: absolute;
+  @apply bg-background-light;
+}
+
+.dark body {
+  @apply bg-background-dark;
 }
 
 html,
@@ -32,14 +31,15 @@ body {
 body {
   font-family: "Roboto", "LXGW WenKai", "KaiXinSong", "SimKai", "楷体",
     "楷体_GB2312", ui-serif, serif;
-  background-color: rgba(255, 245, 230, 0.8);
 }
 
 /* 盒子基础样式 */
 .markdown-body {
-  /* padding: 2rem; */
   font-family: "Roboto", "LXGW WenKai", "KaiXinSong", "SimKai", "楷体",
     "楷体_GB2312", ui-serif, serif;
-  /* border-radius: 0.5rem;
-  background-color: rgba(255, 255, 255, 0.5); */
+}
+
+.dark .markdown-body {
+  color: rgb(229, 231, 235);
+  /* background-color: rgba(31, 41, 55, 0.5); */
 }

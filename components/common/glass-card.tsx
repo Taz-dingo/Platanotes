@@ -16,7 +16,7 @@ export default function GlassCard({
   return (
     <div
       className={cn(
-        "rounded-lg bg-[rgba(255,255,255,0.5)] p-4 shadow-md backdrop-blur-md",
+        "rounded-lg bg-card-light p-4 shadow-md backdrop-blur-md dark:bg-card-dark",
         hover &&
           "transform transition-transform duration-300 will-change-transform hover:-translate-y-1 hover:scale-[1.02]",
         className

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookText, Camera, Film, Home, Lightbulb } from "lucide-react";
+import { BookText, Film, Home, Lightbulb } from "lucide-react";
 
 import { DIRECTORY_NAMES } from "@/lib/config/constants";
 import type { Post } from "@/lib/posts/get-posts-tree";
@@ -29,11 +29,11 @@ const menuConfig = {
     path: "/categories/cinema",
     icon: Film,
   },
-  photos: {
-    name: "摄影",
-    path: "/categories/photos",
-    icon: Camera,
-  },
+  // photos: {
+  //   name: "摄影",
+  //   path: "/categories/photos",
+  //   icon: Camera,
+  // },
 } as const;
 
 interface MenuListProps {
@@ -50,7 +50,10 @@ export default function MenuList({ folders }: MenuListProps) {
       : pathname;
 
     // 如果是文章详情页 (/posts/[...slug])
-    if (currentPath.startsWith("/posts/") && !currentPath.startsWith("/categories/")) {
+    if (
+      currentPath.startsWith("/posts/") &&
+      !currentPath.startsWith("/categories/")
+    ) {
       // 从路径中提取分类
       const pathParts = currentPath.split("/");
       if (pathParts.length >= 3) {
@@ -69,52 +72,30 @@ export default function MenuList({ folders }: MenuListProps) {
     return currentPath === path;
   };
 
-  // 获取目录的系统名称
-  const getSystemName = (displayName: string): string => {
-    const entry = Object.entries(DIRECTORY_NAMES).find(
-      ([_, value]) => value.zh === displayName
-    );
-    return entry ? entry[0] : displayName;
-  };
+  // home放进去
+  folders.unshift({
+    type: "directory",
+    name: "首页",
+    path: "/",
+  });
 
   return (
     <ul className="space-y-1">
-      {/* Home link */}
-      <li>
-        <Link
-          href={menuConfig.home.path}
-          className={`flex items-center gap-2 rounded-lg px-3 py-2 transition-colors ${
-            isSelected(menuConfig.home.path)
-              ? "bg-gray-100 text-green-800"
-              : "hover:bg-gray-100 hover:text-green-800"
-          }`}
-        >
-          <menuConfig.home.icon className="text-lg" />
-          <span className="whitespace-nowrap">{menuConfig.home.name}</span>
-        </Link>
-      </li>
-      {/* Dynamic folders */}
-      {folders.map((folder) => {
-        const folderKey = getSystemName(folder.name) as keyof typeof menuConfig;
-        const config = menuConfig[folderKey];
-        if (!config) return null;
-
-        return (
-          <li key={folder.path}>
-            <Link
-              href={config.path}
-              className={`flex items-center gap-2 rounded-lg px-3 py-2 transition-colors ${
-                isSelected(config.path)
-                  ? "bg-gray-100 text-green-800"
-                  : "hover:bg-gray-100 hover:text-green-800"
-              }`}
-            >
-              <config.icon className="text-lg" />
-              <span className="whitespace-nowrap">{config.name}</span>
-            </Link>
-          </li>
-        );
-      })}
+      {Object.entries(menuConfig).map(([key, config]) => (
+        <li key={config.path}>
+          <Link
+            href={config.path}
+            className={`flex items-center gap-2 rounded-lg px-3 py-2 transition-colors dark:text-gray-300 ${
+              isSelected(config.path)
+                ? "bg-gray-100 text-green-800 dark:bg-zinc-500 dark:text-green-500"
+                : "hover:bg-gray-100 hover:text-green-800 dark:hover:bg-zinc-500 dark:hover:text-green-500"
+            }`}
+          >
+            <config.icon className="text-lg" />
+            <span className="whitespace-nowrap">{config.name}</span>
+          </Link>
+        </li>
+      ))}
     </ul>
   );
 }

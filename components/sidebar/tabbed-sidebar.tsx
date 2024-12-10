@@ -17,7 +17,6 @@ export default function TabbedSidebar({ headings = [] }: TabbedSidebarProps) {
   const pathname = usePathname();
   const [activeTab, setActiveTab] = useState<"toc" | "profile">("profile");
 
-  console.log("TabbedSidebar is rendered")
 
   // Automatically switch to toc tab when in a post page and headings are available
   useEffect(() => {
@@ -37,8 +36,8 @@ export default function TabbedSidebar({ headings = [] }: TabbedSidebarProps) {
             <button
               className={`-mb-[2px] flex flex-1 items-center justify-center gap-2 px-4 py-2 ${
                 activeTab === "profile"
-                  ? "border-b-2 border-green-700 text-green-700"
-                  : "text-gray-500 hover:text-green-700"
+                  ? "border-b-2 border-green-700 text-green-700 dark:border-green-400 dark:text-green-400"
+                  : "text-gray-500 hover:text-green-700 dark:text-gray-200"
               }`}
               onClick={() => setActiveTab("profile")}
             >
@@ -47,8 +46,8 @@ export default function TabbedSidebar({ headings = [] }: TabbedSidebarProps) {
             <button
               className={`-mb-[2px] flex flex-1 items-center justify-center gap-2 px-4 py-2 ${
                 activeTab === "toc"
-                  ? "border-b-2 border-green-700 text-green-700"
-                  : "text-gray-500 hover:text-green-700"
+                  ? "border-b-2 border-green-700 text-green-700 dark:border-green-400 dark:text-green-400"
+                  : "text-gray-500 hover:text-green-700 dark:text-gray-200"
               }`}
               onClick={() => setActiveTab("toc")}
             >

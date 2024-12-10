@@ -7,11 +7,26 @@ import Link from "next/link";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
+import ThemeToggle from "@/components/theme/theme-toggle";
+
 export const metadata: Metadata = {
   title: "梧桐树下",
   description: "享受片刻宁静",
   icons: "/favicon.ico",
 };
+
+function SubTitle({ text }: { text: string }) {
+  return (
+    <h2 className="text-base md:text-lg">
+      <Link
+        className="text-green-700 hover:text-green-900 dark:text-green-600"
+        href="/posts"
+      >
+        {text}
+      </Link>
+    </h2>
+  );
+}
 
 export default function RootLayout({
   children,
@@ -36,27 +51,17 @@ export default function RootLayout({
         <div className="mx-auto px-0 md:px-4">
           <header className="my-4 flex flex-col items-center justify-between space-y-4 border-b-2 px-2 pb-3 md:my-8 md:flex-row md:space-y-0 md:px-10">
             <h1 className="text-3xl md:text-4xl">
-              <Link className="text-green-700 hover:text-green-900" href="/">
+              <Link
+                className="text-green-700 hover:text-green-900 dark:text-green-600"
+                href="/"
+              >
                 梧桐树下
               </Link>
             </h1>
             <div className="flex items-center space-x-4">
-              <h2 className="text-base md:text-lg">
-                <Link
-                  className="text-green-700 hover:text-green-900"
-                  href="/posts"
-                >
-                  文章
-                </Link>
-              </h2>
-              <h2 className="text-base md:text-lg">
-                <Link
-                  className="text-green-700 hover:text-green-900"
-                  href="/about"
-                >
-                  关于
-                </Link>
-              </h2>
+              <SubTitle text="文章" />
+              <SubTitle text="关于" />
+              <ThemeToggle />
             </div>
           </header>
           {children}
