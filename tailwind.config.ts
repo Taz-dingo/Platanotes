@@ -9,6 +9,16 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      colors: {
+        card: {
+          light: "rgba(255,255,255,0.5)",
+          dark: "hsl(0,0%,30%)",
+        },
+        background: {
+          light: "rgba(255,245,230,0.8)",
+          dark: "rgba(0,0,0,0.8)",
+        },
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
@@ -27,4 +37,5 @@ const config: Config = {
   },
   plugins: [require("tailwind-scrollbar")],
 };
+
 export default config;

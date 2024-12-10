@@ -14,6 +14,7 @@ interface TabbedSidebarProps {
 }
 
 export default function TabbedSidebar({ headings = [] }: TabbedSidebarProps) {
+  console.log(headings);
   const pathname = usePathname();
   const [activeTab, setActiveTab] = useState<"toc" | "profile">("profile");
 

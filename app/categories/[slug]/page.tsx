@@ -8,7 +8,6 @@ import {
   getSortedFileList,
 } from "@/lib/posts/get-posts-list";
 import PostList from "@/components/posts/post-list";
-import StaticPostSkeleton from "@/components/posts/static-post-skeleton";
 import ResponsiveASTList from "@/components/sidebar/responsive-ast-list";
 
 interface PageProps {
@@ -53,12 +52,39 @@ async function PostListWrapper({ slug }: { slug: string }) {
   return <PostList initialPosts={initialPosts} />;
 }
 
+function PostListSkeleton() {
+  return (
+    <div
+      className="dark:bg-card-dark group relative mb-3 overflow-hidden rounded-lg bg-[rgba(255,255,255,0.3)] p-8 shadow-sm backdrop-blur-sm transition-opacity duration-500"
+      data-skeleton
+    >
+      <div className="animate-pulse opacity-60">
+        {/* 标题骨架 */}
+        <div className="mb-1 h-7 w-3/4 rounded bg-gray-200" />
+
+        {/* 内容骨架 - 3行 */}
+        <div className="mt-4 space-y-3">
+          <div className="h-4 w-full rounded bg-gray-200" />
+          <div className="h-4 w-11/12 rounded bg-gray-200" />
+          <div className="h-4 w-4/5 rounded bg-gray-200" />
+        </div>
+
+        {/* 日期骨架 */}
+        <div className="mt-4 flex gap-4">
+          <div className="h-4 w-24 rounded bg-gray-200" />
+          <div className="h-4 w-32 rounded bg-gray-200" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function SuspenseFallback() {
   return (
-    <div className="flex flex-col [&>*]:opacity-0 [&>*]:animate-fade-in [&>*]:fill-mode-forwards">
+    <div className="[&>*]:fill-mode-forwards flex flex-col [&>*]:animate-fade-in [&>*]:opacity-0">
       {[...Array(3)].map((_, index) => (
         <div key={index} style={{ animationDelay: `${index * 100}ms` }}>
-          <StaticPostSkeleton />
+          <PostListSkeleton />
         </div>
       ))}
     </div>
@@ -72,7 +98,7 @@ export default function CategoryPage({ params }: PageProps) {
     <div className="flex-1">
       <div className="relative">
         <Suspense fallback={<SuspenseFallback />}>
-          <div className="opacity-0 animate-fade-in fill-mode-forwards">
+          <div className="fill-mode-forwards animate-fade-in opacity-0">
             <PostListWrapper slug={slug} />
           </div>
         </Suspense>

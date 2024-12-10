@@ -91,18 +91,16 @@ export default function PostList({ initialPosts }: PostListProps) {
             .slice(0, 200) + "..."; // 截取前200个字符
 
         return (
-          <GlassCard
-            className="mb-3 p-8"
-            hover
-            key={post.path}
-          >
+          <GlassCard className="mb-3 p-8" hover key={post.path}>
             <Link className="group" href={`/posts/${post.path}`}>
-              <h2 className="mb-1 border-b-2 border-gray-300 pb-1 text-xl transition duration-300 group-hover:text-green-700">
+              <h2 className="mb-1 border-b-2 border-gray-300 pb-1 text-xl transition duration-300 group-hover:text-green-700 dark:text-gray-200">
                 {post.metadata?.title}
               </h2>
-              <p className="break-all text-gray-600">{summary}</p>
+              <p className="break-all text-gray-600 dark:text-gray-300">
+                {summary}
+              </p>
             </Link>
-            <div className="mt-2 flex flex-wrap gap-3 text-sm text-gray-500">
+            <div className="mt-2 flex flex-wrap gap-3 text-sm dark:text-gray-400">
               {createdDate && (
                 <div className="flex items-center gap-1">
                   <Calendar size={14} />
